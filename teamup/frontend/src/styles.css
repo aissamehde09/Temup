@@ -1,0 +1,602 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: Poppins, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --teamup-dark: #071417;
+  --teamup-green: #65a30d;
+  --teamup-orange: #f97316;
+}
+
+.teamup-map-marker {
+  background: transparent;
+  border: 0;
+}
+
+.teamup-map-marker span {
+  display: block;
+  width: 26px;
+  height: 26px;
+  border: 3px solid #fff;
+  border-radius: 9999px 9999px 9999px 0;
+  transform: rotate(-45deg);
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+html {
+  color-scheme: light;
+  scroll-behavior: smooth;
+}
+
+.btn-teamup-primary {
+  --bs-btn-bg: #65a30d;
+  --bs-btn-border-color: #65a30d;
+  --bs-btn-hover-bg: #4d7c0f;
+  --bs-btn-hover-border-color: #4d7c0f;
+  --bs-btn-active-bg: #3f6212;
+  --bs-btn-active-border-color: #3f6212;
+  --bs-btn-color: #ffffff;
+  --bs-btn-hover-color: #ffffff;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.btn-teamup-secondary {
+  --bs-btn-bg: #ffffff;
+  --bs-btn-border-color: #e2e8f0;
+  --bs-btn-hover-bg: #f8fafc;
+  --bs-btn-hover-border-color: #cbd5e1;
+  --bs-btn-color: #0f172a;
+  --bs-btn-hover-color: #0f172a;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.btn-teamup-danger {
+  --bs-btn-bg: #dc2626;
+  --bs-btn-border-color: #dc2626;
+  --bs-btn-hover-bg: #b91c1c;
+  --bs-btn-hover-border-color: #b91c1c;
+  --bs-btn-color: #ffffff;
+  --bs-btn-hover-color: #ffffff;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #65a30d;
+  box-shadow: 0 0 0 0.25rem rgba(101, 163, 13, 0.16);
+}
+
+@media (max-width: 768px) {
+  .teamup-navbar {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .teamup-register-button {
+    padding: 0.75rem 1rem !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+::selection {
+  background: #a7f3d0;
+  color: #064e3b;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes navbarEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes softPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(101, 163, 13, 0.32);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(101, 163, 13, 0);
+  }
+}
+
+@keyframes inviteModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.teamup-invite-modal {
+  animation: inviteModalIn 220ms ease-out both;
+}
+
+.teamup-invite-share-button {
+  display: inline-flex;
+  min-height: 64px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+  transition:
+    transform 200ms ease,
+    background-color 200ms ease,
+    border-color 200ms ease;
+}
+
+.teamup-invite-share-button:hover {
+  transform: translateY(-2px);
+  border-color: rgba(101, 163, 13, 0.45);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.teamup-invite-share-button:focus-visible {
+  outline: 2px solid #84cc16;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .teamup-invite-modal,
+  .teamup-invite-share-button {
+    animation: none;
+    transition: none;
+  }
+}
+
+.teamup-navbar {
+  animation: navbarEnter 0.55s ease-out both;
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease,
+    border-color 260ms ease,
+    background-color 260ms ease;
+  will-change: transform;
+}
+
+.teamup-navbar.is-scrolled {
+  transform: translateY(12px);
+  border-color: rgba(101, 163, 13, 0.18);
+  background-color: rgba(255, 255, 255, 0.94);
+  box-shadow:
+    0 18px 55px rgba(15, 23, 42, 0.12),
+    0 0 0 1px rgba(101, 163, 13, 0.08);
+}
+
+.teamup-brand {
+  transition:
+    transform 220ms ease,
+    filter 220ms ease;
+}
+
+.teamup-brand:hover {
+  transform: translateY(-1px) scale(1.02);
+  filter: drop-shadow(0 8px 18px rgba(101, 163, 13, 0.18));
+}
+
+.teamup-brand img {
+  transition: transform 420ms ease;
+}
+
+.teamup-brand:hover img {
+  transform: rotate(-6deg) scale(1.06);
+}
+
+.teamup-nav-link {
+  position: relative;
+  color: #475569;
+  transition:
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.teamup-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #65a30d, #f97316);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 240ms ease;
+}
+
+.teamup-nav-link:hover,
+.teamup-nav-link.is-active {
+  color: #14532d;
+  transform: translateY(-1px);
+}
+
+.teamup-nav-link:hover::after,
+.teamup-nav-link.is-active::after {
+  transform: scaleX(1);
+}
+
+.teamup-login-link {
+  transition:
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.teamup-login-link:hover {
+  color: #14532d;
+  transform: translateY(-1px);
+}
+
+.teamup-register-button {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease;
+  animation: softPulse 2.8s ease-in-out infinite;
+}
+
+.teamup-register-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.28) 45%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 520ms ease;
+}
+
+.teamup-register-button:hover {
+  transform: translateY(-2px);
+  background-color: #4d7c0f;
+  box-shadow: 0 16px 35px rgba(101, 163, 13, 0.28);
+}
+
+.teamup-register-button:hover::before {
+  transform: translateX(120%);
+}
+
+.teamup-footer {
+  position: relative;
+  overflow: hidden;
+}
+
+.teamup-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(101, 163, 13, 0.18), transparent 28%),
+    radial-gradient(circle at 86% 0%, rgba(249, 115, 22, 0.12), transparent 24%);
+  opacity: 0.9;
+}
+
+.teamup-footer > * {
+  position: relative;
+}
+
+.teamup-footer-block {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: footerReveal 0.7s ease-out forwards;
+  animation-timeline: view();
+  animation-range: entry 0% cover 28%;
+}
+
+.teamup-footer-block:nth-child(2) {
+  animation-delay: 80ms;
+}
+
+.teamup-footer-block:nth-child(3) {
+  animation-delay: 150ms;
+}
+
+.teamup-footer-block:nth-child(4) {
+  animation-delay: 220ms;
+}
+
+.teamup-footer-brand {
+  transition:
+    transform 240ms ease,
+    filter 240ms ease;
+}
+
+.teamup-footer-brand:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 10px 22px rgba(249, 115, 22, 0.18));
+}
+
+.teamup-footer-brand img {
+  transition: transform 420ms ease;
+}
+
+.teamup-footer-brand:hover img {
+  transform: rotate(-8deg) scale(1.08);
+}
+
+.teamup-footer-link {
+  position: relative;
+  display: inline-flex;
+  color: rgba(255, 255, 255, 0.5);
+  transition:
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.teamup-footer-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #65a30d, #f97316);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+}
+
+.teamup-footer-link:hover {
+  color: #ffffff;
+  transform: translateX(4px);
+}
+
+.teamup-footer-link:hover::after {
+  transform: scaleX(1);
+}
+
+.teamup-footer-copy {
+  opacity: 0;
+  animation: footerReveal 0.7s ease-out 160ms forwards;
+  animation-timeline: view();
+  animation-range: entry 0% cover 20%;
+}
+
+@keyframes footerReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Keep the app viewport stable on every screen size. */
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  /* `overflow-x: hidden` implicitly creates an auto scroll container in
+     Chromium, which prevents sticky public navigation from following page
+     scroll. `clip` keeps the viewport clipped without creating that parent. */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* The dashboard rail must cover the complete viewport, even when the main
+   content is taller than the first screen. */
+.teamup-sidebar {
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.teamup-app-main {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+@media (min-width: 1024px) {
+  .teamup-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 40;
+    flex: 0 0 320px;
+    width: 320px;
+    height: 100vh;
+    min-height: 100vh;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .teamup-app-main {
+    margin-left: 320px;
+    max-width: calc(100vw - 320px);
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .teamup-dashboard {
+    max-width: 1120px;
+    grid-template-columns: minmax(0, 1fr) 260px !important;
+    gap: 1.25rem;
+  }
+
+  .teamup-dashboard-right {
+    max-width: 260px;
+  }
+
+  .teamup-dashboard h1 { font-size: 1.55rem; }
+  .teamup-dashboard h2 { font-size: 1.05rem; }
+  .teamup-upcoming-match {
+    grid-template-columns: 76px minmax(0, 1fr) 124px 72px !important;
+    min-height: 100px;
+  }
+  .teamup-upcoming-match > img { width: 76px !important; height: 64px !important; }
+}
+
+/* Upcoming matches: keep the mobile card balanced and centered without
+   changing the desktop grid. */
+@media (max-width: 767px) {
+  .teamup-upcoming-header {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 1rem 1rem 0.85rem;
+    text-align: center;
+  }
+
+  .teamup-upcoming-header h2 {
+    width: 100%;
+    text-align: center;
+  }
+
+  .teamup-upcoming-header a {
+    justify-content: center;
+  }
+
+  .teamup-upcoming-content {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .teamup-upcoming-match {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.7rem;
+    padding: 1.25rem 0 1.35rem;
+    text-align: center;
+  }
+
+  .teamup-upcoming-match > img {
+    width: 132px;
+    height: 92px;
+    margin-inline: auto;
+  }
+
+  .teamup-upcoming-info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .teamup-upcoming-info > * {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .teamup-upcoming-info h3,
+  .teamup-upcoming-info p {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .teamup-upcoming-players {
+    justify-self: center;
+    text-align: center;
+  }
+
+  .teamup-upcoming-action {
+    width: min(100%, 180px) !important;
+    justify-self: center;
+    margin-top: 0.15rem;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .teamup-my-match-row {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 0 1.4rem;
+    text-align: center;
+  }
+
+  .teamup-my-match-row > img {
+    width: 144px !important;
+    height: 96px !important;
+    margin-inline: auto;
+  }
+
+  .teamup-my-match-info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .teamup-my-match-info h2,
+  .teamup-my-match-info p {
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  .teamup-my-match-players {
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .teamup-my-match-players p {
+    width: auto;
+  }
+
+  .teamup-my-match-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 0.65rem;
+  }
+
+  .teamup-my-match-actions > a,
+  .teamup-my-match-actions > button {
+    min-width: 120px;
+  }
+}
+
