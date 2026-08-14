@@ -24,5 +24,8 @@ api.interceptors.response.use(
 );
 
 export function getErrorMessage(error) {
+  if (!error.response) {
+    return 'Serveur inaccessible. Vérifie que l’API Railway est démarrée et que VITE_API_URL est correctement configurée sur Vercel.';
+  }
   return error.response?.data?.message || 'Une erreur est survenue';
 }
