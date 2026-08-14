@@ -1,0 +1,181 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/pages/RegisterPage.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=4942d33c"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+var _s = $RefreshSig$();
+import __vite__cjsImport1_react from "/node_modules/.vite/deps/react.js?v=4942d33c"; const useState = __vite__cjsImport1_react["useState"];
+import { useNavigate } from "/node_modules/.vite/deps/react-router-dom.js?v=4942d33c";
+import Button from "/src/components/Button.jsx";
+import Input from "/src/components/Input.jsx";
+import { useAuth } from "/src/context/AuthContext.jsx?t=1786702920831";
+import { getErrorMessage } from "/src/services/api.js?t=1786702920831";
+export default function RegisterPage() {
+  _s();
+  const { register } = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    city: "",
+    level: "Débutant",
+    sports: [1]
+  });
+  function toggleSport(id) {
+    const exists = form.sports.includes(id);
+    setForm({ ...form, sports: exists ? form.sports.filter((sportId) => sportId !== id) : [...form.sports, id] });
+  }
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError("");
+    try {
+      await register(form);
+      navigate("/dashboard");
+    } catch (err) {
+      setError(getErrorMessage(err));
+    }
+  }
+  return /* @__PURE__ */ jsxDEV("main", { className: "bg-slate-50 px-6 py-12", children: /* @__PURE__ */ jsxDEV("form", { onSubmit: handleSubmit, className: "mx-auto max-w-3xl rounded-[2rem] bg-white p-8 shadow-sm", children: [
+    /* @__PURE__ */ jsxDEV("h1", { className: "text-3xl font-black", children: "Créer un compte" }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+      lineNumber: 42,
+      columnNumber: 9
+    }, this),
+    /* @__PURE__ */ jsxDEV("p", { className: "mt-2 text-slate-500", children: "Complète ton profil sportif pour rejoindre la communauté TeamUp." }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+      lineNumber: 43,
+      columnNumber: 9
+    }, this),
+    error && /* @__PURE__ */ jsxDEV("p", { className: "mt-5 rounded-2xl bg-red-50 p-4 text-sm text-red-700", children: error }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+      lineNumber: 44,
+      columnNumber: 19
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "mt-6 grid gap-4 md:grid-cols-2", children: [
+      /* @__PURE__ */ jsxDEV(Input, { label: "Prénom", value: form.firstName, onChange: (e) => setForm({ ...form, firstName: e.target.value }), required: true }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+        lineNumber: 46,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV(Input, { label: "Nom", value: form.lastName, onChange: (e) => setForm({ ...form, lastName: e.target.value }), required: true }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+        lineNumber: 47,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV(Input, { label: "Email", type: "email", value: form.email, onChange: (e) => setForm({ ...form, email: e.target.value }), required: true }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+        lineNumber: 48,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV(Input, { label: "Ville", value: form.city, onChange: (e) => setForm({ ...form, city: e.target.value }), required: true }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+        lineNumber: 49,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV(Input, { label: "Mot de passe", type: "password", value: form.password, onChange: (e) => setForm({ ...form, password: e.target.value }), required: true }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+        lineNumber: 50,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV(Input, { label: "Confirmation mot de passe", type: "password", value: form.confirmPassword, onChange: (e) => setForm({ ...form, confirmPassword: e.target.value }), required: true }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+        lineNumber: 51,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV("label", { className: "grid gap-2 text-sm font-medium text-slate-700", children: [
+        "Niveau",
+        /* @__PURE__ */ jsxDEV("select", { className: "rounded-2xl border border-slate-200 px-4 py-3", value: form.level, onChange: (e) => setForm({ ...form, level: e.target.value }), children: [
+          /* @__PURE__ */ jsxDEV("option", { children: "Débutant" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+            lineNumber: 55,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV("option", { children: "Intermédiaire" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+            lineNumber: 56,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV("option", { children: "Confirmé" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+            lineNumber: 57,
+            columnNumber: 15
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+          lineNumber: 54,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+        lineNumber: 52,
+        columnNumber: 11
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "grid gap-2 text-sm font-medium text-slate-700", children: [
+        "Sports pratiqués",
+        /* @__PURE__ */ jsxDEV("div", { className: "flex gap-3", children: [[1, "Basketball"], [2, "Football"]].map(
+          ([id, label]) => /* @__PURE__ */ jsxDEV("button", { type: "button", onClick: () => toggleSport(id), className: `rounded-xl px-4 py-3 font-semibold transition-colors ${form.sports.includes(id) ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}`, children: label }, id, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+            lineNumber: 64,
+            columnNumber: 15
+          }, this)
+        ) }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+          lineNumber: 62,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+        lineNumber: 60,
+        columnNumber: 11
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+      lineNumber: 45,
+      columnNumber: 9
+    }, this),
+    /* @__PURE__ */ jsxDEV(Button, { className: "mt-8", children: "Créer mon compte" }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+      lineNumber: 71,
+      columnNumber: 9
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+    lineNumber: 41,
+    columnNumber: 7
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx",
+    lineNumber: 40,
+    columnNumber: 5
+  }, this);
+}
+_s(RegisterPage, "OOBrtsLyDULAKrSeQcLn/kxLzi8=", false, function() {
+  return [useAuth, useNavigate];
+});
+_c = RegisterPage;
+var _c;
+$RefreshReg$(_c, "RegisterPage");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/RegisterPage.jsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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LHVCQUFDLFlBQU8sTUFBSyxVQUFrQixTQUFTLE1BQU1kLFlBQVlDLEVBQUUsR0FBRyxXQUFXLHdEQUF3RFgsS0FBS1MsT0FBT0ksU0FBU0YsRUFBRSxJQUFJLDhCQUE4QixnREFBZ0QsSUFDeE9hLG1CQUR3QmIsSUFBM0I7QUFBQTtBQUFBO0FBQUE7QUFBQSxpQkFFQTtBQUFBLFFBQ0QsS0FMSDtBQUFBO0FBQUE7QUFBQTtBQUFBLGVBTUE7QUFBQSxXQVJGO0FBQUE7QUFBQTtBQUFBO0FBQUEsYUFTQTtBQUFBLFNBeEJGO0FBQUE7QUFBQTtBQUFBO0FBQUEsV0F5QkE7QUFBQSxJQUNBLHVCQUFDLFVBQU8sV0FBVSxRQUFPLGdDQUF6QjtBQUFBO0FBQUE7QUFBQTtBQUFBLFdBQXlDO0FBQUEsT0E5QjNDO0FBQUE7QUFBQTtBQUFBO0FBQUEsU0ErQkEsS0FoQ0Y7QUFBQTtBQUFBO0FBQUE7QUFBQSxTQWlDQTtBQUVKO0FBQUNoQixHQW5FdUJELGNBQVk7QUFBQSxVQUNiRixTQUNKSCxXQUFXO0FBQUE7QUFBQSxLQUZOSztBQUFZLElBQUErQjtBQUFBLGFBQUFBLElBQUEiLCJuYW1lcyI6WyJ1c2VTdGF0ZSIsInVzZU5hdmlnYXRlIiwiQnV0dG9uIiwiSW5wdXQiLCJ1c2VBdXRoIiwiZ2V0RXJyb3JNZXNzYWdlIiwiUmVnaXN0ZXJQYWdlIiwiX3MiLCJyZWdpc3RlciIsIm5hdmlnYXRlIiwiZXJyb3IiLCJzZXRFcnJvciIsImZvcm0iLCJzZXRGb3JtIiwiZmlyc3ROYW1lIiwibGFzdE5hbWUiLCJlbWFpbCIsInBhc3N3b3JkIiwiY29uZmlybVBhc3N3b3JkIiwiY2l0eSIsImxldmVsIiwic3BvcnRzIiwidG9nZ2xlU3BvcnQiLCJpZCIsImV4aXN0cyIsImluY2x1ZGVzIiwiZmlsdGVyIiwic3BvcnRJZCIsImhhbmRsZVN1Ym1pdCIsImV2ZW50IiwicHJldmVudERlZmF1bHQiLCJlcnIiLCJlIiwidGFyZ2V0IiwidmFsdWUiLCJtYXAiLCJsYWJlbCIsIl9jIl0sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VzIjpbIlJlZ2lzdGVyUGFnZS5qc3giXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgdXNlU3RhdGUgfSBmcm9tICdyZWFjdCc7XG5pbXBvcnQgeyB1c2VOYXZpZ2F0ZSB9IGZyb20gJ3JlYWN0LXJvdXRlci1kb20nO1xuaW1wb3J0IEJ1dHRvbiBmcm9tICcuLi9jb21wb25lbnRzL0J1dHRvbic7XG5pbXBvcnQgSW5wdXQgZnJvbSAnLi4vY29tcG9uZW50cy9JbnB1dCc7XG5pbXBvcnQgeyB1c2VBdXRoIH0gZnJvbSAnLi4vY29udGV4dC9BdXRoQ29udGV4dCc7XG5pbXBvcnQgeyBnZXRFcnJvck1lc3NhZ2UgfSBmcm9tICcuLi9zZXJ2aWNlcy9hcGknO1xuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBSZWdpc3RlclBhZ2UoKSB7XG4gIGNvbnN0IHsgcmVnaXN0ZXIgfSA9IHVzZUF1dGgoKTtcbiAgY29uc3QgbmF2aWdhdGUgPSB1c2VOYXZpZ2F0ZSgpO1xuICBjb25zdCBbZXJyb3IsIHNldEVycm9yXSA9IHVzZVN0YXRlKCcnKTtcbiAgY29uc3QgW2Zvcm0sIHNldEZvcm1dID0gdXNlU3RhdGUoe1xuICAgIGZpcnN0TmFtZTogJycsXG4gICAgbGFzdE5hbWU6ICcnLFxuICAgIGVtYWlsOiAnJyxcbiAgICBwYXNzd29yZDogJycsXG4gICAgY29uZmlybVBhc3N3b3JkOiAnJyxcbiAgICBjaXR5OiAnJyxcbiAgICBsZXZlbDogJ0TDqWJ1dGFudCcsXG4gICAgc3BvcnRzOiBbMV0sXG4gIH0pO1xuXG4gIGZ1bmN0aW9uIHRvZ2dsZVNwb3J0KGlkKSB7XG4gICAgY29uc3QgZXhpc3RzID0gZm9ybS5zcG9ydHMuaW5jbHVkZXMoaWQpO1xuICAgIHNldEZvcm0oeyAuLi5mb3JtLCBzcG9ydHM6IGV4aXN0cyA/IGZvcm0uc3BvcnRzLmZpbHRlcigoc3BvcnRJZCkgPT4gc3BvcnRJZCAhPT0gaWQpIDogWy4uLmZvcm0uc3BvcnRzLCBpZF0gfSk7XG4gIH1cblxuICBhc3luYyBmdW5jdGlvbiBoYW5kbGVTdWJtaXQoZXZlbnQpIHtcbiAgICBldmVudC5wcmV2ZW50RGVmYXVsdCgpO1xuICAgIHNldEVycm9yKCcnKTtcbiAgICB0cnkge1xuICAgICAgYXdhaXQgcmVnaXN0ZXIoZm9ybSk7XG4gICAgICBuYXZpZ2F0ZSgnL2Rhc2hib2FyZCcpO1xuICAgIH0gY2F0Y2ggKGVycikge1xuICAgICAgc2V0RXJyb3IoZ2V0RXJyb3JNZXNzYWdlKGVycikpO1xuICAgIH1cbiAgfVxuXG4gIHJldHVybiAoXG4gICAgPG1haW4gY2xhc3NOYW1lPVwiYmctc2xhdGUtNTAgcHgtNiBweS0xMlwiPlxuICAgICAgPGZvcm0gb25TdWJtaXQ9e2hhbmRsZVN1Ym1pdH0gY2xhc3NOYW1lPVwibXgtYXV0byBtYXgtdy0zeGwgcm91bmRlZC1bMnJlbV0gYmctd2hpdGUgcC04IHNoYWRvdy1zbVwiPlxuICAgICAgICA8aDEgY2xhc3NOYW1lPVwidGV4dC0zeGwgZm9udC1ibGFja1wiPkNyw6llciB1biBjb21wdGU8L2gxPlxuICAgICAgICA8cCBjbGFzc05hbWU9XCJtdC0yIHRleHQtc2xhdGUtNTAwXCI+Q29tcGzDqHRlIHRvbiBwcm9maWwgc3BvcnRpZiBwb3VyIHJlam9pbmRyZSBsYSBjb21tdW5hdXTDqSBUZWFtVXAuPC9wPlxuICAgICAgICB7ZXJyb3IgJiYgPHAgY2xhc3NOYW1lPVwibXQtNSByb3VuZGVkLTJ4bCBiZy1yZWQtNTAgcC00IHRleHQtc20gdGV4dC1yZWQtNzAwXCI+e2Vycm9yfTwvcD59XG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibXQtNiBncmlkIGdhcC00IG1kOmdyaWQtY29scy0yXCI+XG4gICAgICAgICAgPElucHV0IGxhYmVsPVwiUHLDqW5vbVwiIHZhbHVlPXtmb3JtLmZpcnN0TmFtZX0gb25DaGFuZ2U9eyhlKSA9PiBzZXRGb3JtKHsgLi4uZm9ybSwgZmlyc3ROYW1lOiBlLnRhcmdldC52YWx1ZSB9KX0gcmVxdWlyZWQgLz5cbiAgICAgICAgICA8SW5wdXQgbGFiZWw9XCJOb21cIiB2YWx1ZT17Zm9ybS5sYXN0TmFtZX0gb25DaGFuZ2U9eyhlKSA9PiBzZXRGb3JtKHsgLi4uZm9ybSwgbGFzdE5hbWU6IGUudGFyZ2V0LnZhbHVlIH0pfSByZXF1aXJlZCAvPlxuICAgICAgICAgIDxJbnB1dCBsYWJlbD1cIkVtYWlsXCIgdHlwZT1cImVtYWlsXCIgdmFsdWU9e2Zvcm0uZW1haWx9IG9uQ2hhbmdlPXsoZSkgPT4gc2V0Rm9ybSh7IC4uLmZvcm0sIGVtYWlsOiBlLnRhcmdldC52YWx1ZSB9KX0gcmVxdWlyZWQgLz5cbiAgICAgICAgICA8SW5wdXQgbGFiZWw9XCJWaWxsZVwiIHZhbHVlPXtmb3JtLmNpdHl9IG9uQ2hhbmdlPXsoZSkgPT4gc2V0Rm9ybSh7IC4uLmZvcm0sIGNpdHk6IGUudGFyZ2V0LnZhbHVlIH0pfSByZXF1aXJlZCAvPlxuICAgICAgICAgIDxJbnB1dCBsYWJlbD1cIk1vdCBkZSBwYXNzZVwiIHR5cGU9XCJwYXNzd29yZFwiIHZhbHVlPXtmb3JtLnBhc3N3b3JkfSBvbkNoYW5nZT17KGUpID0+IHNldEZvcm0oeyAuLi5mb3JtLCBwYXNzd29yZDogZS50YXJnZXQudmFsdWUgfSl9IHJlcXVpcmVkIC8+XG4gICAgICAgICAgPElucHV0IGxhYmVsPVwiQ29uZmlybWF0aW9uIG1vdCBkZSBwYXNzZVwiIHR5cGU9XCJwYXNzd29yZFwiIHZhbHVlPXtmb3JtLmNvbmZpcm1QYXNzd29yZH0gb25DaGFuZ2U9eyhlKSA9PiBzZXRGb3JtKHsgLi4uZm9ybSwgY29uZmlybVBhc3N3b3JkOiBlLnRhcmdldC52YWx1ZSB9KX0gcmVxdWlyZWQgLz5cbiAgICAgICAgICA8bGFiZWwgY2xhc3NOYW1lPVwiZ3JpZCBnYXAtMiB0ZXh0LXNtIGZvbnQtbWVkaXVtIHRleHQtc2xhdGUtNzAwXCI+XG4gICAgICAgICAgICBOaXZlYXVcbiAgICAgICAgICAgIDxzZWxlY3QgY2xhc3NOYW1lPVwicm91bmRlZC0yeGwgYm9yZGVyIGJvcmRlci1zbGF0ZS0yMDAgcHgtNCBweS0zXCIgdmFsdWU9e2Zvcm0ubGV2ZWx9IG9uQ2hhbmdlPXsoZSkgPT4gc2V0Rm9ybSh7IC4uLmZvcm0sIGxldmVsOiBlLnRhcmdldC52YWx1ZSB9KX0+XG4gICAgICAgICAgICAgIDxvcHRpb24+RMOpYnV0YW50PC9vcHRpb24+XG4gICAgICAgICAgICAgIDxvcHRpb24+SW50ZXJtw6lkaWFpcmU8L29wdGlvbj5cbiAgICAgICAgICAgICAgPG9wdGlvbj5Db25maXJtw6k8L29wdGlvbj5cbiAgICAgICAgICAgIDwvc2VsZWN0PlxuICAgICAgICAgIDwvbGFiZWw+XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJncmlkIGdhcC0yIHRleHQtc20gZm9udC1tZWRpdW0gdGV4dC1zbGF0ZS03MDBcIj5cbiAgICAgICAgICAgIFNwb3J0cyBwcmF0aXF1w6lzXG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXggZ2FwLTNcIj5cbiAgICAgICAgICAgICAge1tbMSwgJ0Jhc2tldGJhbGwnXSwgWzIsICdGb290YmFsbCddXS5tYXAoKFtpZCwgbGFiZWxdKSA9PiAoXG4gICAgICAgICAgICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIga2V5PXtpZH0gb25DbGljaz17KCkgPT4gdG9nZ2xlU3BvcnQoaWQpfSBjbGFzc05hbWU9e2Byb3VuZGVkLXhsIHB4LTQgcHktMyBmb250LXNlbWlib2xkIHRyYW5zaXRpb24tY29sb3JzICR7Zm9ybS5zcG9ydHMuaW5jbHVkZXMoaWQpID8gJ2JnLWVtZXJhbGQtNjAwIHRleHQtd2hpdGUnIDogJ2JnLXNsYXRlLTEwMCB0ZXh0LXNsYXRlLTcwMCBob3ZlcjpiZy1zbGF0ZS0yMDAnfWB9PlxuICAgICAgICAgICAgICAgICAge2xhYmVsfVxuICAgICAgICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgICAgICApKX1cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cbiAgICAgICAgPEJ1dHRvbiBjbGFzc05hbWU9XCJtdC04XCI+Q3LDqWVyIG1vbiBjb21wdGU8L0J1dHRvbj5cbiAgICAgIDwvZm9ybT5cbiAgICA8L21haW4+XG4gICk7XG59XG4iXSwiZmlsZSI6IkM6L1VzZXJzL2xhdXJlL0RvY3VtZW50cy9BUFAgTW9iaWxlL3RlYW11cC9mcm9udGVuZC9zcmMvcGFnZXMvUmVnaXN0ZXJQYWdlLmpzeCJ9

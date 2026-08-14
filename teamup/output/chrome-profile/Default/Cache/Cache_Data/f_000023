@@ -1,0 +1,346 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/components/InviteFriendsModal.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=4942d33c"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+var _s = $RefreshSig$();
+import __vite__cjsImport1_react from "/node_modules/.vite/deps/react.js?v=4942d33c"; const useEffect = __vite__cjsImport1_react["useEffect"]; const useMemo = __vite__cjsImport1_react["useMemo"]; const useState = __vite__cjsImport1_react["useState"];
+import { Check, Copy, Link as LinkIcon, Mail, MessageCircle, Share2, UserPlus, X } from "/node_modules/.vite/deps/lucide-react.js?v=4942d33c";
+const inviteMessage = "Rejoins-moi sur TeamUp ! Trouve des joueurs de foot ou de basket près de chez toi et organise tes prochains matchs.";
+async function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
+}
+export default function InviteFriendsModal({ isOpen, onClose }) {
+  _s();
+  const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState("");
+  const inviteLink = useMemo(() => {
+    if (typeof window === "undefined") return "";
+    return `${window.location.origin}/`;
+  }, []);
+  const fullMessage = `${inviteMessage} ${inviteLink}`;
+  const encodedMessage = encodeURIComponent(fullMessage);
+  useEffect(() => {
+    if (!isOpen) return void 0;
+    function handleEscape(event) {
+      if (event.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+  useEffect(() => {
+    if (!copied) return void 0;
+    const timer = window.setTimeout(() => setCopied(false), 2600);
+    return () => window.clearTimeout(timer);
+  }, [copied]);
+  if (!isOpen) return null;
+  async function handleCopy() {
+    try {
+      await copyText(inviteLink);
+      setCopyError("");
+      setCopied(true);
+    } catch {
+      setCopied(false);
+      setCopyError("Impossible de copier automatiquement le lien. Tu peux le sélectionner et le copier manuellement.");
+    }
+  }
+  function shareWhatsapp() {
+    window.open(`https://wa.me/?text=${encodedMessage}`, "_blank", "noopener,noreferrer");
+  }
+  function shareEmail() {
+    const subject = encodeURIComponent("Rejoins-moi sur TeamUp");
+    const body = encodeURIComponent(`${inviteMessage}
+
+${inviteLink}`);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  }
+  async function shareNative() {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "TeamUp",
+          text: inviteMessage,
+          url: inviteLink
+        });
+        return;
+      }
+      await handleCopy();
+    } catch {
+      await handleCopy();
+    }
+  }
+  return /* @__PURE__ */ jsxDEV(
+    "div",
+    {
+      className: "fixed inset-0 z-[120] grid place-items-center bg-[#02090a]/75 px-4 py-6 backdrop-blur-sm",
+      onMouseDown: onClose,
+      children: /* @__PURE__ */ jsxDEV(
+        "section",
+        {
+          role: "dialog",
+          "aria-modal": "true",
+          "aria-labelledby": "invite-friends-title",
+          className: "teamup-invite-modal w-full max-w-3xl rounded-2xl border border-white/12 bg-[#071719] p-5 text-white shadow-2xl shadow-black/50 sm:p-7",
+          onMouseDown: (event) => event.stopPropagation(),
+          children: [
+            /* @__PURE__ */ jsxDEV(
+              "button",
+              {
+                type: "button",
+                onClick: onClose,
+                className: "float-right grid h-10 w-10 cursor-pointer place-items-center rounded-full text-white/55 transition hover:bg-white/8 hover:text-white focus:outline-none focus:ring-2 focus:ring-lime-400",
+                "aria-label": "Fermer la fenêtre d’invitation",
+                children: /* @__PURE__ */ jsxDEV(X, { size: 24, "aria-hidden": "true" }, void 0, false, {
+                  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                  lineNumber: 111,
+                  columnNumber: 11
+                }, this)
+              },
+              void 0,
+              false,
+              {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 105,
+                columnNumber: 9
+              },
+              this
+            ),
+            /* @__PURE__ */ jsxDEV("div", { className: "flex gap-5 pr-10", children: [
+              /* @__PURE__ */ jsxDEV("div", { className: "grid h-16 w-16 shrink-0 place-items-center rounded-full bg-white/7 text-lime-500", children: /* @__PURE__ */ jsxDEV(UserPlus, { size: 34, "aria-hidden": "true" }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 116,
+                columnNumber: 13
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 115,
+                columnNumber: 11
+              }, this),
+              /* @__PURE__ */ jsxDEV("div", { children: [
+                /* @__PURE__ */ jsxDEV("h2", { id: "invite-friends-title", className: "text-2xl font-black leading-tight sm:text-3xl", children: "Invite un ami sur TeamUp" }, void 0, false, {
+                  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                  lineNumber: 119,
+                  columnNumber: 13
+                }, this),
+                /* @__PURE__ */ jsxDEV("p", { className: "mt-3 max-w-xl text-sm leading-6 text-white/65 sm:text-base", children: "Partage TeamUp avec tes amis et trouvez plus facilement des joueurs pour vos prochains matchs." }, void 0, false, {
+                  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                  lineNumber: 122,
+                  columnNumber: 13
+                }, this)
+              ] }, void 0, true, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 118,
+                columnNumber: 11
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+              lineNumber: 114,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "mt-8", children: [
+              /* @__PURE__ */ jsxDEV("p", { className: "mb-3 text-sm font-medium text-white/70", children: "Ton lien d’invitation" }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 129,
+                columnNumber: 11
+              }, this),
+              /* @__PURE__ */ jsxDEV("div", { className: "flex flex-col gap-3 rounded-xl border border-white/12 bg-white/[0.03] p-3 sm:flex-row sm:items-center", children: [
+                /* @__PURE__ */ jsxDEV("div", { className: "flex min-w-0 flex-1 items-center gap-3 px-2", children: [
+                  /* @__PURE__ */ jsxDEV(LinkIcon, { className: "shrink-0 text-lime-500", size: 24, "aria-hidden": "true" }, void 0, false, {
+                    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                    lineNumber: 132,
+                    columnNumber: 15
+                  }, this),
+                  /* @__PURE__ */ jsxDEV("span", { className: "truncate text-sm font-black text-white sm:text-base", children: inviteLink }, void 0, false, {
+                    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                    lineNumber: 133,
+                    columnNumber: 15
+                  }, this)
+                ] }, void 0, true, {
+                  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                  lineNumber: 131,
+                  columnNumber: 13
+                }, this),
+                /* @__PURE__ */ jsxDEV(
+                  "button",
+                  {
+                    type: "button",
+                    onClick: handleCopy,
+                    className: "inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-lime-700 px-5 py-3 text-sm font-black text-white transition hover:bg-lime-800 focus:outline-none focus:ring-2 focus:ring-lime-400",
+                    children: [
+                      copied ? /* @__PURE__ */ jsxDEV(Check, { size: 18, "aria-hidden": "true" }, void 0, false, {
+                        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                        lineNumber: 140,
+                        columnNumber: 25
+                      }, this) : /* @__PURE__ */ jsxDEV(Copy, { size: 18, "aria-hidden": "true" }, void 0, false, {
+                        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                        lineNumber: 140,
+                        columnNumber: 66
+                      }, this),
+                      copied ? "Lien copié !" : "Copier le lien"
+                    ]
+                  },
+                  void 0,
+                  true,
+                  {
+                    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                    lineNumber: 135,
+                    columnNumber: 13
+                  },
+                  this
+                )
+              ] }, void 0, true, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 130,
+                columnNumber: 11
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+              lineNumber: 128,
+              columnNumber: 9
+            }, this),
+            copied && /* @__PURE__ */ jsxDEV("div", { className: "mt-5 flex items-start gap-4 rounded-xl border border-lime-700/45 bg-lime-500/8 p-4 text-sm leading-6 text-white/75", children: [
+              /* @__PURE__ */ jsxDEV("span", { className: "grid h-9 w-9 shrink-0 place-items-center rounded-full bg-lime-600 text-white", children: /* @__PURE__ */ jsxDEV(Check, { size: 20, "aria-hidden": "true" }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 149,
+                columnNumber: 15
+              }, this) }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 148,
+                columnNumber: 13
+              }, this),
+              /* @__PURE__ */ jsxDEV("p", { children: "Le lien a été copié dans ton presse-papiers. Tu peux maintenant le partager avec tes amis." }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 151,
+                columnNumber: 13
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+              lineNumber: 147,
+              columnNumber: 9
+            }, this),
+            copyError && /* @__PURE__ */ jsxDEV("div", { className: "mt-5 rounded-xl border border-orange-500/35 bg-orange-500/8 p-4 text-sm leading-6 text-orange-100", children: copyError }, void 0, false, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+              lineNumber: 156,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "my-7 flex items-center gap-4 text-sm text-white/50", children: [
+              /* @__PURE__ */ jsxDEV("span", { className: "h-px flex-1 bg-white/12" }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 162,
+                columnNumber: 11
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { children: "ou partager via" }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 163,
+                columnNumber: 11
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { className: "h-px flex-1 bg-white/12" }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 164,
+                columnNumber: 11
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+              lineNumber: 161,
+              columnNumber: 9
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "grid gap-3 sm:grid-cols-3", children: [
+              /* @__PURE__ */ jsxDEV("button", { type: "button", onClick: shareWhatsapp, className: "teamup-invite-share-button", children: [
+                /* @__PURE__ */ jsxDEV(MessageCircle, { size: 24, className: "text-green-400", "aria-hidden": "true" }, void 0, false, {
+                  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                  lineNumber: 169,
+                  columnNumber: 13
+                }, this),
+                "WhatsApp"
+              ] }, void 0, true, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 168,
+                columnNumber: 11
+              }, this),
+              /* @__PURE__ */ jsxDEV("button", { type: "button", onClick: shareEmail, className: "teamup-invite-share-button", children: [
+                /* @__PURE__ */ jsxDEV(Mail, { size: 24, className: "text-sky-400", "aria-hidden": "true" }, void 0, false, {
+                  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                  lineNumber: 173,
+                  columnNumber: 13
+                }, this),
+                "E-mail"
+              ] }, void 0, true, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 172,
+                columnNumber: 11
+              }, this),
+              /* @__PURE__ */ jsxDEV("button", { type: "button", onClick: shareNative, className: "teamup-invite-share-button", children: [
+                /* @__PURE__ */ jsxDEV(Share2, { size: 24, className: "text-lime-500", "aria-hidden": "true" }, void 0, false, {
+                  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                  lineNumber: 177,
+                  columnNumber: 13
+                }, this),
+                "Autres options"
+              ] }, void 0, true, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+                lineNumber: 176,
+                columnNumber: 11
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+              lineNumber: 167,
+              columnNumber: 9
+            }, this)
+          ]
+        },
+        void 0,
+        true,
+        {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+          lineNumber: 98,
+          columnNumber: 7
+        },
+        this
+      )
+    },
+    void 0,
+    false,
+    {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx",
+      lineNumber: 94,
+      columnNumber: 5
+    },
+    this
+  );
+}
+_s(InviteFriendsModal, "xibGnw4YzO8nC4pkm542aZfSlsk=");
+_c = InviteFriendsModal;
+var _c;
+$RefreshReg$(_c, "InviteFriendsModal");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/InviteFriendsModal.jsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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RGhFO0FBQUE7QUFBQTtBQUFBO0FBQUEscUJBR0E7QUFBQSxpQkFaRjtBQUFBO0FBQUE7QUFBQTtBQUFBLG1CQWFBO0FBQUE7QUFBQTtBQUFBLFFBbEZGO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQSxNQW1GQTtBQUFBO0FBQUEsSUF2RkY7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBLEVBd0ZBO0FBRUo7QUFBQzNCLEdBaEt1Qkgsb0JBQWtCO0FBQUEsS0FBbEJBO0FBQWtCLElBQUFtQztBQUFBLGFBQUFBLElBQUEiLCJuYW1lcyI6WyJ1c2VFZmZlY3QiLCJ1c2VNZW1vIiwidXNlU3RhdGUiLCJDaGVjayIsIkNvcHkiLCJMaW5rIiwiTGlua0ljb24iLCJNYWlsIiwiTWVzc2FnZUNpcmNsZSIsIlNoYXJlMiIsIlVzZXJQbHVzIiwiWCIsImludml0ZU1lc3NhZ2UiLCJjb3B5VGV4dCIsInRleHQiLCJuYXZpZ2F0b3IiLCJjbGlwYm9hcmQiLCJ3cml0ZVRleHQiLCJ0ZXh0YXJlYSIsImRvY3VtZW50IiwiY3JlYXRlRWxlbWVudCIsInZhbHVlIiwic2V0QXR0cmlidXRlIiwic3R5bGUiLCJwb3NpdGlvbiIsIm9wYWNpdHkiLCJib2R5IiwiYXBwZW5kQ2hpbGQiLCJzZWxlY3QiLCJleGVjQ29tbWFuZCIsInJlbW92ZUNoaWxkIiwiSW52aXRlRnJpZW5kc01vZGFsIiwiaXNPcGVuIiwib25DbG9zZSIsIl9zIiwiY29waWVkIiwic2V0Q29waWVkIiwiY29weUVycm9yIiwic2V0Q29weUVycm9yIiwiaW52aXRlTGluayIsIndpbmRvdyIsImxvY2F0aW9uIiwib3JpZ2luIiwiZnVsbE1lc3NhZ2UiLCJlbmNvZGVkTWVzc2FnZSIsImVuY29kZVVSSUNvbXBvbmVudCIsInVuZGVmaW5lZCIsImhhbmRsZUVzY2FwZSIsImV2ZW50Iiwia2V5IiwiYWRkRXZlbnRMaXN0ZW5lciIsInJlbW92ZUV2ZW50TGlzdGVuZXIiLCJ0aW1lciIsInNldFRpbWVvdXQiLCJjbGVhclRpbWVvdXQiLCJoYW5kbGVDb3B5Iiwic2hhcmVXaGF0c2FwcCIsIm9wZW4iLCJzaGFyZUVtYWlsIiwic3ViamVjdCIsImhyZWYiLCJzaGFyZU5hdGl2ZSIsInNoYXJlIiwidGl0bGUiLCJ1cmwiLCJzdG9wUHJvcGFnYXRpb24iLCJfYyJdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlcyI6WyJJbnZpdGVGcmllbmRzTW9kYWwuanN4Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHVzZUVmZmVjdCwgdXNlTWVtbywgdXNlU3RhdGUgfSBmcm9tICdyZWFjdCc7XG5pbXBvcnQgeyBDaGVjaywgQ29weSwgTGluayBhcyBMaW5rSWNvbiwgTWFpbCwgTWVzc2FnZUNpcmNsZSwgU2hhcmUyLCBVc2VyUGx1cywgWCB9IGZyb20gJ2x1Y2lkZS1yZWFjdCc7XG5cbmNvbnN0IGludml0ZU1lc3NhZ2UgPVxuICAnUmVqb2lucy1tb2kgc3VyIFRlYW1VcCAhIFRyb3V2ZSBkZXMgam91ZXVycyBkZSBmb290IG91IGRlIGJhc2tldCBwcsOocyBkZSBjaGV6IHRvaSBldCBvcmdhbmlzZSB0ZXMgcHJvY2hhaW5zIG1hdGNocy4nO1xuXG5hc3luYyBmdW5jdGlvbiBjb3B5VGV4dCh0ZXh0KSB7XG4gIGlmIChuYXZpZ2F0b3IuY2xpcGJvYXJkPy53cml0ZVRleHQpIHtcbiAgICBhd2FpdCBuYXZpZ2F0b3IuY2xpcGJvYXJkLndyaXRlVGV4dCh0ZXh0KTtcbiAgICByZXR1cm47XG4gIH1cblxuICBjb25zdCB0ZXh0YXJlYSA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ3RleHRhcmVhJyk7XG4gIHRleHRhcmVhLnZhbHVlID0gdGV4dDtcbiAgdGV4dGFyZWEuc2V0QXR0cmlidXRlKCdyZWFkb25seScsICcnKTtcbiAgdGV4dGFyZWEuc3R5bGUucG9zaXRpb24gPSAnZml4ZWQnO1xuICB0ZXh0YXJlYS5zdHlsZS5vcGFjaXR5ID0gJzAnO1xuICBkb2N1bWVudC5ib2R5LmFwcGVuZENoaWxkKHRleHRhcmVhKTtcbiAgdGV4dGFyZWEuc2VsZWN0KCk7XG4gIGRvY3VtZW50LmV4ZWNDb21tYW5kKCdjb3B5Jyk7XG4gIGRvY3VtZW50LmJvZHkucmVtb3ZlQ2hpbGQodGV4dGFyZWEpO1xufVxuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBJbnZpdGVGcmllbmRzTW9kYWwoeyBpc09wZW4sIG9uQ2xvc2UgfSkge1xuICBjb25zdCBbY29waWVkLCBzZXRDb3BpZWRdID0gdXNlU3RhdGUoZmFsc2UpO1xuICBjb25zdCBbY29weUVycm9yLCBzZXRDb3B5RXJyb3JdID0gdXNlU3RhdGUoJycpO1xuXG4gIGNvbnN0IGludml0ZUxpbmsgPSB1c2VNZW1vKCgpID0+IHtcbiAgICBpZiAodHlwZW9mIHdpbmRvdyA9PT0gJ3VuZGVmaW5lZCcpIHJldHVybiAnJztcbiAgICByZXR1cm4gYCR7d2luZG93LmxvY2F0aW9uLm9yaWdpbn0vYDtcbiAgfSwgW10pO1xuXG4gIGNvbnN0IGZ1bGxNZXNzYWdlID0gYCR7aW52aXRlTWVzc2FnZX0gJHtpbnZpdGVMaW5rfWA7XG4gIGNvbnN0IGVuY29kZWRNZXNzYWdlID0gZW5jb2RlVVJJQ29tcG9uZW50KGZ1bGxNZXNzYWdlKTtcblxuICB1c2VFZmZlY3QoKCkgPT4ge1xuICAgIGlmICghaXNPcGVuKSByZXR1cm4gdW5kZWZpbmVkO1xuXG4gICAgZnVuY3Rpb24gaGFuZGxlRXNjYXBlKGV2ZW50KSB7XG4gICAgICBpZiAoZXZlbnQua2V5ID09PSAnRXNjYXBlJykgb25DbG9zZSgpO1xuICAgIH1cblxuICAgIGRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ2tleWRvd24nLCBoYW5kbGVFc2NhcGUpO1xuICAgIHJldHVybiAoKSA9PiBkb2N1bWVudC5yZW1vdmVFdmVudExpc3RlbmVyKCdrZXlkb3duJywgaGFuZGxlRXNjYXBlKTtcbiAgfSwgW2lzT3Blbiwgb25DbG9zZV0pO1xuXG4gIHVzZUVmZmVjdCgoKSA9PiB7XG4gICAgaWYgKCFjb3BpZWQpIHJldHVybiB1bmRlZmluZWQ7XG4gICAgY29uc3QgdGltZXIgPSB3aW5kb3cuc2V0VGltZW91dCgoKSA9PiBzZXRDb3BpZWQoZmFsc2UpLCAyNjAwKTtcbiAgICByZXR1cm4gKCkgPT4gd2luZG93LmNsZWFyVGltZW91dCh0aW1lcik7XG4gIH0sIFtjb3BpZWRdKTtcblxuICBpZiAoIWlzT3BlbikgcmV0dXJuIG51bGw7XG5cbiAgYXN5bmMgZnVuY3Rpb24gaGFuZGxlQ29weSgpIHtcbiAgICB0cnkge1xuICAgICAgYXdhaXQgY29weVRleHQoaW52aXRlTGluayk7XG4gICAgICBzZXRDb3B5RXJyb3IoJycpO1xuICAgICAgc2V0Q29waWVkKHRydWUpO1xuICAgIH0gY2F0Y2gge1xuICAgICAgc2V0Q29waWVkKGZhbHNlKTtcbiAgICAgIHNldENvcHlFcnJvcignSW1wb3NzaWJsZSBkZSBjb3BpZXIgYXV0b21hdGlxdWVtZW50IGxlIGxpZW4uIFR1IHBldXggbGUgc8OpbGVjdGlvbm5lciBldCBsZSBjb3BpZXIgbWFudWVsbGVtZW50LicpO1xuICAgIH1cbiAgfVxuXG4gIGZ1bmN0aW9uIHNoYXJlV2hhdHNhcHAoKSB7XG4gICAgd2luZG93Lm9wZW4oYGh0dHBzOi8vd2EubWUvP3RleHQ9JHtlbmNvZGVkTWVzc2FnZX1gLCAnX2JsYW5rJywgJ25vb3BlbmVyLG5vcmVmZXJyZXInKTtcbiAgfVxuXG4gIGZ1bmN0aW9uIHNoYXJlRW1haWwoKSB7XG4gICAgY29uc3Qgc3ViamVjdCA9IGVuY29kZVVSSUNvbXBvbmVudCgnUmVqb2lucy1tb2kgc3VyIFRlYW1VcCcpO1xuICAgIGNvbnN0IGJvZHkgPSBlbmNvZGVVUklDb21wb25lbnQoYCR7aW52aXRlTWVzc2FnZX1cXG5cXG4ke2ludml0ZUxpbmt9YCk7XG4gICAgd2luZG93LmxvY2F0aW9uLmhyZWYgPSBgbWFpbHRvOj9zdWJqZWN0PSR7c3ViamVjdH0mYm9keT0ke2JvZHl9YDtcbiAgfVxuXG4gIGFzeW5jIGZ1bmN0aW9uIHNoYXJlTmF0aXZlKCkge1xuICAgIHRyeSB7XG4gICAgICBpZiAobmF2aWdhdG9yLnNoYXJlKSB7XG4gICAgICAgIGF3YWl0IG5hdmlnYXRvci5zaGFyZSh7XG4gICAgICAgICAgdGl0bGU6ICdUZWFtVXAnLFxuICAgICAgICAgIHRleHQ6IGludml0ZU1lc3NhZ2UsXG4gICAgICAgICAgdXJsOiBpbnZpdGVMaW5rLFxuICAgICAgICB9KTtcbiAgICAgICAgcmV0dXJuO1xuICAgICAgfVxuXG4gICAgICBhd2FpdCBoYW5kbGVDb3B5KCk7XG4gICAgfSBjYXRjaCB7XG4gICAgICBhd2FpdCBoYW5kbGVDb3B5KCk7XG4gICAgfVxuICB9XG5cbiAgcmV0dXJuIChcbiAgICA8ZGl2XG4gICAgICBjbGFzc05hbWU9XCJmaXhlZCBpbnNldC0wIHotWzEyMF0gZ3JpZCBwbGFjZS1pdGVtcy1jZW50ZXIgYmctWyMwMjA5MGFdLzc1IHB4LTQgcHktNiBiYWNrZHJvcC1ibHVyLXNtXCJcbiAgICAgIG9uTW91c2VEb3duPXtvbkNsb3NlfVxuICAgID5cbiAgICAgIDxzZWN0aW9uXG4gICAgICAgIHJvbGU9XCJkaWFsb2dcIlxuICAgICAgICBhcmlhLW1vZGFsPVwidHJ1ZVwiXG4gICAgICAgIGFyaWEtbGFiZWxsZWRieT1cImludml0ZS1mcmllbmRzLXRpdGxlXCJcbiAgICAgICAgY2xhc3NOYW1lPVwidGVhbXVwLWludml0ZS1tb2RhbCB3LWZ1bGwgbWF4LXctM3hsIHJvdW5kZWQtMnhsIGJvcmRlciBib3JkZXItd2hpdGUvMTIgYmctWyMwNzE3MTldIHAtNSB0ZXh0LXdoaXRlIHNoYWRvdy0yeGwgc2hhZG93LWJsYWNrLzUwIHNtOnAtN1wiXG4gICAgICAgIG9uTW91c2VEb3duPXsoZXZlbnQpID0+IGV2ZW50LnN0b3BQcm9wYWdhdGlvbigpfVxuICAgICAgPlxuICAgICAgICA8YnV0dG9uXG4gICAgICAgICAgdHlwZT1cImJ1dHRvblwiXG4gICAgICAgICAgb25DbGljaz17b25DbG9zZX1cbiAgICAgICAgICBjbGFzc05hbWU9XCJmbG9hdC1yaWdodCBncmlkIGgtMTAgdy0xMCBjdXJzb3ItcG9pbnRlciBwbGFjZS1pdGVtcy1jZW50ZXIgcm91bmRlZC1mdWxsIHRleHQtd2hpdGUvNTUgdHJhbnNpdGlvbiBob3ZlcjpiZy13aGl0ZS84IGhvdmVyOnRleHQtd2hpdGUgZm9jdXM6b3V0bGluZS1ub25lIGZvY3VzOnJpbmctMiBmb2N1czpyaW5nLWxpbWUtNDAwXCJcbiAgICAgICAgICBhcmlhLWxhYmVsPVwiRmVybWVyIGxhIGZlbsOqdHJlIGTigJlpbnZpdGF0aW9uXCJcbiAgICAgICAgPlxuICAgICAgICAgIDxYIHNpemU9ezI0fSBhcmlhLWhpZGRlbj1cInRydWVcIiAvPlxuICAgICAgICA8L2J1dHRvbj5cblxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXggZ2FwLTUgcHItMTBcIj5cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImdyaWQgaC0xNiB3LTE2IHNocmluay0wIHBsYWNlLWl0ZW1zLWNlbnRlciByb3VuZGVkLWZ1bGwgYmctd2hpdGUvNyB0ZXh0LWxpbWUtNTAwXCI+XG4gICAgICAgICAgICA8VXNlclBsdXMgc2l6ZT17MzR9IGFyaWEtaGlkZGVuPVwidHJ1ZVwiIC8+XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgIDxoMiBpZD1cImludml0ZS1mcmllbmRzLXRpdGxlXCIgY2xhc3NOYW1lPVwidGV4dC0yeGwgZm9udC1ibGFjayBsZWFkaW5nLXRpZ2h0IHNtOnRleHQtM3hsXCI+XG4gICAgICAgICAgICAgIEludml0ZSB1biBhbWkgc3VyIFRlYW1VcFxuICAgICAgICAgICAgPC9oMj5cbiAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cIm10LTMgbWF4LXcteGwgdGV4dC1zbSBsZWFkaW5nLTYgdGV4dC13aGl0ZS82NSBzbTp0ZXh0LWJhc2VcIj5cbiAgICAgICAgICAgICAgUGFydGFnZSBUZWFtVXAgYXZlYyB0ZXMgYW1pcyBldCB0cm91dmV6IHBsdXMgZmFjaWxlbWVudCBkZXMgam91ZXVycyBwb3VyIHZvcyBwcm9jaGFpbnMgbWF0Y2hzLlxuICAgICAgICAgICAgPC9wPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cblxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cIm10LThcIj5cbiAgICAgICAgICA8cCBjbGFzc05hbWU9XCJtYi0zIHRleHQtc20gZm9udC1tZWRpdW0gdGV4dC13aGl0ZS83MFwiPlRvbiBsaWVuIGTigJlpbnZpdGF0aW9uPC9wPlxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBmbGV4LWNvbCBnYXAtMyByb3VuZGVkLXhsIGJvcmRlciBib3JkZXItd2hpdGUvMTIgYmctd2hpdGUvWzAuMDNdIHAtMyBzbTpmbGV4LXJvdyBzbTppdGVtcy1jZW50ZXJcIj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZmxleCBtaW4tdy0wIGZsZXgtMSBpdGVtcy1jZW50ZXIgZ2FwLTMgcHgtMlwiPlxuICAgICAgICAgICAgICA8TGlua0ljb24gY2xhc3NOYW1lPVwic2hyaW5rLTAgdGV4dC1saW1lLTUwMFwiIHNpemU9ezI0fSBhcmlhLWhpZGRlbj1cInRydWVcIiAvPlxuICAgICAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJ0cnVuY2F0ZSB0ZXh0LXNtIGZvbnQtYmxhY2sgdGV4dC13aGl0ZSBzbTp0ZXh0LWJhc2VcIj57aW52aXRlTGlua308L3NwYW4+XG4gICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDxidXR0b25cbiAgICAgICAgICAgICAgdHlwZT1cImJ1dHRvblwiXG4gICAgICAgICAgICAgIG9uQ2xpY2s9e2hhbmRsZUNvcHl9XG4gICAgICAgICAgICAgIGNsYXNzTmFtZT1cImlubGluZS1mbGV4IGN1cnNvci1wb2ludGVyIGl0ZW1zLWNlbnRlciBqdXN0aWZ5LWNlbnRlciBnYXAtMiByb3VuZGVkLWxnIGJnLWxpbWUtNzAwIHB4LTUgcHktMyB0ZXh0LXNtIGZvbnQtYmxhY2sgdGV4dC13aGl0ZSB0cmFuc2l0aW9uIGhvdmVyOmJnLWxpbWUtODAwIGZvY3VzOm91dGxpbmUtbm9uZSBmb2N1czpyaW5nLTIgZm9jdXM6cmluZy1saW1lLTQwMFwiXG4gICAgICAgICAgICA+XG4gICAgICAgICAgICAgIHtjb3BpZWQgPyA8Q2hlY2sgc2l6ZT17MTh9IGFyaWEtaGlkZGVuPVwidHJ1ZVwiIC8+IDogPENvcHkgc2l6ZT17MTh9IGFyaWEtaGlkZGVuPVwidHJ1ZVwiIC8+fVxuICAgICAgICAgICAgICB7Y29waWVkID8gJ0xpZW4gY29wacOpICEnIDogJ0NvcGllciBsZSBsaWVuJ31cbiAgICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cblxuICAgICAgICB7Y29waWVkICYmIChcbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cIm10LTUgZmxleCBpdGVtcy1zdGFydCBnYXAtNCByb3VuZGVkLXhsIGJvcmRlciBib3JkZXItbGltZS03MDAvNDUgYmctbGltZS01MDAvOCBwLTQgdGV4dC1zbSBsZWFkaW5nLTYgdGV4dC13aGl0ZS83NVwiPlxuICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwiZ3JpZCBoLTkgdy05IHNocmluay0wIHBsYWNlLWl0ZW1zLWNlbnRlciByb3VuZGVkLWZ1bGwgYmctbGltZS02MDAgdGV4dC13aGl0ZVwiPlxuICAgICAgICAgICAgICA8Q2hlY2sgc2l6ZT17MjB9IGFyaWEtaGlkZGVuPVwidHJ1ZVwiIC8+XG4gICAgICAgICAgICA8L3NwYW4+XG4gICAgICAgICAgICA8cD5MZSBsaWVuIGEgw6l0w6kgY29wacOpIGRhbnMgdG9uIHByZXNzZS1wYXBpZXJzLiBUdSBwZXV4IG1haW50ZW5hbnQgbGUgcGFydGFnZXIgYXZlYyB0ZXMgYW1pcy48L3A+XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgICl9XG5cbiAgICAgICAge2NvcHlFcnJvciAmJiAoXG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtdC01IHJvdW5kZWQteGwgYm9yZGVyIGJvcmRlci1vcmFuZ2UtNTAwLzM1IGJnLW9yYW5nZS01MDAvOCBwLTQgdGV4dC1zbSBsZWFkaW5nLTYgdGV4dC1vcmFuZ2UtMTAwXCI+XG4gICAgICAgICAgICB7Y29weUVycm9yfVxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICApfVxuXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibXktNyBmbGV4IGl0ZW1zLWNlbnRlciBnYXAtNCB0ZXh0LXNtIHRleHQtd2hpdGUvNTBcIj5cbiAgICAgICAgICA8c3BhbiBjbGFzc05hbWU9XCJoLXB4IGZsZXgtMSBiZy13aGl0ZS8xMlwiIC8+XG4gICAgICAgICAgPHNwYW4+b3UgcGFydGFnZXIgdmlhPC9zcGFuPlxuICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImgtcHggZmxleC0xIGJnLXdoaXRlLzEyXCIgLz5cbiAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJncmlkIGdhcC0zIHNtOmdyaWQtY29scy0zXCI+XG4gICAgICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgb25DbGljaz17c2hhcmVXaGF0c2FwcH0gY2xhc3NOYW1lPVwidGVhbXVwLWludml0ZS1zaGFyZS1idXR0b25cIj5cbiAgICAgICAgICAgIDxNZXNzYWdlQ2lyY2xlIHNpemU9ezI0fSBjbGFzc05hbWU9XCJ0ZXh0LWdyZWVuLTQwMFwiIGFyaWEtaGlkZGVuPVwidHJ1ZVwiIC8+XG4gICAgICAgICAgICBXaGF0c0FwcFxuICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIG9uQ2xpY2s9e3NoYXJlRW1haWx9IGNsYXNzTmFtZT1cInRlYW11cC1pbnZpdGUtc2hhcmUtYnV0dG9uXCI+XG4gICAgICAgICAgICA8TWFpbCBzaXplPXsyNH0gY2xhc3NOYW1lPVwidGV4dC1za3ktNDAwXCIgYXJpYS1oaWRkZW49XCJ0cnVlXCIgLz5cbiAgICAgICAgICAgIEUtbWFpbFxuICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIG9uQ2xpY2s9e3NoYXJlTmF0aXZlfSBjbGFzc05hbWU9XCJ0ZWFtdXAtaW52aXRlLXNoYXJlLWJ1dHRvblwiPlxuICAgICAgICAgICAgPFNoYXJlMiBzaXplPXsyNH0gY2xhc3NOYW1lPVwidGV4dC1saW1lLTUwMFwiIGFyaWEtaGlkZGVuPVwidHJ1ZVwiIC8+XG4gICAgICAgICAgICBBdXRyZXMgb3B0aW9uc1xuICAgICAgICAgIDwvYnV0dG9uPlxuICAgICAgICA8L2Rpdj5cbiAgICAgIDwvc2VjdGlvbj5cbiAgICA8L2Rpdj5cbiAgKTtcbn1cbiJdLCJmaWxlIjoiQzovVXNlcnMvbGF1cmUvRG9jdW1lbnRzL0FQUCBNb2JpbGUvdGVhbXVwL2Zyb250ZW5kL3NyYy9jb21wb25lbnRzL0ludml0ZUZyaWVuZHNNb2RhbC5qc3gifQ==

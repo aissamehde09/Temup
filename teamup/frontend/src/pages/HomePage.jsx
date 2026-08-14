@@ -32,7 +32,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="overflow-hidden rounded-[2rem] bg-white p-3 shadow-xl">
-          <img src="/img/teamup-basketball-original.png" alt="Match de basket" className="h-[520px] w-full rounded-[1.5rem] object-cover" />
+          <img src="/img/teamup-basketball-original.png" alt="Match de basket" className="h-[320px] w-full rounded-[1.5rem] object-cover sm:h-[400px] lg:h-[520px]" />
         </div>
       </section>
 
@@ -65,4 +65,3 @@ export default function HomePage() {
     </main>
   );
 }
-

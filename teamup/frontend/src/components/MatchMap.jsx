@@ -55,7 +55,7 @@ function MapRecenter({ matches }) {
 export default function MatchMap({ matches }) {
   const mappableMatches = matches.filter((match) => positionFor(match));
   return (
-    <div className="teamup-map overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-sm" style={{ height: '600px', width: '100%' }}>
+    <div className="teamup-map overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-sm" style={{ height: 'min(600px, 70vh)', width: '100%' }}>
       <MapContainer center={center} zoom={12} scrollWheelZoom style={{ height: '100%', width: '100%' }} whenReady={(event) => event.target.invalidateSize()}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

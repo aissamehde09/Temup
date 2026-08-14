@@ -101,6 +101,26 @@ html {
   .teamup-navbar {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+    width: 100%;
+    max-width: 100vw;
+    overflow: visible;
+  }
+
+  .teamup-navbar > div {
+    min-width: 0;
+  }
+
+  .teamup-navbar .teamup-brand {
+    min-width: 0;
+    max-width: calc(100% - 3.5rem);
+  }
+
+  .teamup-navbar .teamup-brand span {
+    white-space: nowrap;
+  }
+
+  .teamup-navbar button[aria-label] {
+    flex: 0 0 auto;
   }
 
   .teamup-register-button {
@@ -117,9 +137,10 @@ html {
   }
 
   .login-card {
-    width: 100%;
+    width: min(100%, calc(100vw - 1.5rem));
     border-radius: 1.25rem;
     padding: 1.25rem !important;
+    overflow: hidden;
   }
 
   .login-card h1 {
@@ -129,6 +150,7 @@ html {
 
   .login-card p {
     max-width: 100%;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -245,7 +267,7 @@ a {
 }
 
 .teamup-navbar.is-scrolled {
-  transform: translateY(12px);
+  transform: translateY(0);
   border-color: rgba(101, 163, 13, 0.18);
   background-color: rgba(255, 255, 255, 0.94);
   box-shadow:
@@ -638,6 +660,164 @@ img {
   .teamup-my-match-actions > a,
   .teamup-my-match-actions > button {
     min-width: 120px;
+  }
+}
+
+/* Responsive audit: keep every route inside the viewport. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.teamup-app-shell,
+.teamup-app-main,
+.teamup-dashboard,
+.teamup-dashboard > *,
+.teamup-dashboard-right,
+.teamup-upcoming-match,
+.teamup-my-match-row {
+  min-width: 0;
+}
+
+.teamup-app-main > * {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+@media (min-width: 1024px) {
+  /* Match the desktop mockup: a compact, stable rail and a fluid content area. */
+  .teamup-sidebar {
+    flex-basis: 250px;
+    width: 250px;
+    padding-inline: 1rem;
+  }
+
+  .teamup-app-main {
+    margin-left: 250px;
+    max-width: calc(100vw - 250px);
+    padding-inline: clamp(1rem, 2.2vw, 2.5rem);
+  }
+
+  .teamup-dashboard {
+    width: 100%;
+    max-width: 1180px;
+    grid-template-columns: minmax(0, 1fr) 280px !important;
+  }
+
+  .teamup-dashboard-right {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .teamup-dashboard h1 {
+    font-size: clamp(1.45rem, 1.8vw, 2rem) !important;
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 1023px) {
+  .teamup-app-main {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0 !important;
+    padding-inline: clamp(.75rem, 3vw, 1.5rem) !important;
+  }
+
+  .teamup-app-main > * {
+    max-width: 100%;
+  }
+
+  .teamup-dashboard {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .teamup-dashboard-right {
+    width: 100%;
+    max-width: none;
+  }
+
+  .teamup-dashboard h1 {
+    font-size: clamp(1.4rem, 4vw, 1.9rem) !important;
+    line-height: 1.2;
+  }
+
+  .teamup-dashboard h2 {
+    font-size: clamp(1rem, 3vw, 1.25rem) !important;
+  }
+
+  .teamup-navbar {
+    width: 100%;
+    max-width: 100vw;
+  }
+}
+
+@media (max-width: 767px) {
+  .teamup-app-main {
+    padding-top: 4.5rem !important;
+    padding-inline: .75rem !important;
+  }
+
+  .teamup-dashboard {
+    gap: 1rem !important;
+  }
+
+  .teamup-dashboard > section,
+  .teamup-dashboard-right > * {
+    width: 100%;
+  }
+
+  .teamup-dashboard-right .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .teamup-upcoming-match,
+  .teamup-my-match-row {
+    overflow: hidden;
+  }
+
+  /* Public pages: prevent oversized headings and horizontal crop on phones. */
+  main.bg-slate-50 {
+    padding-inline: .75rem !important;
+  }
+
+  main.bg-slate-50 h1 {
+    font-size: clamp(1.75rem, 8vw, 2.35rem) !important;
+    line-height: 1.15;
+  }
+
+  main.bg-slate-50 h2 {
+    font-size: clamp(1.15rem, 5vw, 1.65rem) !important;
+    line-height: 1.25;
+  }
+
+  main.bg-slate-50 section {
+    max-width: 100%;
+  }
+
+  .teamup-footer {
+    padding-inline: 1rem !important;
+  }
+
+  .teamup-map {
+    height: min(420px, 62vh) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .teamup-navbar,
+  .teamup-sidebar,
+  .teamup-footer-block,
+  .teamup-footer-copy {
+    animation: none !important;
+    transition: none !important;
   }
 }
 

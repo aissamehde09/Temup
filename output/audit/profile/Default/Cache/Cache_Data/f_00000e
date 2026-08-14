@@ -1,0 +1,522 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/pages/DashboardPage.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=4942d33c"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+var _s = $RefreshSig$();
+import { Link } from "/node_modules/.vite/deps/react-router-dom.js?v=4942d33c";
+import EmptyState from "/src/components/EmptyState.jsx";
+import { useAuth } from "/src/context/AuthContext.jsx?t=1786702920831";
+import { useNotifications } from "/src/context/NotificationContext.jsx?t=1786702920831";
+import { demoMatches } from "/src/data/teamupDemo.js";
+import { appAvatars, AvatarStack, IconStat, PagePanel, SportBadge, sportMeta } from "/src/components/InternalUI.jsx";
+import UserAvatar from "/src/components/UserAvatar.jsx";
+import { ArrowRight, Basketball, Bell, CalendarDays, CalendarPlus, Football, Hand, MessageCircle, Search, Star, Trophy, User } from "/src/components/landing/icons.jsx";
+export default function DashboardPage() {
+  _s();
+  const { user } = useAuth();
+  const { notifications, unreadCount } = useNotifications();
+  const isDemoAccount = user?.email === "mehdi@teamup.local";
+  const firstName = user?.first_name || user?.firstName || "Sportif";
+  const upcomingMatches = isDemoAccount ? demoMatches.slice(1, 4) : [];
+  return /* @__PURE__ */ jsxDEV("div", { className: "teamup-dashboard mx-auto grid w-full max-w-[1180px] items-start gap-5 xl:grid-cols-[minmax(0,1fr)_292px]", children: [
+    /* @__PURE__ */ jsxDEV("section", { className: "min-w-0", children: [
+      /* @__PURE__ */ jsxDEV(Header, { firstName }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 20,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "mt-4 grid gap-4 lg:grid-cols-3", children: [
+        /* @__PURE__ */ jsxDEV(IconStat, { Icon: CalendarDays, value: isDemoAccount ? "3" : "0", label: "À venir", helper: "Prochains", color: "#65A30D" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 23,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(IconStat, { Icon: Trophy, value: isDemoAccount ? "7" : "0", label: "Organisés", helper: "Total", color: "#F97316" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 24,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(IconStat, { Icon: Star, value: isDemoAccount ? "4.8/5" : "0/5", label: "Note", helper: isDemoAccount ? "24 avis" : "0 avis", color: "#F97316" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 25,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 22,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "mt-4 grid gap-4 lg:grid-cols-2", children: [
+        /* @__PURE__ */ jsxDEV(SportShortcut, { sport: "Football" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 29,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(SportShortcut, { sport: "Basketball" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 30,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 28,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV(PagePanel, { className: "mt-5 overflow-hidden", children: [
+        /* @__PURE__ */ jsxDEV("div", { className: "teamup-upcoming-header flex items-center justify-between border-b border-slate-100 px-5 py-4", children: [
+          /* @__PURE__ */ jsxDEV("h2", { className: "text-base font-black text-slate-950", children: "Mes prochains matchs" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 35,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Link, { to: "/my-matches", className: "flex items-center gap-2 text-sm font-black text-lime-800", children: [
+            "Voir tous ",
+            /* @__PURE__ */ jsxDEV(ArrowRight, { size: 14, color: "currentColor" }, void 0, false, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+              lineNumber: 37,
+              columnNumber: 25
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 36,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 34,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "teamup-upcoming-content px-5", children: upcomingMatches.length > 0 ? upcomingMatches.map(
+          (match, index) => /* @__PURE__ */ jsxDEV(UpcomingMatch, { match, extra: index + 2 }, match.id, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 43,
+            columnNumber: 13
+          }, this)
+        ) : /* @__PURE__ */ jsxDEV("div", { className: "py-5", children: /* @__PURE__ */ jsxDEV(EmptyState, { title: "Aucun match", description: "Tu n’as pas encore rejoint de match." }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 47,
+          columnNumber: 17
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 46,
+          columnNumber: 13
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 40,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 33,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV(PagePanel, { className: "mt-5 overflow-hidden bg-lime-50/70", children: /* @__PURE__ */ jsxDEV("div", { className: "grid min-h-[126px] items-center gap-4 p-5 md:grid-cols-[56px_minmax(0,1fr)_260px]", children: [
+        /* @__PURE__ */ jsxDEV("span", { className: "grid h-12 w-12 place-items-center rounded-full bg-lime-100 text-lime-700", children: /* @__PURE__ */ jsxDEV(User, { size: 22, color: "currentColor" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 56,
+          columnNumber: 15
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 55,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { children: [
+          /* @__PURE__ */ jsxDEV("h2", { className: "text-lg font-black text-slate-950", children: "Organise ton match" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 59,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV("p", { className: "mt-1 text-xs text-slate-600", children: "Crée une partie en quelques clics." }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 60,
+            columnNumber: 15
+          }, this),
+          /* @__PURE__ */ jsxDEV(Link, { to: "/matches/create", className: "mt-4 inline-flex items-center gap-3 rounded-lg bg-lime-700 px-5 py-2.5 text-xs font-black text-white", children: [
+            "Créer un match ",
+            /* @__PURE__ */ jsxDEV(ArrowRight, { size: 14, color: "currentColor" }, void 0, false, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+              lineNumber: 62,
+              columnNumber: 32
+            }, this)
+          ] }, void 0, true, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 61,
+            columnNumber: 15
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 58,
+          columnNumber: 13
+        }, this),
+        /* @__PURE__ */ jsxDEV("img", { src: "/img/teamup-football-night-original.png", alt: "", className: "hidden h-32 w-full rounded-tl-[5rem] object-cover md:block" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 65,
+          columnNumber: 13
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 54,
+        columnNumber: 11
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 53,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 19,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("aside", { className: "teamup-dashboard-right grid min-w-0 content-start gap-5", children: [
+      /* @__PURE__ */ jsxDEV(PagePanel, { className: "p-5", children: [
+        /* @__PURE__ */ jsxDEV("h2", { className: "text-xl font-black text-slate-950", children: "Notifications" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 72,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "mt-4 grid gap-4", children: notifications.length > 0 ? notifications.slice(0, 3).map(
+          (notification, index) => /* @__PURE__ */ jsxDEV("div", { className: "grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-slate-100 pb-5 last:border-0 last:pb-0", children: [
+            /* @__PURE__ */ jsxDEV(UserAvatar, { user: {
+              name: ["Thomas", "Sarah", "Alex"][index] || "Membre TeamUp",
+              avatar: appAvatars[index]
+            }, size: "lg" }, void 0, false, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+              lineNumber: 77,
+              columnNumber: 19
+            }, this),
+            /* @__PURE__ */ jsxDEV("div", { className: "min-w-0", children: [
+              /* @__PURE__ */ jsxDEV("p", { className: "line-clamp-2 text-sm font-black leading-5 text-slate-950", children: notification.message }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+                lineNumber: 82,
+                columnNumber: 21
+              }, this),
+              /* @__PURE__ */ jsxDEV("p", { className: "mt-1 truncate text-sm font-bold text-lime-800", children: notification.context }, void 0, false, {
+                fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+                lineNumber: 83,
+                columnNumber: 21
+              }, this)
+            ] }, void 0, true, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+              lineNumber: 81,
+              columnNumber: 19
+            }, this),
+            /* @__PURE__ */ jsxDEV("p", { className: "whitespace-nowrap text-xs text-slate-500", children: notification.createdAt }, void 0, false, {
+              fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+              lineNumber: 85,
+              columnNumber: 19
+            }, this)
+          ] }, notification._id, true, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 76,
+            columnNumber: 13
+          }, this)
+        ) : /* @__PURE__ */ jsxDEV(EmptyState, { title: "Aucune notif", description: "Tu n’as aucune notification." }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 89,
+          columnNumber: 13
+        }, this) }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 73,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV(Link, { to: "/notifications", className: "mt-6 flex items-center justify-center gap-2 text-sm font-black text-lime-800", children: [
+          "Tout voir ",
+          /* @__PURE__ */ jsxDEV(ArrowRight, { size: 14, color: "currentColor" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 93,
+            columnNumber: 23
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 92,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 71,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV(PagePanel, { className: "p-5", children: [
+        /* @__PURE__ */ jsxDEV("h2", { className: "text-xl font-black text-slate-950", children: "Accès rapides" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 98,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { className: "mt-4 grid grid-cols-3 gap-3", children: [
+          /* @__PURE__ */ jsxDEV(Quick, { href: "/matches", Icon: Search, label: "Rechercher", color: "#65A30D" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 100,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Quick, { href: "/matches/create", Icon: CalendarPlus, label: "Créer", color: "#F97316" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 101,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Quick, { href: "/my-matches", Icon: CalendarDays, label: "Matchs", color: "#0EA5E9" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 102,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Quick, { href: "/notifications", Icon: Bell, label: "Notifs", color: "#9333EA", badge: unreadCount || void 0 }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 103,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Quick, { href: "/messages", Icon: MessageCircle, label: "Messages", color: "#0284C7", badge: "2" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 104,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV(Quick, { href: "/profile", Icon: User, label: "Profil", color: "#65A30D" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 105,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 99,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 97,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 70,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+    lineNumber: 18,
+    columnNumber: 5
+  }, this);
+}
+_s(DashboardPage, "D5p5lEwEajzRUuhFUHJBNRNrZtU=", false, function() {
+  return [useAuth, useNotifications];
+});
+_c = DashboardPage;
+function Header({ firstName }) {
+  return /* @__PURE__ */ jsxDEV("div", { children: /* @__PURE__ */ jsxDEV("div", { children: [
+    /* @__PURE__ */ jsxDEV("h1", { className: "flex items-center gap-3 text-2xl font-black tracking-tight text-slate-950", children: [
+      "Bonjour ",
+      firstName,
+      " ",
+      /* @__PURE__ */ jsxDEV(Hand, { size: 23, color: "#F59E0B" }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 118,
+        columnNumber: 31
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 117,
+      columnNumber: 9
+    }, this),
+    /* @__PURE__ */ jsxDEV("p", { className: "mt-1 max-w-xl text-sm leading-5 text-slate-600", children: "Trouve ou crée ton match." }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 120,
+      columnNumber: 9
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+    lineNumber: 116,
+    columnNumber: 7
+  }, this) }, void 0, false, {
+    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+    lineNumber: 115,
+    columnNumber: 5
+  }, this);
+}
+_c2 = Header;
+function SportShortcut({ sport }) {
+  const meta = sportMeta(sport);
+  const Icon = sport === "Basketball" ? Basketball : Football;
+  const image = sport === "Basketball" ? "/img/teamup-basketball-original.png" : "/img/teamup-football-original.png";
+  return /* @__PURE__ */ jsxDEV(Link, { to: "/matches", className: `teamup-sport-shortcut group relative min-h-[104px] overflow-hidden rounded-xl p-4 text-white ${meta.solid}`, children: [
+    /* @__PURE__ */ jsxDEV("img", { src: image, alt: "", className: "absolute inset-0 h-full w-full object-cover opacity-35 transition group-hover:scale-105" }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 133,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "absolute inset-0 bg-gradient-to-r from-black/35 to-transparent" }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 134,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "relative flex h-full items-center justify-between", children: [
+      /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-4", children: [
+        /* @__PURE__ */ jsxDEV(Icon, { size: 30, color: "currentColor" }, void 0, false, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 137,
+          columnNumber: 11
+        }, this),
+        /* @__PURE__ */ jsxDEV("div", { children: [
+          /* @__PURE__ */ jsxDEV("h2", { className: "text-lg font-black uppercase leading-5", children: sport }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 139,
+            columnNumber: 13
+          }, this),
+          /* @__PURE__ */ jsxDEV("p", { className: "mt-1 text-sm font-bold", children: "Trouver" }, void 0, false, {
+            fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+            lineNumber: 140,
+            columnNumber: 13
+          }, this)
+        ] }, void 0, true, {
+          fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+          lineNumber: 138,
+          columnNumber: 11
+        }, this)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 136,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("span", { className: "grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-lime-700", children: /* @__PURE__ */ jsxDEV(ArrowRight, { size: 15, color: "currentColor" }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 144,
+        columnNumber: 11
+      }, this) }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 143,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 135,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+    lineNumber: 132,
+    columnNumber: 5
+  }, this);
+}
+_c3 = SportShortcut;
+function UpcomingMatch({ match, extra }) {
+  const meta = sportMeta(match);
+  return /* @__PURE__ */ jsxDEV("article", { className: "teamup-upcoming-match grid items-center gap-4 border-b border-slate-100 py-3.5 last:border-b-0 md:grid-cols-[88px_minmax(0,1fr)_142px_84px]", children: [
+    /* @__PURE__ */ jsxDEV("img", { src: match.image_url, alt: match.title, className: "h-[74px] w-[88px] rounded-lg object-cover" }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 155,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "teamup-upcoming-info min-w-0", children: [
+      /* @__PURE__ */ jsxDEV(SportBadge, { match }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 157,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("h3", { className: "mt-1 truncate text-[15px] font-black leading-5 text-slate-950", children: match.title }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 158,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("p", { className: "mt-1 text-xs leading-4 text-slate-500", children: [
+        "Dim. 11 mai · ",
+        String(match.match_time).slice(0, 5)
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 159,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("p", { className: "truncate text-xs leading-4 text-slate-500", children: [
+        match.city,
+        " · ",
+        match.location
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 160,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 156,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("div", { className: "teamup-upcoming-players min-w-0 justify-self-center", children: [
+      /* @__PURE__ */ jsxDEV(AvatarStack, { count: 4, extra }, void 0, false, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 163,
+        columnNumber: 9
+      }, this),
+      /* @__PURE__ */ jsxDEV("p", { className: "mt-2 text-center text-xs font-bold text-slate-700", children: [
+        match.players_count,
+        "/",
+        match.max_players,
+        " joueurs"
+      ] }, void 0, true, {
+        fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+        lineNumber: 164,
+        columnNumber: 9
+      }, this)
+    ] }, void 0, true, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 162,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV(Link, { to: `/matches/${match.id}`, className: `teamup-upcoming-action w-[76px] justify-self-end rounded-lg border px-3 py-2 text-center text-xs font-black ${meta.button}`, children: "Voir" }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 166,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+    lineNumber: 154,
+    columnNumber: 5
+  }, this);
+}
+_c4 = UpcomingMatch;
+function Quick({ href, Icon, label, color, badge }) {
+  return /* @__PURE__ */ jsxDEV(Link, { to: href, className: "teamup-quick-link relative grid min-h-[86px] place-items-center overflow-hidden rounded-xl border border-slate-200 bg-white p-2 text-center transition hover:-translate-y-0.5 hover:shadow-md", children: [
+    badge && /* @__PURE__ */ jsxDEV("span", { className: "absolute right-4 top-4 grid h-6 w-6 place-items-center rounded-full bg-orange-600 text-xs font-black text-white", children: badge }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 176,
+      columnNumber: 17
+    }, this),
+    /* @__PURE__ */ jsxDEV(Icon, { size: 22, color }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 177,
+      columnNumber: 7
+    }, this),
+    /* @__PURE__ */ jsxDEV("p", { className: "mt-2 max-w-full truncate text-[11px] font-black leading-4 text-slate-950", children: label }, void 0, false, {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+      lineNumber: 178,
+      columnNumber: 7
+    }, this)
+  ] }, void 0, true, {
+    fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx",
+    lineNumber: 175,
+    columnNumber: 5
+  }, this);
+}
+_c5 = Quick;
+var _c, _c2, _c3, _c4, _c5;
+$RefreshReg$(_c, "DashboardPage");
+$RefreshReg$(_c2, "Header");
+$RefreshReg$(_c3, "SportShortcut");
+$RefreshReg$(_c4, "UpcomingMatch");
+$RefreshReg$(_c5, "Quick");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/pages/DashboardPage.jsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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QUE7QUFBQSxTQUlBO0FBRUo7QUFBQ0csTUFSUUw7QUFBSyxJQUFBTSxJQUFBMUIsS0FBQU8sS0FBQVksS0FBQU07QUFBQSxhQUFBQyxJQUFBO0FBQUEsYUFBQTFCLEtBQUE7QUFBQSxhQUFBTyxLQUFBO0FBQUEsYUFBQVksS0FBQTtBQUFBLGFBQUFNLEtBQUEiLCJuYW1lcyI6WyJMaW5rIiwiRW1wdHlTdGF0ZSIsInVzZUF1dGgiLCJ1c2VOb3RpZmljYXRpb25zIiwiZGVtb01hdGNoZXMiLCJhcHBBdmF0YXJzIiwiQXZhdGFyU3RhY2siLCJJY29uU3RhdCIsIlBhZ2VQYW5lbCIsIlNwb3J0QmFkZ2UiLCJzcG9ydE1ldGEiLCJVc2VyQXZhdGFyIiwiQXJyb3dSaWdodCIsIkJhc2tldGJhbGwiLCJCZWxsIiwiQ2FsZW5kYXJEYXlzIiwiQ2FsZW5kYXJQbHVzIiwiRm9vdGJhbGwiLCJIYW5kIiwiTWVzc2FnZUNpcmNsZSIsIlNlYXJjaCIsIlN0YXIiLCJUcm9waHkiLCJVc2VyIiwiRGFzaGJvYXJkUGFnZSIsIl9zIiwidXNlciIsIm5vdGlmaWNhdGlvbnMiLCJ1bnJlYWRDb3VudCIsImlzRGVtb0FjY291bnQiLCJlbWFpbCIsImZpcnN0TmFtZSIsImZpcnN0X25hbWUiLCJ1cGNvbWluZ01hdGNoZXMiLCJzbGljZSIsImxlbmd0aCIsIm1hcCIsIm1hdGNoIiwiaW5kZXgiLCJpZCIsIm5vdGlmaWNhdGlvbiIsIm5hbWUiLCJhdmF0YXIiLCJtZXNzYWdlIiwiY29udGV4dCIsImNyZWF0ZWRBdCIsIl9pZCIsInVuZGVmaW5lZCIsIkhlYWRlciIsIl9jMiIsIlNwb3J0U2hvcnRjdXQiLCJzcG9ydCIsIm1ldGEiLCJJY29uIiwiaW1hZ2UiLCJzb2xpZCIsIl9jMyIsIlVwY29taW5nTWF0Y2giLCJleHRyYSIsImltYWdlX3VybCIsInRpdGxlIiwiU3RyaW5nIiwibWF0Y2hfdGltZSIsImNpdHkiLCJsb2NhdGlvbiIsInBsYXllcnNfY291bnQiLCJtYXhfcGxheWVycyIsImJ1dHRvbiIsIl9jNCIsIlF1aWNrIiwiaHJlZiIsImxhYmVsIiwiY29sb3IiLCJiYWRnZSIsIl9jNSIsIl9jIl0sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VzIjpbIkRhc2hib2FyZFBhZ2UuanN4Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IExpbmsgfSBmcm9tICdyZWFjdC1yb3V0ZXItZG9tJztcbmltcG9ydCBFbXB0eVN0YXRlIGZyb20gJy4uL2NvbXBvbmVudHMvRW1wdHlTdGF0ZSc7XG5pbXBvcnQgeyB1c2VBdXRoIH0gZnJvbSAnLi4vY29udGV4dC9BdXRoQ29udGV4dCc7XG5pbXBvcnQgeyB1c2VOb3RpZmljYXRpb25zIH0gZnJvbSAnLi4vY29udGV4dC9Ob3RpZmljYXRpb25Db250ZXh0JztcbmltcG9ydCB7IGRlbW9NYXRjaGVzIH0gZnJvbSAnLi4vZGF0YS90ZWFtdXBEZW1vJztcbmltcG9ydCB7IGFwcEF2YXRhcnMsIEF2YXRhclN0YWNrLCBJY29uU3RhdCwgUGFnZVBhbmVsLCBTcG9ydEJhZGdlLCBzcG9ydE1ldGEgfSBmcm9tICcuLi9jb21wb25lbnRzL0ludGVybmFsVUknO1xuaW1wb3J0IFVzZXJBdmF0YXIgZnJvbSAnLi4vY29tcG9uZW50cy9Vc2VyQXZhdGFyJztcbmltcG9ydCB7IEFycm93UmlnaHQsIEJhc2tldGJhbGwsIEJlbGwsIENhbGVuZGFyRGF5cywgQ2FsZW5kYXJQbHVzLCBGb290YmFsbCwgSGFuZCwgTWVzc2FnZUNpcmNsZSwgU2VhcmNoLCBTdGFyLCBUcm9waHksIFVzZXIgfSBmcm9tICcuLi9jb21wb25lbnRzL2xhbmRpbmcvaWNvbnMnO1xuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBEYXNoYm9hcmRQYWdlKCkge1xuICBjb25zdCB7IHVzZXIgfSA9IHVzZUF1dGgoKTtcbiAgY29uc3QgeyBub3RpZmljYXRpb25zLCB1bnJlYWRDb3VudCB9ID0gdXNlTm90aWZpY2F0aW9ucygpO1xuICBjb25zdCBpc0RlbW9BY2NvdW50ID0gdXNlcj8uZW1haWwgPT09ICdtZWhkaUB0ZWFtdXAubG9jYWwnO1xuICBjb25zdCBmaXJzdE5hbWUgPSB1c2VyPy5maXJzdF9uYW1lIHx8IHVzZXI/LmZpcnN0TmFtZSB8fCAnU3BvcnRpZic7XG4gIGNvbnN0IHVwY29taW5nTWF0Y2hlcyA9IGlzRGVtb0FjY291bnQgPyBkZW1vTWF0Y2hlcy5zbGljZSgxLCA0KSA6IFtdO1xuXG4gIHJldHVybiAoXG4gICAgPGRpdiBjbGFzc05hbWU9XCJ0ZWFtdXAtZGFzaGJvYXJkIG14LWF1dG8gZ3JpZCB3LWZ1bGwgbWF4LXctWzExODBweF0gaXRlbXMtc3RhcnQgZ2FwLTUgeGw6Z3JpZC1jb2xzLVttaW5tYXgoMCwxZnIpXzI5MnB4XVwiPlxuICAgICAgPHNlY3Rpb24gY2xhc3NOYW1lPVwibWluLXctMFwiPlxuICAgICAgICA8SGVhZGVyIGZpcnN0TmFtZT17Zmlyc3ROYW1lfSAvPlxuXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibXQtNCBncmlkIGdhcC00IGxnOmdyaWQtY29scy0zXCI+XG4gICAgICAgICAgPEljb25TdGF0IEljb249e0NhbGVuZGFyRGF5c30gdmFsdWU9e2lzRGVtb0FjY291bnQgPyAnMycgOiAnMCd9IGxhYmVsPVwiw4AgdmVuaXJcIiBoZWxwZXI9XCJQcm9jaGFpbnNcIiBjb2xvcj1cIiM2NUEzMERcIiAvPlxuICAgICAgICAgIDxJY29uU3RhdCBJY29uPXtUcm9waHl9IHZhbHVlPXtpc0RlbW9BY2NvdW50ID8gJzcnIDogJzAnfSBsYWJlbD1cIk9yZ2FuaXPDqXNcIiBoZWxwZXI9XCJUb3RhbFwiIGNvbG9yPVwiI0Y5NzMxNlwiIC8+XG4gICAgICAgICAgPEljb25TdGF0IEljb249e1N0YXJ9IHZhbHVlPXtpc0RlbW9BY2NvdW50ID8gJzQuOC81JyA6ICcwLzUnfSBsYWJlbD1cIk5vdGVcIiBoZWxwZXI9e2lzRGVtb0FjY291bnQgPyAnMjQgYXZpcycgOiAnMCBhdmlzJ30gY29sb3I9XCIjRjk3MzE2XCIgLz5cbiAgICAgICAgPC9kaXY+XG5cbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtdC00IGdyaWQgZ2FwLTQgbGc6Z3JpZC1jb2xzLTJcIj5cbiAgICAgICAgICA8U3BvcnRTaG9ydGN1dCBzcG9ydD1cIkZvb3RiYWxsXCIgLz5cbiAgICAgICAgICA8U3BvcnRTaG9ydGN1dCBzcG9ydD1cIkJhc2tldGJhbGxcIiAvPlxuICAgICAgICA8L2Rpdj5cblxuICAgICAgICA8UGFnZVBhbmVsIGNsYXNzTmFtZT1cIm10LTUgb3ZlcmZsb3ctaGlkZGVuXCI+XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJ0ZWFtdXAtdXBjb21pbmctaGVhZGVyIGZsZXggaXRlbXMtY2VudGVyIGp1c3RpZnktYmV0d2VlbiBib3JkZXItYiBib3JkZXItc2xhdGUtMTAwIHB4LTUgcHktNFwiPlxuICAgICAgICAgICAgPGgyIGNsYXNzTmFtZT1cInRleHQtYmFzZSBmb250LWJsYWNrIHRleHQtc2xhdGUtOTUwXCI+TWVzIHByb2NoYWlucyBtYXRjaHM8L2gyPlxuICAgICAgICAgICAgPExpbmsgdG89XCIvbXktbWF0Y2hlc1wiIGNsYXNzTmFtZT1cImZsZXggaXRlbXMtY2VudGVyIGdhcC0yIHRleHQtc20gZm9udC1ibGFjayB0ZXh0LWxpbWUtODAwXCI+XG4gICAgICAgICAgICAgIFZvaXIgdG91cyA8QXJyb3dSaWdodCBzaXplPXsxNH0gY29sb3I9XCJjdXJyZW50Q29sb3JcIiAvPlxuICAgICAgICAgICAgPC9MaW5rPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidGVhbXVwLXVwY29taW5nLWNvbnRlbnQgcHgtNVwiPlxuICAgICAgICAgICAge3VwY29taW5nTWF0Y2hlcy5sZW5ndGggPiAwID8gKFxuICAgICAgICAgICAgICB1cGNvbWluZ01hdGNoZXMubWFwKChtYXRjaCwgaW5kZXgpID0+IChcbiAgICAgICAgICAgICAgICA8VXBjb21pbmdNYXRjaCBrZXk9e21hdGNoLmlkfSBtYXRjaD17bWF0Y2h9IGV4dHJhPXtpbmRleCArIDJ9IC8+XG4gICAgICAgICAgICAgICkpXG4gICAgICAgICAgICApIDogKFxuICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInB5LTVcIj5cbiAgICAgICAgICAgICAgICA8RW1wdHlTdGF0ZSB0aXRsZT1cIkF1Y3VuIG1hdGNoXCIgZGVzY3JpcHRpb249XCJUdSBu4oCZYXMgcGFzIGVuY29yZSByZWpvaW50IGRlIG1hdGNoLlwiIC8+XG4gICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgKX1cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9QYWdlUGFuZWw+XG5cbiAgICAgICAgPFBhZ2VQYW5lbCBjbGFzc05hbWU9XCJtdC01IG92ZXJmbG93LWhpZGRlbiBiZy1saW1lLTUwLzcwXCI+XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJncmlkIG1pbi1oLVsxMjZweF0gaXRlbXMtY2VudGVyIGdhcC00IHAtNSBtZDpncmlkLWNvbHMtWzU2cHhfbWlubWF4KDAsMWZyKV8yNjBweF1cIj5cbiAgICAgICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImdyaWQgaC0xMiB3LTEyIHBsYWNlLWl0ZW1zLWNlbnRlciByb3VuZGVkLWZ1bGwgYmctbGltZS0xMDAgdGV4dC1saW1lLTcwMFwiPlxuICAgICAgICAgICAgICA8VXNlciBzaXplPXsyMn0gY29sb3I9XCJjdXJyZW50Q29sb3JcIiAvPlxuICAgICAgICAgICAgPC9zcGFuPlxuICAgICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgICAgPGgyIGNsYXNzTmFtZT1cInRleHQtbGcgZm9udC1ibGFjayB0ZXh0LXNsYXRlLTk1MFwiPk9yZ2FuaXNlIHRvbiBtYXRjaDwvaDI+XG4gICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cIm10LTEgdGV4dC14cyB0ZXh0LXNsYXRlLTYwMFwiPkNyw6llIHVuZSBwYXJ0aWUgZW4gcXVlbHF1ZXMgY2xpY3MuPC9wPlxuICAgICAgICAgICAgICA8TGluayB0bz1cIi9tYXRjaGVzL2NyZWF0ZVwiIGNsYXNzTmFtZT1cIm10LTQgaW5saW5lLWZsZXggaXRlbXMtY2VudGVyIGdhcC0zIHJvdW5kZWQtbGcgYmctbGltZS03MDAgcHgtNSBweS0yLjUgdGV4dC14cyBmb250LWJsYWNrIHRleHQtd2hpdGVcIj5cbiAgICAgICAgICAgICAgICBDcsOpZXIgdW4gbWF0Y2ggPEFycm93UmlnaHQgc2l6ZT17MTR9IGNvbG9yPVwiY3VycmVudENvbG9yXCIgLz5cbiAgICAgICAgICAgICAgPC9MaW5rPlxuICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICA8aW1nIHNyYz1cIi9pbWcvdGVhbXVwLWZvb3RiYWxsLW5pZ2h0LW9yaWdpbmFsLnBuZ1wiIGFsdD1cIlwiIGNsYXNzTmFtZT1cImhpZGRlbiBoLTMyIHctZnVsbCByb3VuZGVkLXRsLVs1cmVtXSBvYmplY3QtY292ZXIgbWQ6YmxvY2tcIiAvPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L1BhZ2VQYW5lbD5cbiAgICAgIDwvc2VjdGlvbj5cblxuICAgICAgPGFzaWRlIGNsYXNzTmFtZT1cInRlYW11cC1kYXNoYm9hcmQtcmlnaHQgZ3JpZCBtaW4tdy0wIGNvbnRlbnQtc3RhcnQgZ2FwLTVcIj5cbiAgICAgICAgPFBhZ2VQYW5lbCBjbGFzc05hbWU9XCJwLTVcIj5cbiAgICAgICAgICA8aDIgY2xhc3NOYW1lPVwidGV4dC14bCBmb250LWJsYWNrIHRleHQtc2xhdGUtOTUwXCI+Tm90aWZpY2F0aW9uczwvaDI+XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtdC00IGdyaWQgZ2FwLTRcIj5cbiAgICAgICAgICAgIHtub3RpZmljYXRpb25zLmxlbmd0aCA+IDAgPyAoXG4gICAgICAgICAgICAgIG5vdGlmaWNhdGlvbnMuc2xpY2UoMCwgMykubWFwKChub3RpZmljYXRpb24sIGluZGV4KSA9PiAoXG4gICAgICAgICAgICAgICAgPGRpdiBrZXk9e25vdGlmaWNhdGlvbi5faWR9IGNsYXNzTmFtZT1cImdyaWQgZ3JpZC1jb2xzLVthdXRvXzFmcl9hdXRvXSBpdGVtcy1jZW50ZXIgZ2FwLTQgYm9yZGVyLWIgYm9yZGVyLXNsYXRlLTEwMCBwYi01IGxhc3Q6Ym9yZGVyLTAgbGFzdDpwYi0wXCI+XG4gICAgICAgICAgICAgICAgICA8VXNlckF2YXRhciB1c2VyPXt7XG4gICAgICAgICAgICAgICAgICAgIG5hbWU6IFsnVGhvbWFzJywgJ1NhcmFoJywgJ0FsZXgnXVtpbmRleF0gfHwgJ01lbWJyZSBUZWFtVXAnLFxuICAgICAgICAgICAgICAgICAgICBhdmF0YXI6IGFwcEF2YXRhcnNbaW5kZXhdLFxuICAgICAgICAgICAgICAgICAgfX0gc2l6ZT1cImxnXCIgLz5cbiAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibWluLXctMFwiPlxuICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJsaW5lLWNsYW1wLTIgdGV4dC1zbSBmb250LWJsYWNrIGxlYWRpbmctNSB0ZXh0LXNsYXRlLTk1MFwiPntub3RpZmljYXRpb24ubWVzc2FnZX08L3A+XG4gICAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cIm10LTEgdHJ1bmNhdGUgdGV4dC1zbSBmb250LWJvbGQgdGV4dC1saW1lLTgwMFwiPntub3RpZmljYXRpb24uY29udGV4dH08L3A+XG4gICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cIndoaXRlc3BhY2Utbm93cmFwIHRleHQteHMgdGV4dC1zbGF0ZS01MDBcIj57bm90aWZpY2F0aW9uLmNyZWF0ZWRBdH08L3A+XG4gICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICkpXG4gICAgICAgICAgICApIDogKFxuICAgICAgICAgICAgICA8RW1wdHlTdGF0ZSB0aXRsZT1cIkF1Y3VuZSBub3RpZlwiIGRlc2NyaXB0aW9uPVwiVHUgbuKAmWFzIGF1Y3VuZSBub3RpZmljYXRpb24uXCIgLz5cbiAgICAgICAgICAgICl9XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgPExpbmsgdG89XCIvbm90aWZpY2F0aW9uc1wiIGNsYXNzTmFtZT1cIm10LTYgZmxleCBpdGVtcy1jZW50ZXIganVzdGlmeS1jZW50ZXIgZ2FwLTIgdGV4dC1zbSBmb250LWJsYWNrIHRleHQtbGltZS04MDBcIj5cbiAgICAgICAgICAgIFRvdXQgdm9pciA8QXJyb3dSaWdodCBzaXplPXsxNH0gY29sb3I9XCJjdXJyZW50Q29sb3JcIiAvPlxuICAgICAgICAgIDwvTGluaz5cbiAgICAgICAgPC9QYWdlUGFuZWw+XG5cbiAgICAgICAgPFBhZ2VQYW5lbCBjbGFzc05hbWU9XCJwLTVcIj5cbiAgICAgICAgICA8aDIgY2xhc3NOYW1lPVwidGV4dC14bCBmb250LWJsYWNrIHRleHQtc2xhdGUtOTUwXCI+QWNjw6hzIHJhcGlkZXM8L2gyPlxuICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwibXQtNCBncmlkIGdyaWQtY29scy0zIGdhcC0zXCI+XG4gICAgICAgICAgICA8UXVpY2sgaHJlZj1cIi9tYXRjaGVzXCIgSWNvbj17U2VhcmNofSBsYWJlbD1cIlJlY2hlcmNoZXJcIiBjb2xvcj1cIiM2NUEzMERcIiAvPlxuICAgICAgICAgICAgPFF1aWNrIGhyZWY9XCIvbWF0Y2hlcy9jcmVhdGVcIiBJY29uPXtDYWxlbmRhclBsdXN9IGxhYmVsPVwiQ3LDqWVyXCIgY29sb3I9XCIjRjk3MzE2XCIgLz5cbiAgICAgICAgICAgIDxRdWljayBocmVmPVwiL215LW1hdGNoZXNcIiBJY29uPXtDYWxlbmRhckRheXN9IGxhYmVsPVwiTWF0Y2hzXCIgY29sb3I9XCIjMEVBNUU5XCIgLz5cbiAgICAgICAgICAgIDxRdWljayBocmVmPVwiL25vdGlmaWNhdGlvbnNcIiBJY29uPXtCZWxsfSBsYWJlbD1cIk5vdGlmc1wiIGNvbG9yPVwiIzkzMzNFQVwiIGJhZGdlPXt1bnJlYWRDb3VudCB8fCB1bmRlZmluZWR9IC8+XG4gICAgICAgICAgICA8UXVpY2sgaHJlZj1cIi9tZXNzYWdlc1wiIEljb249e01lc3NhZ2VDaXJjbGV9IGxhYmVsPVwiTWVzc2FnZXNcIiBjb2xvcj1cIiMwMjg0QzdcIiBiYWRnZT1cIjJcIiAvPlxuICAgICAgICAgICAgPFF1aWNrIGhyZWY9XCIvcHJvZmlsZVwiIEljb249e1VzZXJ9IGxhYmVsPVwiUHJvZmlsXCIgY29sb3I9XCIjNjVBMzBEXCIgLz5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9QYWdlUGFuZWw+XG4gICAgICA8L2FzaWRlPlxuICAgIDwvZGl2PlxuICApO1xufVxuXG5mdW5jdGlvbiBIZWFkZXIoeyBmaXJzdE5hbWUgfSkge1xuICByZXR1cm4gKFxuICAgIDxkaXY+XG4gICAgICA8ZGl2PlxuICAgICAgICA8aDEgY2xhc3NOYW1lPVwiZmxleCBpdGVtcy1jZW50ZXIgZ2FwLTMgdGV4dC0yeGwgZm9udC1ibGFjayB0cmFja2luZy10aWdodCB0ZXh0LXNsYXRlLTk1MFwiPlxuICAgICAgICAgIEJvbmpvdXIge2ZpcnN0TmFtZX0gPEhhbmQgc2l6ZT17MjN9IGNvbG9yPVwiI0Y1OUUwQlwiIC8+XG4gICAgICAgIDwvaDE+XG4gICAgICAgIDxwIGNsYXNzTmFtZT1cIm10LTEgbWF4LXcteGwgdGV4dC1zbSBsZWFkaW5nLTUgdGV4dC1zbGF0ZS02MDBcIj5Ucm91dmUgb3UgY3LDqWUgdG9uIG1hdGNoLjwvcD5cbiAgICAgIDwvZGl2PlxuICAgIDwvZGl2PlxuICApO1xufVxuXG5mdW5jdGlvbiBTcG9ydFNob3J0Y3V0KHsgc3BvcnQgfSkge1xuICBjb25zdCBtZXRhID0gc3BvcnRNZXRhKHNwb3J0KTtcbiAgY29uc3QgSWNvbiA9IHNwb3J0ID09PSAnQmFza2V0YmFsbCcgPyBCYXNrZXRiYWxsIDogRm9vdGJhbGw7XG4gIGNvbnN0IGltYWdlID0gc3BvcnQgPT09ICdCYXNrZXRiYWxsJyA/ICcvaW1nL3RlYW11cC1iYXNrZXRiYWxsLW9yaWdpbmFsLnBuZycgOiAnL2ltZy90ZWFtdXAtZm9vdGJhbGwtb3JpZ2luYWwucG5nJztcblxuICByZXR1cm4gKFxuICAgIDxMaW5rIHRvPVwiL21hdGNoZXNcIiBjbGFzc05hbWU9e2B0ZWFtdXAtc3BvcnQtc2hvcnRjdXQgZ3JvdXAgcmVsYXRpdmUgbWluLWgtWzEwNHB4XSBvdmVyZmxvdy1oaWRkZW4gcm91bmRlZC14bCBwLTQgdGV4dC13aGl0ZSAke21ldGEuc29saWR9YH0+XG4gICAgICA8aW1nIHNyYz17aW1hZ2V9IGFsdD1cIlwiIGNsYXNzTmFtZT1cImFic29sdXRlIGluc2V0LTAgaC1mdWxsIHctZnVsbCBvYmplY3QtY292ZXIgb3BhY2l0eS0zNSB0cmFuc2l0aW9uIGdyb3VwLWhvdmVyOnNjYWxlLTEwNVwiIC8+XG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cImFic29sdXRlIGluc2V0LTAgYmctZ3JhZGllbnQtdG8tciBmcm9tLWJsYWNrLzM1IHRvLXRyYW5zcGFyZW50XCIgLz5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwicmVsYXRpdmUgZmxleCBoLWZ1bGwgaXRlbXMtY2VudGVyIGp1c3RpZnktYmV0d2VlblwiPlxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXggaXRlbXMtY2VudGVyIGdhcC00XCI+XG4gICAgICAgICAgPEljb24gc2l6ZT17MzB9IGNvbG9yPVwiY3VycmVudENvbG9yXCIgLz5cbiAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgPGgyIGNsYXNzTmFtZT1cInRleHQtbGcgZm9udC1ibGFjayB1cHBlcmNhc2UgbGVhZGluZy01XCI+e3Nwb3J0fTwvaDI+XG4gICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJtdC0xIHRleHQtc20gZm9udC1ib2xkXCI+VHJvdXZlcjwvcD5cbiAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgPC9kaXY+XG4gICAgICAgIDxzcGFuIGNsYXNzTmFtZT1cImdyaWQgaC05IHctOSBzaHJpbmstMCBwbGFjZS1pdGVtcy1jZW50ZXIgcm91bmRlZC1mdWxsIGJnLXdoaXRlIHRleHQtbGltZS03MDBcIj5cbiAgICAgICAgICA8QXJyb3dSaWdodCBzaXplPXsxNX0gY29sb3I9XCJjdXJyZW50Q29sb3JcIiAvPlxuICAgICAgICA8L3NwYW4+XG4gICAgICA8L2Rpdj5cbiAgICA8L0xpbms+XG4gICk7XG59XG5cbmZ1bmN0aW9uIFVwY29taW5nTWF0Y2goeyBtYXRjaCwgZXh0cmEgfSkge1xuICBjb25zdCBtZXRhID0gc3BvcnRNZXRhKG1hdGNoKTtcbiAgcmV0dXJuIChcbiAgICA8YXJ0aWNsZSBjbGFzc05hbWU9XCJ0ZWFtdXAtdXBjb21pbmctbWF0Y2ggZ3JpZCBpdGVtcy1jZW50ZXIgZ2FwLTQgYm9yZGVyLWIgYm9yZGVyLXNsYXRlLTEwMCBweS0zLjUgbGFzdDpib3JkZXItYi0wIG1kOmdyaWQtY29scy1bODhweF9taW5tYXgoMCwxZnIpXzE0MnB4Xzg0cHhdXCI+XG4gICAgICA8aW1nIHNyYz17bWF0Y2guaW1hZ2VfdXJsfSBhbHQ9e21hdGNoLnRpdGxlfSBjbGFzc05hbWU9XCJoLVs3NHB4XSB3LVs4OHB4XSByb3VuZGVkLWxnIG9iamVjdC1jb3ZlclwiIC8+XG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cInRlYW11cC11cGNvbWluZy1pbmZvIG1pbi13LTBcIj5cbiAgICAgICAgPFNwb3J0QmFkZ2UgbWF0Y2g9e21hdGNofSAvPlxuICAgICAgICA8aDMgY2xhc3NOYW1lPVwibXQtMSB0cnVuY2F0ZSB0ZXh0LVsxNXB4XSBmb250LWJsYWNrIGxlYWRpbmctNSB0ZXh0LXNsYXRlLTk1MFwiPnttYXRjaC50aXRsZX08L2gzPlxuICAgICAgICA8cCBjbGFzc05hbWU9XCJtdC0xIHRleHQteHMgbGVhZGluZy00IHRleHQtc2xhdGUtNTAwXCI+RGltLiAxMSBtYWkgwrcge1N0cmluZyhtYXRjaC5tYXRjaF90aW1lKS5zbGljZSgwLCA1KX08L3A+XG4gICAgICAgIDxwIGNsYXNzTmFtZT1cInRydW5jYXRlIHRleHQteHMgbGVhZGluZy00IHRleHQtc2xhdGUtNTAwXCI+e21hdGNoLmNpdHl9IMK3IHttYXRjaC5sb2NhdGlvbn08L3A+XG4gICAgICA8L2Rpdj5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwidGVhbXVwLXVwY29taW5nLXBsYXllcnMgbWluLXctMCBqdXN0aWZ5LXNlbGYtY2VudGVyXCI+XG4gICAgICAgIDxBdmF0YXJTdGFjayBjb3VudD17NH0gZXh0cmE9e2V4dHJhfSAvPlxuICAgICAgICA8cCBjbGFzc05hbWU9XCJtdC0yIHRleHQtY2VudGVyIHRleHQteHMgZm9udC1ib2xkIHRleHQtc2xhdGUtNzAwXCI+e21hdGNoLnBsYXllcnNfY291bnR9L3ttYXRjaC5tYXhfcGxheWVyc30gam91ZXVyczwvcD5cbiAgICAgIDwvZGl2PlxuICAgICAgPExpbmsgdG89e2AvbWF0Y2hlcy8ke21hdGNoLmlkfWB9IGNsYXNzTmFtZT17YHRlYW11cC11cGNvbWluZy1hY3Rpb24gdy1bNzZweF0ganVzdGlmeS1zZWxmLWVuZCByb3VuZGVkLWxnIGJvcmRlciBweC0zIHB5LTIgdGV4dC1jZW50ZXIgdGV4dC14cyBmb250LWJsYWNrICR7bWV0YS5idXR0b259YH0+XG4gICAgICAgIFZvaXJcbiAgICAgIDwvTGluaz5cbiAgICA8L2FydGljbGU+XG4gICk7XG59XG5cbmZ1bmN0aW9uIFF1aWNrKHsgaHJlZiwgSWNvbiwgbGFiZWwsIGNvbG9yLCBiYWRnZSB9KSB7XG4gIHJldHVybiAoXG4gICAgPExpbmsgdG89e2hyZWZ9IGNsYXNzTmFtZT1cInRlYW11cC1xdWljay1saW5rIHJlbGF0aXZlIGdyaWQgbWluLWgtWzg2cHhdIHBsYWNlLWl0ZW1zLWNlbnRlciBvdmVyZmxvdy1oaWRkZW4gcm91bmRlZC14bCBib3JkZXIgYm9yZGVyLXNsYXRlLTIwMCBiZy13aGl0ZSBwLTIgdGV4dC1jZW50ZXIgdHJhbnNpdGlvbiBob3ZlcjotdHJhbnNsYXRlLXktMC41IGhvdmVyOnNoYWRvdy1tZFwiPlxuICAgICAge2JhZGdlICYmIDxzcGFuIGNsYXNzTmFtZT1cImFic29sdXRlIHJpZ2h0LTQgdG9wLTQgZ3JpZCBoLTYgdy02IHBsYWNlLWl0ZW1zLWNlbnRlciByb3VuZGVkLWZ1bGwgYmctb3JhbmdlLTYwMCB0ZXh0LXhzIGZvbnQtYmxhY2sgdGV4dC13aGl0ZVwiPntiYWRnZX08L3NwYW4+fVxuICAgICAgPEljb24gc2l6ZT17MjJ9IGNvbG9yPXtjb2xvcn0gLz5cbiAgICAgIDxwIGNsYXNzTmFtZT1cIm10LTIgbWF4LXctZnVsbCB0cnVuY2F0ZSB0ZXh0LVsxMXB4XSBmb250LWJsYWNrIGxlYWRpbmctNCB0ZXh0LXNsYXRlLTk1MFwiPntsYWJlbH08L3A+XG4gICAgPC9MaW5rPlxuICApO1xufVxuIl0sImZpbGUiOiJDOi9Vc2Vycy9sYXVyZS9Eb2N1bWVudHMvQVBQIE1vYmlsZS90ZWFtdXAvZnJvbnRlbmQvc3JjL3BhZ2VzL0Rhc2hib2FyZFBhZ2UuanN4In0=

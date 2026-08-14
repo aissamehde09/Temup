@@ -1,0 +1,340 @@
+import { createHotContext as __vite__createHotContext } from "/@vite/client";import.meta.hot = __vite__createHotContext("/src/components/landing/icons.jsx");import __vite__cjsImport0_react_jsxDevRuntime from "/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=4942d33c"; const jsxDEV = __vite__cjsImport0_react_jsxDevRuntime["jsxDEV"];
+function FontAwesomeIcon({
+  icon,
+  prefix = "fa-solid",
+  size = 24,
+  color = "currentColor",
+  className = "",
+  style,
+  ...props
+}) {
+  return /* @__PURE__ */ jsxDEV(
+    "i",
+    {
+      "aria-hidden": "true",
+      className: `${prefix} ${icon} inline-block leading-none ${className}`,
+      style: {
+        fontSize: typeof size === "number" ? `${size}px` : size,
+        color,
+        ...style
+      },
+      ...props
+    },
+    void 0,
+    false,
+    {
+      fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+      lineNumber: 11,
+      columnNumber: 5
+    },
+    this
+  );
+}
+_c = FontAwesomeIcon;
+export const ArrowRight = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-arrow-right", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 24,
+  columnNumber: 38
+}, this);
+_c2 = ArrowRight;
+export const Bell = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-bell", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 25,
+  columnNumber: 32
+}, this);
+_c3 = Bell;
+export const CalendarDays = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-calendar-days", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 26,
+  columnNumber: 40
+}, this);
+_c4 = CalendarDays;
+export const CalendarPlus = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-calendar-plus", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 27,
+  columnNumber: 40
+}, this);
+_c5 = CalendarPlus;
+export const MapPin = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-location-dot", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 28,
+  columnNumber: 34
+}, this);
+_c6 = MapPin;
+export const Search = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-magnifying-glass", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 29,
+  columnNumber: 34
+}, this);
+_c7 = Search;
+export const List = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-list", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 30,
+  columnNumber: 32
+}, this);
+_c8 = List;
+export const Map = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-map", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 31,
+  columnNumber: 31
+}, this);
+_c9 = Map;
+export const ShieldCheck = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-shield-halved", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 32,
+  columnNumber: 39
+}, this);
+_c0 = ShieldCheck;
+export const Users = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-users", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 33,
+  columnNumber: 33
+}, this);
+_c1 = Users;
+export const MessageCircle = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-comment-dots", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 34,
+  columnNumber: 41
+}, this);
+_c10 = MessageCircle;
+export const Trophy = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-trophy", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 35,
+  columnNumber: 34
+}, this);
+_c11 = Trophy;
+export const Star = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-star", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 36,
+  columnNumber: 32
+}, this);
+_c12 = Star;
+export const Home = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-house", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 37,
+  columnNumber: 32
+}, this);
+_c13 = Home;
+export const Plus = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-plus", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 38,
+  columnNumber: 32
+}, this);
+_c14 = Plus;
+export const Heart = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-heart", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 39,
+  columnNumber: 33
+}, this);
+_c15 = Heart;
+export const Gear = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-gear", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 40,
+  columnNumber: 32
+}, this);
+_c16 = Gear;
+export const Logout = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-right-from-bracket", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 41,
+  columnNumber: 34
+}, this);
+_c17 = Logout;
+export const Football = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-futbol", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 42,
+  columnNumber: 36
+}, this);
+_c18 = Football;
+export const Basketball = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-basketball", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 43,
+  columnNumber: 38
+}, this);
+_c19 = Basketball;
+export const Clock = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-clock", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 44,
+  columnNumber: 33
+}, this);
+_c20 = Clock;
+export const Medal = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-medal", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 45,
+  columnNumber: 33
+}, this);
+_c21 = Medal;
+export const Hand = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-hand", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 46,
+  columnNumber: 32
+}, this);
+_c22 = Hand;
+export const User = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-user", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 47,
+  columnNumber: 32
+}, this);
+_c23 = User;
+export const EmptyBox = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-inbox", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 48,
+  columnNumber: 36
+}, this);
+_c24 = EmptyBox;
+export const ChevronDown = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-chevron-down", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 49,
+  columnNumber: 39
+}, this);
+_c25 = ChevronDown;
+export const Phone = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-phone", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 50,
+  columnNumber: 33
+}, this);
+_c26 = Phone;
+export const Video = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-video", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 51,
+  columnNumber: 33
+}, this);
+_c27 = Video;
+export const Paperclip = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-paperclip", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 52,
+  columnNumber: 37
+}, this);
+_c28 = Paperclip;
+export const DoorOpen = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-door-open", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 53,
+  columnNumber: 36
+}, this);
+_c29 = DoorOpen;
+export const Pen = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-pen", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 54,
+  columnNumber: 31
+}, this);
+_c30 = Pen;
+export const Lock = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-lock", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 55,
+  columnNumber: 32
+}, this);
+_c31 = Lock;
+export const Language = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-language", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 56,
+  columnNumber: 36
+}, this);
+_c32 = Language;
+export const Eye = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-eye", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 57,
+  columnNumber: 31
+}, this);
+_c33 = Eye;
+export const CircleInfo = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-circle-info", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 58,
+  columnNumber: 38
+}, this);
+_c34 = CircleInfo;
+export const CheckCircle = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { icon: "fa-circle-check", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 59,
+  columnNumber: 39
+}, this);
+_c35 = CheckCircle;
+export const Instagram = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { prefix: "fa-brands", icon: "fa-instagram", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 61,
+  columnNumber: 37
+}, this);
+_c36 = Instagram;
+export const Facebook = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { prefix: "fa-brands", icon: "fa-facebook-f", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 62,
+  columnNumber: 36
+}, this);
+_c37 = Facebook;
+export const Twitter = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { prefix: "fa-brands", icon: "fa-x-twitter", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 63,
+  columnNumber: 35
+}, this);
+_c38 = Twitter;
+export const Youtube = (props) => /* @__PURE__ */ jsxDEV(FontAwesomeIcon, { prefix: "fa-brands", icon: "fa-youtube", ...props }, void 0, false, {
+  fileName: "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx",
+  lineNumber: 64,
+  columnNumber: 35
+}, this);
+_c39 = Youtube;
+var _c, _c2, _c3, _c4, _c5, _c6, _c7, _c8, _c9, _c0, _c1, _c10, _c11, _c12, _c13, _c14, _c15, _c16, _c17, _c18, _c19, _c20, _c21, _c22, _c23, _c24, _c25, _c26, _c27, _c28, _c29, _c30, _c31, _c32, _c33, _c34, _c35, _c36, _c37, _c38, _c39;
+$RefreshReg$(_c, "FontAwesomeIcon");
+$RefreshReg$(_c2, "ArrowRight");
+$RefreshReg$(_c3, "Bell");
+$RefreshReg$(_c4, "CalendarDays");
+$RefreshReg$(_c5, "CalendarPlus");
+$RefreshReg$(_c6, "MapPin");
+$RefreshReg$(_c7, "Search");
+$RefreshReg$(_c8, "List");
+$RefreshReg$(_c9, "Map");
+$RefreshReg$(_c0, "ShieldCheck");
+$RefreshReg$(_c1, "Users");
+$RefreshReg$(_c10, "MessageCircle");
+$RefreshReg$(_c11, "Trophy");
+$RefreshReg$(_c12, "Star");
+$RefreshReg$(_c13, "Home");
+$RefreshReg$(_c14, "Plus");
+$RefreshReg$(_c15, "Heart");
+$RefreshReg$(_c16, "Gear");
+$RefreshReg$(_c17, "Logout");
+$RefreshReg$(_c18, "Football");
+$RefreshReg$(_c19, "Basketball");
+$RefreshReg$(_c20, "Clock");
+$RefreshReg$(_c21, "Medal");
+$RefreshReg$(_c22, "Hand");
+$RefreshReg$(_c23, "User");
+$RefreshReg$(_c24, "EmptyBox");
+$RefreshReg$(_c25, "ChevronDown");
+$RefreshReg$(_c26, "Phone");
+$RefreshReg$(_c27, "Video");
+$RefreshReg$(_c28, "Paperclip");
+$RefreshReg$(_c29, "DoorOpen");
+$RefreshReg$(_c30, "Pen");
+$RefreshReg$(_c31, "Lock");
+$RefreshReg$(_c32, "Language");
+$RefreshReg$(_c33, "Eye");
+$RefreshReg$(_c34, "CircleInfo");
+$RefreshReg$(_c35, "CheckCircle");
+$RefreshReg$(_c36, "Instagram");
+$RefreshReg$(_c37, "Facebook");
+$RefreshReg$(_c38, "Twitter");
+$RefreshReg$(_c39, "Youtube");
+import * as RefreshRuntime from "/@react-refresh";
+const inWebWorker = typeof WorkerGlobalScope !== "undefined" && self instanceof WorkerGlobalScope;
+if (import.meta.hot && !inWebWorker) {
+  if (!window.$RefreshReg$) {
+    throw new Error(
+      "@vitejs/plugin-react can't detect preamble. Something is wrong."
+    );
+  }
+  RefreshRuntime.__hmr_import(import.meta.url).then((currentExports) => {
+    RefreshRuntime.registerExportsForReactRefresh("C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx", currentExports);
+    import.meta.hot.accept((nextExports) => {
+      if (!nextExports) return;
+      const invalidateMessage = RefreshRuntime.validateRefreshBoundaryAndEnqueueUpdate("C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx", currentExports, nextExports);
+      if (invalidateMessage) import.meta.hot.invalidate(invalidateMessage);
+    });
+  });
+}
+function $RefreshReg$(type, id) {
+  return RefreshRuntime.register(type, "C:/Users/laure/Documents/APP Mobile/teamup/frontend/src/components/landing/icons.jsx " + id);
+}
+function $RefreshSig$() {
+  return RefreshRuntime.createSignatureFunctionForTransform();
+}
+
+//# sourceMappingURL=data:application/json;base64,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QUFFLE1BQUE7QUFBQSxhQUFBRSxNQUFBO0FBQUEsYUFBQUUsTUFBQTtBQUFBLGFBQUFFLE1BQUE7QUFBQSxhQUFBRSxNQUFBO0FBQUEsYUFBQUUsTUFBQTtBQUFBLGFBQUFFLE1BQUE7QUFBQSxhQUFBRSxNQUFBO0FBQUEsYUFBQUUsTUFBQTtBQUFBLGFBQUFFLE1BQUE7QUFBQSxhQUFBRSxNQUFBO0FBQUEsYUFBQUUsTUFBQSIsIm5hbWVzIjpbIkZvbnRBd2Vzb21lSWNvbiIsImljb24iLCJwcmVmaXgiLCJzaXplIiwiY29sb3IiLCJjbGFzc05hbWUiLCJzdHlsZSIsInByb3BzIiwiZm9udFNpemUiLCJfYyIsIkFycm93UmlnaHQiLCJfYzIiLCJCZWxsIiwiX2MzIiwiQ2FsZW5kYXJEYXlzIiwiX2M0IiwiQ2FsZW5kYXJQbHVzIiwiX2M1IiwiTWFwUGluIiwiX2M2IiwiU2VhcmNoIiwiX2M3IiwiTGlzdCIsIl9jOCIsIk1hcCIsIl9jOSIsIlNoaWVsZENoZWNrIiwiX2MwIiwiVXNlcnMiLCJfYzEiLCJNZXNzYWdlQ2lyY2xlIiwiX2MxMCIsIlRyb3BoeSIsIl9jMTEiLCJTdGFyIiwiX2MxMiIsIkhvbWUiLCJfYzEzIiwiUGx1cyIsIl9jMTQiLCJIZWFydCIsIl9jMTUiLCJHZWFyIiwiX2MxNiIsIkxvZ291dCIsIl9jMTciLCJGb290YmFsbCIsIl9jMTgiLCJCYXNrZXRiYWxsIiwiX2MxOSIsIkNsb2NrIiwiX2MyMCIsIk1lZGFsIiwiX2MyMSIsIkhhbmQiLCJfYzIyIiwiVXNlciIsIl9jMjMiLCJFbXB0eUJveCIsIl9jMjQiLCJDaGV2cm9uRG93biIsIl9jMjUiLCJQaG9uZSIsIl9jMjYiLCJWaWRlbyIsIl9jMjciLCJQYXBlcmNsaXAiLCJfYzI4IiwiRG9vck9wZW4iLCJfYzI5IiwiUGVuIiwiX2MzMCIsIkxvY2siLCJfYzMxIiwiTGFuZ3VhZ2UiLCJfYzMyIiwiRXllIiwiX2MzMyIsIkNpcmNsZUluZm8iLCJfYzM0IiwiQ2hlY2tDaXJjbGUiLCJfYzM1IiwiSW5zdGFncmFtIiwiX2MzNiIsIkZhY2Vib29rIiwiX2MzNyIsIlR3aXR0ZXIiLCJfYzM4IiwiWW91dHViZSIsIl9jMzkiXSwiaWdub3JlTGlzdCI6W10sInNvdXJjZXMiOlsiaWNvbnMuanN4Il0sInNvdXJjZXNDb250ZW50IjpbImZ1bmN0aW9uIEZvbnRBd2Vzb21lSWNvbih7XG4gIGljb24sXG4gIHByZWZpeCA9ICdmYS1zb2xpZCcsXG4gIHNpemUgPSAyNCxcbiAgY29sb3IgPSAnY3VycmVudENvbG9yJyxcbiAgY2xhc3NOYW1lID0gJycsXG4gIHN0eWxlLFxuICAuLi5wcm9wc1xufSkge1xuICByZXR1cm4gKFxuICAgIDxpXG4gICAgICBhcmlhLWhpZGRlbj1cInRydWVcIlxuICAgICAgY2xhc3NOYW1lPXtgJHtwcmVmaXh9ICR7aWNvbn0gaW5saW5lLWJsb2NrIGxlYWRpbmctbm9uZSAke2NsYXNzTmFtZX1gfVxuICAgICAgc3R5bGU9e3tcbiAgICAgICAgZm9udFNpemU6IHR5cGVvZiBzaXplID09PSAnbnVtYmVyJyA/IGAke3NpemV9cHhgIDogc2l6ZSxcbiAgICAgICAgY29sb3IsXG4gICAgICAgIC4uLnN0eWxlLFxuICAgICAgfX1cbiAgICAgIHsuLi5wcm9wc31cbiAgICAvPlxuICApO1xufVxuXG5leHBvcnQgY29uc3QgQXJyb3dSaWdodCA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBpY29uPVwiZmEtYXJyb3ctcmlnaHRcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IEJlbGwgPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLWJlbGxcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IENhbGVuZGFyRGF5cyA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBpY29uPVwiZmEtY2FsZW5kYXItZGF5c1wiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgQ2FsZW5kYXJQbHVzID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1jYWxlbmRhci1wbHVzXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBNYXBQaW4gPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLWxvY2F0aW9uLWRvdFwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgU2VhcmNoID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1tYWduaWZ5aW5nLWdsYXNzXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBMaXN0ID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1saXN0XCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBNYXAgPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLW1hcFwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgU2hpZWxkQ2hlY2sgPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLXNoaWVsZC1oYWx2ZWRcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IFVzZXJzID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS11c2Vyc1wiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgTWVzc2FnZUNpcmNsZSA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBpY29uPVwiZmEtY29tbWVudC1kb3RzXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBUcm9waHkgPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLXRyb3BoeVwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgU3RhciA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBpY29uPVwiZmEtc3RhclwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgSG9tZSA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBpY29uPVwiZmEtaG91c2VcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IFBsdXMgPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLXBsdXNcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IEhlYXJ0ID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1oZWFydFwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgR2VhciA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBpY29uPVwiZmEtZ2VhclwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgTG9nb3V0ID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1yaWdodC1mcm9tLWJyYWNrZXRcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IEZvb3RiYWxsID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1mdXRib2xcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IEJhc2tldGJhbGwgPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLWJhc2tldGJhbGxcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IENsb2NrID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1jbG9ja1wiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgTWVkYWwgPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLW1lZGFsXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBIYW5kID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1oYW5kXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBVc2VyID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS11c2VyXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBFbXB0eUJveCA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBpY29uPVwiZmEtaW5ib3hcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IENoZXZyb25Eb3duID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1jaGV2cm9uLWRvd25cIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IFBob25lID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1waG9uZVwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgVmlkZW8gPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLXZpZGVvXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBQYXBlcmNsaXAgPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLXBhcGVyY2xpcFwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgRG9vck9wZW4gPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLWRvb3Itb3BlblwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgUGVuID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1wZW5cIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IExvY2sgPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLWxvY2tcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IExhbmd1YWdlID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1sYW5ndWFnZVwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgRXllID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIGljb249XCJmYS1leWVcIiB7Li4ucHJvcHN9IC8+O1xuZXhwb3J0IGNvbnN0IENpcmNsZUluZm8gPSAocHJvcHMpID0+IDxGb250QXdlc29tZUljb24gaWNvbj1cImZhLWNpcmNsZS1pbmZvXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBDaGVja0NpcmNsZSA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBpY29uPVwiZmEtY2lyY2xlLWNoZWNrXCIgey4uLnByb3BzfSAvPjtcblxuZXhwb3J0IGNvbnN0IEluc3RhZ3JhbSA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBwcmVmaXg9XCJmYS1icmFuZHNcIiBpY29uPVwiZmEtaW5zdGFncmFtXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBGYWNlYm9vayA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBwcmVmaXg9XCJmYS1icmFuZHNcIiBpY29uPVwiZmEtZmFjZWJvb2stZlwiIHsuLi5wcm9wc30gLz47XG5leHBvcnQgY29uc3QgVHdpdHRlciA9IChwcm9wcykgPT4gPEZvbnRBd2Vzb21lSWNvbiBwcmVmaXg9XCJmYS1icmFuZHNcIiBpY29uPVwiZmEteC10d2l0dGVyXCIgey4uLnByb3BzfSAvPjtcbmV4cG9ydCBjb25zdCBZb3V0dWJlID0gKHByb3BzKSA9PiA8Rm9udEF3ZXNvbWVJY29uIHByZWZpeD1cImZhLWJyYW5kc1wiIGljb249XCJmYS15b3V0dWJlXCIgey4uLnByb3BzfSAvPjtcbiJdLCJmaWxlIjoiQzovVXNlcnMvbGF1cmUvRG9jdW1lbnRzL0FQUCBNb2JpbGUvdGVhbXVwL2Zyb250ZW5kL3NyYy9jb21wb25lbnRzL2xhbmRpbmcvaWNvbnMuanN4In0=
