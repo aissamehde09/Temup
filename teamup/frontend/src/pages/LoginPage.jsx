@@ -31,11 +31,11 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="grid min-h-[calc(100vh-74px)] place-items-center bg-slate-50 px-6 py-12">
-      <form onSubmit={handleSubmit} className="w-full max-w-md rounded-[2rem] bg-white p-8 shadow-sm">
+    <main className="login-page grid min-h-[calc(100vh-74px)] place-items-center bg-slate-50 px-6 py-12">
+      <form onSubmit={handleSubmit} className="login-card w-full max-w-md rounded-[2rem] bg-white p-8 shadow-sm">
         <h1 className="text-3xl font-black">Connexion</h1>
         <p className="mt-2 text-slate-500">Connecte-toi pour créer ou rejoindre un match.</p>
-        <p className="mt-4 rounded-2xl bg-lime-50 p-4 text-sm font-semibold text-lime-700">
+        <p className="login-demo mt-4 rounded-2xl bg-lime-50 p-4 text-sm font-semibold text-lime-700">
           Identifiants de test : mehdi@teamup.local / admin123
         </p>
         {error && <p className="mt-5 rounded-2xl bg-red-50 p-4 text-sm text-red-700">{error}</p>}
