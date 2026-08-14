@@ -101,14 +101,14 @@ export default function MatchDetailPage() {
   }
 
   return (
-    <div className="mx-auto max-w-[1040px]">
+    <div className="match-detail-shell mx-auto w-full max-w-[1040px]">
       <SuccessToast message={toast} onClose={() => setToast('')} />
 
       <Link to="/matches" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-lime-800">
         ← Retour
       </Link>
 
-      <PagePanel className="p-7">
+      <PagePanel className="match-detail-panel p-7">
         <div className="grid gap-7 lg:grid-cols-[1fr_310px]">
           <section>
             <img src={match.image_url} alt={match.title} className="h-72 w-full rounded-lg object-cover" />

@@ -809,6 +809,38 @@ body {
   .teamup-map {
     height: min(420px, 62vh) !important;
   }
+
+  /* Match detail: keep the panel and its media fully visible on narrow phones. */
+  .match-detail-shell {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .match-detail-panel {
+    padding: 1rem !important;
+    border-radius: 1rem;
+  }
+
+  .match-detail-panel > .grid {
+    gap: 1rem;
+  }
+
+  .match-detail-panel img {
+    height: clamp(10rem, 52vw, 15rem) !important;
+    max-width: 100%;
+  }
+
+  .match-detail-panel aside {
+    padding: 1rem !important;
+  }
+
+  .match-detail-panel .grid.gap-7 {
+    gap: 1rem;
+  }
+
+  .match-detail-panel .grid.gap-4 > * {
+    min-width: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
