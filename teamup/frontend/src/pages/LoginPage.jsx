@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import { useAuth } from '../context/AuthContext';
+import { getErrorMessage } from '../services/api';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -20,8 +21,8 @@ export default function LoginPage() {
     try {
       await login(form);
       navigate(redirectTo, { replace: true });
-    } catch {
-      setError('Connexion impossible. Vérifie les champs puis réessaie.');
+    } catch (requestError) {
+      setError(getErrorMessage(requestError));
     } finally {
       setLoading(false);
     }

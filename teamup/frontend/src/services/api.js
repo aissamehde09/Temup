@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  // Valeur de secours pour la production : Vercel remplace normalement cette
+  // valeur avec VITE_API_URL au moment du build.
+  baseURL: import.meta.env.VITE_API_URL || 'https://temup-production.up.railway.app/api',
 });
 
 api.interceptors.request.use((config) => {
@@ -24,4 +26,3 @@ api.interceptors.response.use(
 export function getErrorMessage(error) {
   return error.response?.data?.message || 'Une erreur est survenue';
 }
-
