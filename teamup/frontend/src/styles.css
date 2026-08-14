@@ -825,9 +825,12 @@ body {
     gap: 1rem;
   }
 
-  .match-detail-panel img {
+  /* Only resize the match cover; participant avatars keep their 40px square. */
+  .match-detail-panel > .grid:first-child > section > img {
     height: clamp(10rem, 52vw, 15rem) !important;
     max-width: 100%;
+    width: 100%;
+    object-fit: cover;
   }
 
   .match-detail-panel aside {
