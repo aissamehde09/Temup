@@ -13,7 +13,8 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-const host = process.env.HOST || '127.0.0.1';
+// Railway doit pouvoir atteindre l'application depuis l'extérieur du conteneur.
+const host = process.env.HOST || '0.0.0.0';
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:5173',
@@ -58,27 +59,26 @@ app.use((req, res) => {
 app.use(errorMiddleware);
 
 async function startServer() {
-  try {
-    if (process.env.MONGODB_URI) {
-      await mongoose.connect(process.env.MONGODB_URI);
-      console.log('MongoDB connecté');
+  const server = app.listen(port, host, () => {
+    console.log(`TeamUp API démarrée sur http://${host}:${port}`);
+  });
+
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`Le port ${port} est déjà utilisé. Ferme l’ancien backend ou change PORT dans .env.`);
+      return;
     }
 
-    const server = app.listen(port, host, () => {
-      console.log(`TeamUp API démarrée sur http://${host}:${port}`);
-    });
+    console.error('Erreur serveur:', error);
+  });
 
-    server.on('error', (error) => {
-      if (error.code === 'EADDRINUSE') {
-        console.error(`Le port ${port} est déjà utilisé. Ferme l’ancien backend ou change PORT dans .env.`);
-        return;
-      }
-
-      console.error('Erreur serveur:', error);
-    });
-  } catch (error) {
-    console.error('Impossible de démarrer le serveur', error);
-    process.exit(1);
+  // MongoDB est utilisé pour les notifications. Une indisponibilité temporaire
+  // ne doit pas empêcher l'API et son endpoint de santé de démarrer.
+  if (process.env.MONGODB_URI) {
+    mongoose
+      .connect(process.env.MONGODB_URI, { serverSelectionTimeoutMS: 10000 })
+      .then(() => console.log('MongoDB connecté'))
+      .catch((error) => console.error('MongoDB indisponible, les notifications sont temporairement désactivées:', error.message));
   }
 }
 
