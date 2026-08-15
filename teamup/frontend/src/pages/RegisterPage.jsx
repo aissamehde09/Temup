@@ -18,7 +18,7 @@ export default function RegisterPage() {
     confirmPassword: '',
     city: '',
     level: 'Débutant',
-    sports: [1],
+    sports: [],
   });
 
   function toggleSport(id) {

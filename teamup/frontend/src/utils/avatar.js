@@ -19,13 +19,28 @@ const generatedAvatarsByFirstName = {
   thomas: '/img/avatar-thomas-generated.png',
 };
 
+function isDemoUser(user = {}) {
+  const email = String(user.email || '').trim().toLowerCase();
+  return (
+    email.endsWith('@teamup.local') ||
+    user.isDemo === true ||
+    user.demo === true ||
+    user.source === 'demo'
+  );
+}
+
 export function getGeneratedAvatar(user = {}) {
   const email = String(user.email || '').trim().toLowerCase();
   const firstName = String(user.first_name || user.firstName || user.name?.trim().split(/\s+/)[0] || '').trim();
   const lastName = String(user.last_name || user.lastName || user.name?.trim().split(/\s+/).slice(1).join(' ') || '').trim();
   const fullName = `${firstName} ${lastName}`.trim().toLowerCase();
 
-  return generatedAvatarsByEmail[email] || generatedAvatarsByFullName[fullName] || generatedAvatarsByFirstName[firstName.toLowerCase()] || '';
+  const avatarByEmail = generatedAvatarsByEmail[email];
+  if (avatarByEmail) return avatarByEmail;
+
+  if (!isDemoUser(user)) return '';
+
+  return generatedAvatarsByFullName[fullName] || generatedAvatarsByFirstName[firstName.toLowerCase()] || '';
 }
 
 function isUsableImageSource(value) {

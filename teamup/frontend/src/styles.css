@@ -865,7 +865,31 @@ body {
     width: 300px !important;
     flex-basis: 300px !important;
     padding-inline: 1.35rem !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
     overflow-x: hidden !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(101, 163, 13, 0.85) rgba(255, 255, 255, 0.08);
+  }
+
+  .teamup-sidebar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .teamup-sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+  }
+
+  .teamup-sidebar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #65a30d, #f97316);
+    border: 2px solid #071417;
+    border-radius: 999px;
+  }
+
+  .teamup-sidebar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #84cc16, #ff8a00);
   }
 
   .teamup-app-main {
@@ -946,7 +970,8 @@ body,
 @media (min-width: 1024px) {
   .teamup-sidebar {
     min-height: 100vh !important;
-    height: auto !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
   }
 
   .teamup-sidebar::after {

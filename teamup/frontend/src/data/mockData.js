@@ -3,7 +3,7 @@ export const users = [
     id: 1,
     firstName: 'Mehdi',
     lastName: 'Ait',
-    pseudo: 'mehdi_dev',
+    pseudo: 'demo_mehdi',
     city: 'Nanterre',
     level: 'Intermédiaire',
     sports: ['Football', 'Basketball'],

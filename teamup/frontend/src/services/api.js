@@ -43,7 +43,7 @@ api.interceptors.response.use(
 
 export function getErrorMessage(error) {
   if (error.code === 'TEAMUP_API_URL_MISSING') {
-    return 'Configuration API manquante. Ajoute VITE_API_URL sur Vercel avec l’URL Railway terminée par /api.';
+    return 'Configuration API manquante. Ajoute VITE_API_URL sur Vercel avec l’URL publique Railway.';
   }
 
   if (!error.response) {
