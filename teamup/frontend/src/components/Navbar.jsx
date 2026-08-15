@@ -30,7 +30,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className={`teamup-navbar teamup-navbar-light relative sticky top-0 z-30 border-b border-slate-100 bg-white px-4 py-3 text-slate-800 sm:px-6 lg:px-8 ${isScrolled ? 'is-scrolled' : ''}`}>
+    <header className={`teamup-navbar teamup-navbar-light sticky top-0 z-30 border-b border-slate-100 bg-white px-4 py-3 text-slate-800 sm:px-6 lg:px-8 ${isScrolled ? 'is-scrolled' : ''}`}>
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4">
         <Link to="/" onClick={handleHomeClick} className="teamup-brand flex shrink-0 items-center gap-3">
           <img src="/img/logo-teamup.png" alt="TeamUp" className="h-12 w-12 rounded-full object-cover" />

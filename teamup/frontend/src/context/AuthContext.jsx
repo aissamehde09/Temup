@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { api } from '../services/api';
+import { normalizeUser } from '../utils/matchNormalize';
 
 const AuthContext = createContext(null);
 
@@ -8,7 +9,7 @@ export function AuthProvider({ children }) {
     if (!localStorage.getItem('teamup_token')) return null;
     const storedUser = localStorage.getItem('teamup_user');
     try {
-      return storedUser ? JSON.parse(storedUser) : null;
+      return storedUser ? normalizeUser(JSON.parse(storedUser)) : null;
     } catch {
       localStorage.removeItem('teamup_user');
       return null;
@@ -26,8 +27,9 @@ export function AuthProvider({ children }) {
 
       try {
         const { data } = await api.get('/users/me');
-        localStorage.setItem('teamup_user', JSON.stringify(data.user));
-        setUser(data.user);
+        const nextUser = normalizeUser(data.user);
+        localStorage.setItem('teamup_user', JSON.stringify(nextUser));
+        setUser(nextUser);
       } catch {
         localStorage.removeItem('teamup_token');
         localStorage.removeItem('teamup_user');
@@ -42,18 +44,20 @@ export function AuthProvider({ children }) {
 
   async function login(credentials) {
     const { data } = await api.post('/auth/login', credentials);
+    const nextUser = normalizeUser(data.user);
     localStorage.setItem('teamup_token', data.token);
-    localStorage.setItem('teamup_user', JSON.stringify(data.user));
-    setUser(data.user);
-    return data.user;
+    localStorage.setItem('teamup_user', JSON.stringify(nextUser));
+    setUser(nextUser);
+    return nextUser;
   }
 
   async function register(payload) {
     const { data } = await api.post('/auth/register', payload);
+    const nextUser = normalizeUser(data.user);
     localStorage.setItem('teamup_token', data.token);
-    localStorage.setItem('teamup_user', JSON.stringify(data.user));
-    setUser(data.user);
-    return data.user;
+    localStorage.setItem('teamup_user', JSON.stringify(nextUser));
+    setUser(nextUser);
+    return nextUser;
   }
 
   function logout() {
@@ -64,7 +68,7 @@ export function AuthProvider({ children }) {
 
   function updateUser(patch) {
     setUser((current) => {
-      const next = { ...(current || {}), ...patch };
+      const next = normalizeUser({ ...(current || {}), ...patch });
       localStorage.setItem('teamup_user', JSON.stringify(next));
       return next;
     });
@@ -72,9 +76,10 @@ export function AuthProvider({ children }) {
 
   async function updateAvatar(avatarUrl) {
     const { data } = await api.put('/users/me/avatar', { avatarUrl });
-    localStorage.setItem('teamup_user', JSON.stringify(data.user));
-    setUser(data.user);
-    return data.user;
+    const nextUser = normalizeUser(data.user);
+    localStorage.setItem('teamup_user', JSON.stringify(nextUser));
+    setUser(nextUser);
+    return nextUser;
   }
 
   const value = useMemo(

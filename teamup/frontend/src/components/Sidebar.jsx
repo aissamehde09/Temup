@@ -66,7 +66,7 @@ export default function Sidebar() {
         <SidebarContent onNavigate={closeMobile} onLogout={requestLogout} />
         <div className="px-4 pb-6"><InviteFriendsCard onInvite={() => { closeMobile(); setInviteOpen(true); }} /></div>
       </aside>
-      <aside className="teamup-sidebar sticky top-0 hidden h-screen w-[250px] shrink-0 overflow-y-auto overflow-x-hidden bg-[#071417] text-white lg:block">
+      <aside className="teamup-sidebar hidden min-h-screen w-[300px] shrink-0 overflow-y-auto overflow-x-hidden bg-[#071417] text-white lg:block">
         <SidebarContent onLogout={requestLogout} />
         <div className="px-4 pb-6"><InviteFriendsCard onInvite={() => setInviteOpen(true)} /></div>
       </aside>

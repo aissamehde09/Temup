@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Basketball, CalendarDays, Clock, Football, MapPin, ShieldCheck } from './landing/icons';
+import { getAvatarSource } from '../utils/avatar';
+import { formatMatchTime, formatShortMatchDate } from '../utils/matchDate';
 
 export const appAvatars = [
   '/img/avatar-mehdi-generated.png',
@@ -51,17 +53,33 @@ export function SportBadge({ match, className = '' }) {
   );
 }
 
-export function AvatarStack({ count = 4, extra, size = 'h-8 w-8' }) {
+function avatarInitials(user, fallbackIndex = 0) {
+  const first = String(user?.first_name || user?.firstName || user?.name || '').trim();
+  const last = String(user?.last_name || user?.lastName || '').trim();
+  const initials = `${first.charAt(0)}${last.charAt(0)}`.trim().toUpperCase();
+  return initials || ['TU', 'SA', 'TH', 'AL'][fallbackIndex] || 'TU';
+}
+
+export function AvatarStack({ participants = [], count = 4, extra, size = 'h-8 w-8' }) {
+  const visibleParticipants = Array.isArray(participants) && participants.length
+    ? participants.slice(0, count)
+    : appAvatars.slice(0, count).map((avatar, index) => ({ avatar, name: ['Mehdi', 'Sarah', 'Thomas', 'Alex'][index] }));
+
   return (
     <div className="flex items-center">
       <div className="flex -space-x-2">
-        {appAvatars.slice(0, count).map((avatar, index) => (
-          avatar ? <img key={index} src={avatar} alt="" className={`${size} rounded-full object-cover ring-2 ring-white`} /> : (
-            <span key={index} className={`${size} grid place-items-center rounded-full bg-emerald-100 text-[10px] font-black text-emerald-700 ring-2 ring-white`} aria-label="Membre TeamUp">
-              {['TU', 'SA', 'TH', 'AL'][index] || 'TU'}
+        {visibleParticipants.map((participant, index) => {
+          const avatar = getAvatarSource(participant) || participant.avatar;
+          const label = participant.name || `${participant.first_name || participant.firstName || ''} ${participant.last_name || participant.lastName || ''}`.trim() || 'Membre TeamUp';
+
+          return avatar ? (
+            <img key={`${label}-${index}`} src={avatar} alt={label} className={`${size} rounded-full object-cover ring-2 ring-white`} />
+          ) : (
+            <span key={`${label}-${index}`} className={`${size} grid place-items-center rounded-full bg-emerald-100 text-[10px] font-black text-emerald-700 ring-2 ring-white`} aria-label={label}>
+              {avatarInitials(participant, index)}
             </span>
-          )
-        ))}
+          );
+        })}
       </div>
       {extra && (
         <span className="ml-2 grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
@@ -77,9 +95,9 @@ export function MatchInfo({ match, compact = false }) {
     <div className={`grid gap-1 ${compact ? 'text-xs' : 'text-sm'} text-slate-500`}>
       <p className="flex items-center gap-2">
         <CalendarDays size={13} color="currentColor" />
-        {match.dateLabel || formatDateLabel(match.match_date)}
+        {match.dateLabel || formatShortMatchDate(match)}
         <Clock size={13} color="currentColor" className="ml-2" />
-        {String(match.match_time).slice(0, 5)}
+        {formatMatchTime(match)}
       </p>
       <p className="flex items-center gap-2">
         <MapPin size={13} color="currentColor" />
@@ -89,19 +107,7 @@ export function MatchInfo({ match, compact = false }) {
   );
 }
 
-function formatDateLabel(value) {
-  if (!value) return 'Date non renseignée';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return String(value);
-
-  return new Intl.DateTimeFormat('fr-FR', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  }).format(date);
-}
-
-export function MatchListRow({ match, actions, playersText, imageSize = 'h-24 w-24' }) {
+export function MatchListRow({ match, actions, playersText, imageSize = 'h-24 w-24', extra }) {
   const meta = sportMeta(match);
   return (
     <article className="teamup-my-match-row grid items-center gap-4 border-b border-slate-100 py-4 last:border-b-0 md:grid-cols-[auto_1fr_auto_auto]">
@@ -112,7 +118,11 @@ export function MatchListRow({ match, actions, playersText, imageSize = 'h-24 w-
         <MatchInfo match={match} compact />
       </div>
       <div className="teamup-my-match-players flex items-center gap-4">
-        <AvatarStack count={4} extra={match.players_count > 8 ? 2 : undefined} />
+        <AvatarStack
+          participants={match.participants}
+          count={4}
+          extra={extra ?? Math.max(0, Number(match.players_count || 0) - 4)}
+        />
         <p className="w-20 text-sm font-bold text-slate-700">{playersText || `${match.players_count}/${match.max_players}`}</p>
       </div>
       <div className="teamup-my-match-actions flex justify-end gap-3">{actions || (

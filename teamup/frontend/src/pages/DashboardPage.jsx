@@ -3,18 +3,41 @@ import EmptyState from '../components/EmptyState';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
 import { useSocial } from '../context/SocialContext';
+import { useMatchData } from '../context/MatchDataContext';
 import { demoMatches } from '../data/teamupDemo';
 import { appAvatars, AvatarStack, IconStat, PagePanel, SportBadge, sportMeta } from '../components/InternalUI';
 import UserAvatar from '../components/UserAvatar';
 import { ArrowRight, Basketball, Bell, CalendarDays, CalendarPlus, Football, Hand, MessageCircle, Search, Star, Trophy, User } from '../components/landing/icons';
+import { formatMatchTime, formatShortMatchDate, isPastMatch } from '../utils/matchDate';
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const { matches } = useMatchData();
   const { notifications, unreadCount } = useNotifications();
   const { unreadMessagesCount } = useSocial();
   const isDemoAccount = user?.email === 'mehdi@teamup.local';
   const firstName = user?.first_name || user?.firstName || 'Sportif';
-  const upcomingMatches = isDemoAccount ? demoMatches.slice(1, 4) : [];
+  const userId = String(user?.id || '');
+  const userEmail = String(user?.email || '').toLowerCase();
+  const organizedMatches = matches.filter((match) => (
+    (match.organizer_id != null && String(match.organizer_id) === userId)
+    || (match.organizer_email && String(match.organizer_email).toLowerCase() === userEmail)
+  ));
+  const participatingMatches = matches.filter((match) => (
+    Array.isArray(match.participants)
+    && match.participants.some((participant) => (
+      (participant.id != null && String(participant.id) === userId)
+      || (participant.email && String(participant.email).toLowerCase() === userEmail)
+    ))
+  ));
+  const realUpcomingMatches = [...organizedMatches, ...participatingMatches]
+    .filter((match, index, array) => array.findIndex((item) => String(item.id) === String(match.id)) === index)
+    .filter((match) => !isPastMatch(match))
+    .slice(0, 3);
+  const upcomingMatches = isDemoAccount && realUpcomingMatches.length === 0 ? demoMatches.slice(1, 4) : realUpcomingMatches;
+  const upcomingCount = isDemoAccount && realUpcomingMatches.length === 0 ? 3 : realUpcomingMatches.length;
+  const organizedCount = isDemoAccount && organizedMatches.length === 0 ? 7 : organizedMatches.length;
+  const rating = isDemoAccount ? '4.8/5' : '0/5';
 
   return (
     <div className="teamup-dashboard mx-auto grid w-full max-w-[1180px] items-start gap-5 xl:grid-cols-[minmax(0,1fr)_292px]">
@@ -22,9 +45,9 @@ export default function DashboardPage() {
         <Header firstName={firstName} />
 
         <div className="mt-4 grid gap-4 lg:grid-cols-3">
-          <IconStat Icon={CalendarDays} value={isDemoAccount ? '3' : '0'} label="À venir" helper="Prochains" color="#65A30D" />
-          <IconStat Icon={Trophy} value={isDemoAccount ? '7' : '0'} label="Organisés" helper="Total" color="#F97316" />
-          <IconStat Icon={Star} value={isDemoAccount ? '4.8/5' : '0/5'} label="Note" helper={isDemoAccount ? '24 avis' : '0 avis'} color="#F97316" />
+          <IconStat Icon={CalendarDays} value={String(upcomingCount)} label="À venir" helper="Prochains" color="#65A30D" />
+          <IconStat Icon={Trophy} value={String(organizedCount)} label="Organisés" helper="Total" color="#F97316" />
+          <IconStat Icon={Star} value={rating} label="Note" helper={isDemoAccount ? '24 avis' : '0 avis'} color="#F97316" />
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-2">
@@ -41,8 +64,8 @@ export default function DashboardPage() {
           </div>
           <div className="teamup-upcoming-content px-5">
             {upcomingMatches.length > 0 ? (
-              upcomingMatches.map((match, index) => (
-                <UpcomingMatch key={match.id} match={match} extra={index + 2} />
+              upcomingMatches.map((match) => (
+                <UpcomingMatch key={match.id} match={match} extra={Math.max(0, Number(match.players_count || 0) - 4)} />
               ))
             ) : (
               <div className="py-5">
@@ -158,11 +181,11 @@ function UpcomingMatch({ match, extra }) {
       <div className="teamup-upcoming-info min-w-0">
         <SportBadge match={match} />
         <h3 className="mt-1 truncate text-[15px] font-black leading-5 text-slate-950">{match.title}</h3>
-        <p className="mt-1 text-xs leading-4 text-slate-500">Dim. 11 mai · {String(match.match_time).slice(0, 5)}</p>
+        <p className="mt-1 text-xs leading-4 text-slate-500">{formatShortMatchDate(match)} · {formatMatchTime(match)}</p>
         <p className="truncate text-xs leading-4 text-slate-500">{match.city} · {match.location}</p>
       </div>
       <div className="teamup-upcoming-players min-w-0 justify-self-center">
-        <AvatarStack count={4} extra={extra} />
+        <AvatarStack participants={match.participants} count={4} extra={extra} />
         <p className="mt-2 text-center text-xs font-bold text-slate-700">{match.players_count}/{match.max_players} joueurs</p>
       </div>
       <Link to={`/matches/${match.id}`} className={`teamup-upcoming-action w-[76px] justify-self-end rounded-lg border px-3 py-2 text-center text-xs font-black ${meta.button}`}>

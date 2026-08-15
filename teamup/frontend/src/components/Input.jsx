@@ -1,12 +1,12 @@
 export default function Input({ label, error, className = '', ...props }) {
   return (
-    <label className="d-grid gap-2 small fw-semibold text-slate-700">
-      {label && <span>{label}</span>}
+    <label className="grid gap-2 text-sm font-semibold text-slate-700">
+      {label && <span className="leading-none">{label}</span>}
       <input
-        className={`form-control rounded-4 border-slate-200 bg-white px-4 py-3 text-slate-950 ${className}`}
+        className={`w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-950 outline-none transition focus:border-lime-600 focus:ring-4 focus:ring-lime-600/10 ${className}`}
         {...props}
       />
-      {error && <span className="form-text text-danger">{error}</span>}
+      {error && <span className="text-xs font-semibold text-red-600">{error}</span>}
     </label>
   );
 }

@@ -1,18 +1,5 @@
 import Modal from './Modal';
-
-function formatMatchDate(value) {
-  if (!value) return 'Date à confirmer';
-  const raw = String(value);
-  const dateOnly = raw.slice(0, 10);
-  const date = new Date(`${dateOnly}T12:00:00`);
-  if (Number.isNaN(date.getTime())) return raw;
-  return new Intl.DateTimeFormat('fr-FR', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(date);
-}
+import { formatMatchDate, formatMatchTime } from '../utils/matchDate';
 
 export default function JoinMatchModal({ open, match, onCancel, onConfirm, error, loading }) {
   return (
@@ -21,7 +8,7 @@ export default function JoinMatchModal({ open, match, onCancel, onConfirm, error
         <div className="rounded-2xl bg-orange-50 p-4">
           <p className="text-sm font-black text-orange-600">🏀 {match.title}</p>
           <p className="mt-2 text-sm font-medium text-slate-700">
-            {formatMatchDate(match.match_date)} • {String(match.match_time || '').slice(0, 5)}
+            {formatMatchDate(match)} • {formatMatchTime(match)}
           </p>
           <p className="mt-1 text-sm text-slate-500">{match.city} - {match.location}</p>
         </div>

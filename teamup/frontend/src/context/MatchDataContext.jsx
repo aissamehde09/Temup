@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { api } from '../services/api';
+import { normalizeMatch } from '../utils/matchNormalize';
 
 const MatchDataContext = createContext(null);
 const STORAGE_KEY = 'teamup_created_matches';
 function readCreatedMatches() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    return (JSON.parse(localStorage.getItem(STORAGE_KEY)) || []).map(normalizeMatch);
   } catch {
     return [];
   }
@@ -20,10 +21,9 @@ export function MatchDataProvider({ children }) {
   async function refreshMatches() {
     try {
       const { data } = await api.get('/matches');
-      setServerMatches(data.matches || []);
+      setServerMatches((data.matches || []).map(normalizeMatch));
       setError(null);
     } catch (requestError) {
-      setServerMatches([]);
       setError(requestError);
     } finally {
       setLoading(false);
@@ -37,10 +37,13 @@ export function MatchDataProvider({ children }) {
     return () => window.removeEventListener('focus', onFocus);
   }, []);
 
-  const matches = useMemo(
-    () => serverMatches,
-    [serverMatches, createdMatches],
-  );
+  const matches = useMemo(() => {
+    const byId = new Map();
+    [...serverMatches, ...createdMatches].map(normalizeMatch).forEach((match) => {
+      byId.set(String(match.id), match);
+    });
+    return Array.from(byId.values());
+  }, [serverMatches, createdMatches]);
 
   async function createMatch(payload) {
     const sportId = payload.sport_name === 'Basketball' ? 1 : 2;
@@ -60,7 +63,7 @@ export function MatchDataProvider({ children }) {
         latitude: payload.latitude,
         longitude: payload.longitude,
       });
-      const created = data.match;
+      const created = normalizeMatch(data.match);
       setServerMatches((current) => (current ? [...current, created] : [created]));
       return created;
     } catch (error) {

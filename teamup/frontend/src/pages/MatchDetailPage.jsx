@@ -15,19 +15,8 @@ import { MetaItem, PagePanel, RemainingPlaces, SportBadge } from '../components/
 import { CalendarDays, Clock, MapPin, ShieldCheck, Star } from '../components/landing/icons';
 import UserAvatar from '../components/UserAvatar';
 import { getAvatarSource } from '../utils/avatar';
-
-function formatMatchDate(value) {
-  if (!value) return 'Date non renseignée';
-  const date = new Date(`${String(value).slice(0, 10)}T12:00:00`);
-  if (Number.isNaN(date.getTime())) return String(value);
-
-  return new Intl.DateTimeFormat('fr-FR', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(date);
-}
+import { formatMatchDate, formatMatchTime } from '../utils/matchDate';
+import { normalizeMatch } from '../utils/matchNormalize';
 
 export default function MatchDetailPage() {
   const { id } = useParams();
@@ -50,9 +39,7 @@ export default function MatchDetailPage() {
   const [joining, setJoining] = useState(false);
   const [leaveError, setLeaveError] = useState('');
   const [leaving, setLeaving] = useState(false);
-  const participantsCount = match
-    ? (matchDetails ? Number(match.players_count) : Number(match.players_count) + (joined ? 1 : 0))
-    : 0;
+  const participantsCount = match ? Number(match.players_count || match.participants?.length || 0) : 0;
   const matchWithCount = match ? { ...match, players_count: participantsCount } : null;
   const placesLeft = match ? Number(match.max_players) - participantsCount : 0;
   const isFull = placesLeft <= 0;
@@ -82,7 +69,7 @@ export default function MatchDetailPage() {
     api.get(`/matches/${id}`)
       .then(({ data }) => {
         if (!active) return;
-        setMatchDetails(data.match);
+        setMatchDetails(normalizeMatch(data.match));
       })
       .catch((error) => {
         if (!active) return;
@@ -192,8 +179,8 @@ export default function MatchDetailPage() {
 
           <aside className="rounded-xl border border-slate-200 bg-white p-6">
             <div className="grid gap-7">
-              <MetaItem Icon={CalendarDays} title="Date" value={formatMatchDate(match.match_date)} />
-              <MetaItem Icon={Clock} title="Heure" value={String(match.match_time).slice(0, 5)} />
+              <MetaItem Icon={CalendarDays} title="Date" value={formatMatchDate(match)} />
+              <MetaItem Icon={Clock} title="Heure" value={formatMatchTime(match)} />
               <MetaItem Icon={MapPin} title="Lieu" value={`${match.city} - ${match.location}`} />
               <MetaItem Icon={ShieldCheck} title="Niveau" value={match.level} />
             </div>

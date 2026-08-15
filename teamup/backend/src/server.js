@@ -15,18 +15,27 @@ const app = express();
 const port = process.env.PORT || 5000;
 // Railway doit pouvoir atteindre l'application depuis l'extérieur du conteneur.
 const host = process.env.HOST || '0.0.0.0';
+function parseOrigins(...values) {
+  return values
+    .flatMap((value) => String(value || '').split(','))
+    .map((value) => value.trim().replace(/\/+$/, ''))
+    .filter(Boolean);
+}
+
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  ...parseOrigins(process.env.FRONTEND_URL, process.env.URL_FRONTEND, process.env.VITE_FRONTEND_URL),
+  ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL.replace(/\/+$/, '')}`] : []),
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'http://localhost:5175',
   'http://127.0.0.1:5175',
-].filter(Boolean);
+];
 
 function isAllowedOrigin(origin) {
-  if (!origin || allowedOrigins.includes(origin)) return true;
+  const cleanOrigin = String(origin || '').replace(/\/+$/, '');
+  if (!cleanOrigin || allowedOrigins.includes(cleanOrigin)) return true;
   try {
-    const url = new URL(origin);
+    const url = new URL(cleanOrigin);
     return url.protocol === 'https:' && url.hostname.endsWith('.vercel.app');
   } catch {
     return false;

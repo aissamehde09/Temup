@@ -9,10 +9,12 @@ const mysqlOptions = {
   namedPlaceholders: true,
 };
 
+const mysqlConnectionUrl = process.env.MYSQL_URL || process.env.MYSQL_PRIVATE_URL || process.env.DATABASE_URL;
+
 // Railway fournit une URL complète (MYSQL_PRIVATE_URL). En local, on
 // conserve la configuration détaillée host/user/password/database.
-export const pool = process.env.MYSQL_URL
-  ? mysql.createPool(process.env.MYSQL_URL, mysqlOptions)
+export const pool = mysqlConnectionUrl
+  ? mysql.createPool(mysqlConnectionUrl, mysqlOptions)
   : mysql.createPool({
       host: process.env.MYSQL_HOST || 'localhost',
       port: Number(process.env.MYSQL_PORT || 3306),

@@ -5,6 +5,7 @@ import ViewToggle from '../components/ViewToggle';
 import { useMatchData } from '../context/MatchDataContext';
 import { MatchListRow, PagePanel, PageTitle, SelectInput, TextInput, sportMeta } from '../components/InternalUI';
 import { Search } from '../components/landing/icons';
+import { normalizeDateInput } from '../utils/matchDate';
 
 export default function MatchesPage() {
   const { matches } = useMatchData();
@@ -23,7 +24,7 @@ export default function MatchesPage() {
       return (!normalizedQuery || searchable.includes(normalizedQuery))
         && (!sport || match.sport_name === sport)
         && (!city || match.city.toLowerCase().includes(city.trim().toLowerCase()))
-        && (!date || match.match_date === date)
+        && (!date || normalizeDateInput(match.match_date || match.date) === normalizeDateInput(date))
         && (!level || match.level === level);
     });
   }, [matches, query, sport, city, date, level]);

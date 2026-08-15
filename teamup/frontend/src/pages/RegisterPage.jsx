@@ -53,9 +53,9 @@ export default function RegisterPage() {
   }
 
   return (
-    <main className="bg-slate-50 px-6 py-12">
-      <form onSubmit={handleSubmit} className="mx-auto max-w-3xl rounded-[2rem] bg-white p-8 shadow-sm">
-        <h1 className="text-3xl font-black">Créer un compte</h1>
+    <main className="bg-slate-50 px-4 py-8 sm:px-6 sm:py-12">
+      <form onSubmit={handleSubmit} className="mx-auto w-full max-w-3xl rounded-[1.5rem] bg-white p-6 shadow-sm sm:rounded-[2rem] sm:p-8">
+        <h1 className="text-2xl font-black sm:text-3xl">Créer un compte</h1>
         <p className="mt-2 text-slate-500">Complète ton profil sportif pour rejoindre la communauté TeamUp.</p>
         {error && <p className="mt-5 rounded-2xl bg-red-50 p-4 text-sm text-red-700">{error}</p>}
         <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -75,7 +75,7 @@ export default function RegisterPage() {
           </label>
           <div className="grid gap-2 text-sm font-medium text-slate-700">
             Sports pratiqués
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               {[[1, 'Basketball'], [2, 'Football']].map(([id, label]) => (
                 <button type="button" key={id} onClick={() => toggleSport(id)} className={`rounded-xl px-4 py-3 font-semibold transition-colors ${form.sports.includes(id) ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
                   {label}
@@ -84,7 +84,7 @@ export default function RegisterPage() {
             </div>
           </div>
         </div>
-        <Button className="mt-8" disabled={loading}>{loading ? 'Création...' : 'Créer mon compte'}</Button>
+        <Button className="mt-8 bg-[#65A30D] hover:bg-[#4d7c0f]" disabled={loading}>{loading ? 'Création...' : 'Créer mon compte'}</Button>
       </form>
     </main>
   );

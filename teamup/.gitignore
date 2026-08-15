@@ -9,3 +9,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 chrome-screenshot-profile2/
+debug.log
+output/
+frontend/debug.log

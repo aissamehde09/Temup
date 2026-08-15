@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useMatchInteractions } from '../context/MatchInteractionContext';
 import { useMatchData } from '../context/MatchDataContext';
 import { MatchListRow, PagePanel, PageTitle, sportMeta } from '../components/InternalUI';
+import { isPastMatch } from '../utils/matchDate';
 
 export default function MyMatchesPage() {
   const { user } = useAuth();
@@ -26,11 +27,10 @@ export default function MyMatchesPage() {
   const matches = [...baseMatches, ...joinedMatches]
     .filter((match, index, array) => array.findIndex((item) => item.id === match.id) === index);
   const organizedIds = new Set(organizedMatches.map((match) => String(match.id)));
-  const isPast = (match) => new Date(`${match.match_date}T${String(match.match_time).slice(0, 5)}`) < new Date();
   const visibleMatches = useMemo(() => {
     if (activeTab === 'Organisés') return organizedMatches;
-    if (activeTab === 'Passés') return matches.filter(isPast);
-    return matches.filter((match) => !isPast(match));
+    if (activeTab === 'Passés') return matches.filter(isPastMatch);
+    return matches.filter((match) => !isPastMatch(match));
   }, [activeTab, matches, organizedMatches]);
 
   async function handleDelete(match) {
@@ -68,8 +68,7 @@ export default function MyMatchesPage() {
           {deleteError && <p className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{deleteError}</p>}
           {visibleMatches.length > 0 ? visibleMatches.map((match) => {
             const meta = sportMeta(match);
-            const isJoinedFromAction = joinedIds.includes(String(match.id));
-            const playersCount = Number(match.players_count) + (isJoinedFromAction ? 1 : 0);
+            const playersCount = Number(match.players_count || match.participants?.length || 0);
             return (
               <MatchListRow
                 key={match.id}

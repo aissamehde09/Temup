@@ -856,3 +856,142 @@ body {
   }
 }
 
+/* Final layout guard: overrides older Bootstrap/Tailwind conflicts left during
+   the migration attempts. Keep this block at the end of the file. */
+@media (min-width: 1024px) {
+  .teamup-sidebar {
+    position: fixed !important;
+    inset: 0 auto 0 0 !important;
+    width: 300px !important;
+    flex-basis: 300px !important;
+    padding-inline: 1.35rem !important;
+    overflow-x: hidden !important;
+  }
+
+  .teamup-app-main {
+    margin-left: 300px !important;
+    max-width: calc(100vw - 300px) !important;
+    padding-inline: clamp(1rem, 2vw, 2rem) !important;
+  }
+
+  .teamup-app-main > * {
+    max-width: 1280px !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+
+  .teamup-dashboard {
+    max-width: 1280px !important;
+    grid-template-columns: minmax(0, 1fr) 300px !important;
+    gap: 1.5rem !important;
+  }
+
+  .teamup-dashboard-right {
+    max-width: 300px !important;
+  }
+
+  .teamup-upcoming-match {
+    grid-template-columns: 96px minmax(0, 1fr) 170px 96px !important;
+    gap: 1rem !important;
+  }
+
+  .teamup-upcoming-match > img {
+    width: 96px !important;
+    height: 76px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .teamup-upcoming-match,
+  .teamup-my-match-row {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    justify-items: center !important;
+    text-align: center !important;
+  }
+
+  .teamup-upcoming-players,
+  .teamup-my-match-players,
+  .teamup-my-match-actions {
+    justify-content: center !important;
+    justify-self: center !important;
+  }
+
+  .teamup-upcoming-action,
+  .teamup-my-match-actions > a,
+  .teamup-my-match-actions > button {
+    width: min(100%, 180px) !important;
+  }
+}
+
+/* Production responsive guard: keeps the restored Tailwind UI stable across
+   desktop, tablet and phone widths after the Bootstrap rollback. */
+html,
+body,
+#root {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.teamup-navbar {
+  position: sticky !important;
+  top: 0 !important;
+}
+
+.teamup-app-shell {
+  align-items: stretch;
+  overflow-x: hidden;
+}
+
+@media (min-width: 1024px) {
+  .teamup-sidebar {
+    min-height: 100vh !important;
+    height: auto !important;
+  }
+
+  .teamup-sidebar::after {
+    content: "";
+    display: block;
+    min-height: 4rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .login-page {
+    min-height: calc(100svh - 64px) !important;
+    align-items: start !important;
+    padding-top: 1.5rem !important;
+  }
+
+  .login-card {
+    width: min(100%, calc(100vw - 2rem)) !important;
+  }
+
+  .teamup-dashboard {
+    justify-items: center;
+  }
+
+  .teamup-dashboard > section,
+  .teamup-dashboard-right {
+    max-width: 100%;
+    justify-self: stretch;
+  }
+
+  .teamup-upcoming-content {
+    padding-inline: 1rem !important;
+  }
+
+  .teamup-upcoming-match > img,
+  .teamup-my-match-row > img {
+    width: min(9rem, 58vw) !important;
+    height: 7rem !important;
+    object-fit: cover;
+  }
+
+  .teamup-upcoming-info,
+  .teamup-my-match-info {
+    width: 100%;
+    max-width: 20rem;
+  }
+}
+

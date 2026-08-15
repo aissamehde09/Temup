@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from './AuthContext';
-import { useNotifications } from './NotificationContext';
+import { useMatchData } from './MatchDataContext';
 import { api } from '../services/api';
+import { isPastMatch } from '../utils/matchDate';
+import { normalizeMatch } from '../utils/matchNormalize';
 
 const MatchInteractionContext = createContext(null);
 
@@ -15,7 +17,7 @@ function readStoredIds(key) {
 
 export function MatchInteractionProvider({ children }) {
   const { user } = useAuth();
-  const { addNotification } = useNotifications();
+  const { matches, refreshMatches } = useMatchData();
   const userKey = user?.email || 'guest';
   const joinedKey = `teamup_joined_matches_${userKey}`;
   const favoriteKey = `teamup_favorite_matches_${userKey}`;
@@ -50,28 +52,42 @@ export function MatchInteractionProvider({ children }) {
 
   async function joinMatch(matchId) {
     const id = String(matchId);
-    if (localStorage.getItem('teamup_token')) {
-      const { data } = await api.post(`/matches/${id}/join`);
-      setJoinedIds((current) => (current.includes(id) ? current : [...current, id]));
-      setLeftIds((current) => current.filter((item) => item !== id));
-      return data.match;
-    }
+    const token = localStorage.getItem('teamup_token');
+    if (!token) throw new Error('Connecte-toi pour rejoindre ce match.');
+
+    const match = matches.find((item) => String(item.id) === id);
+    const currentUserId = String(user?.id || '');
+    const currentUserEmail = String(user?.email || '').toLowerCase();
+    const isOrganizer = Boolean(match && (
+      (match.organizer_id != null && String(match.organizer_id) === currentUserId)
+      || (match.organizer_email && String(match.organizer_email).toLowerCase() === currentUserEmail)
+    ));
+    const alreadyParticipant = Boolean(match?.participants?.some((participant) => (
+      (participant.id != null && String(participant.id) === currentUserId)
+      || (participant.email && String(participant.email).toLowerCase() === currentUserEmail)
+    )));
+
+    if (isOrganizer) throw new Error('Tu ne peux pas rejoindre ton propre match.');
+    if (match && isPastMatch(match)) throw new Error('Impossible de rejoindre un match passé.');
+    if (match && Number(match.players_count) >= Number(match.max_players)) throw new Error('Ce match est complet.');
+    if (alreadyParticipant || joinedIds.includes(id)) throw new Error('Tu es déjà inscrit à ce match.');
+
+    const { data } = await api.post(`/matches/${id}/join`);
     setJoinedIds((current) => (current.includes(id) ? current : [...current, id]));
     setLeftIds((current) => current.filter((item) => item !== id));
-    addNotification({ type: 'MATCH_JOINED', message: 'Tu as rejoint un match', context: `Match #${matchId}` });
+    refreshMatches();
+    return data.match ? normalizeMatch(data.match) : null;
   }
 
   async function leaveMatch(matchId) {
     const id = String(matchId);
-    if (localStorage.getItem('teamup_token')) {
-      const { data } = await api.delete(`/matches/${id}/leave`);
-      setJoinedIds((current) => current.filter((item) => item !== id));
-      setLeftIds((current) => (current.includes(id) ? current : [...current, id]));
-      return data.match;
-    }
+    const token = localStorage.getItem('teamup_token');
+    if (!token) throw new Error('Connecte-toi pour quitter ce match.');
+    const { data } = await api.delete(`/matches/${id}/leave`);
     setJoinedIds((current) => current.filter((item) => item !== id));
     setLeftIds((current) => (current.includes(id) ? current : [...current, id]));
-    addNotification({ type: 'MATCH_LEFT', message: 'Tu as quitté un match', context: `Match #${matchId}` });
+    refreshMatches();
+    return data.match ? normalizeMatch(data.match) : null;
   }
 
   function toggleFavorite(matchId) {
@@ -90,7 +106,7 @@ export function MatchInteractionProvider({ children }) {
     toggleFavorite,
     isJoined: (matchId) => joinedIds.includes(String(matchId)),
     isFavorite: (matchId) => favoriteIds.includes(String(matchId)),
-  }), [joinedIds, leftIds, favoriteIds]);
+  }), [joinedIds, leftIds, favoriteIds, matches, user]);
 
   return (
     <MatchInteractionContext.Provider value={value}>

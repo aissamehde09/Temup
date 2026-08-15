@@ -21,6 +21,27 @@ const matchSelect = `
   INNER JOIN users u ON u.id = m.organizer_id
 `;
 
+const CITY_COORDINATES = {
+  nanterre: { latitude: 48.8924, longitude: 2.2067 },
+  puteaux: { latitude: 48.8847, longitude: 2.2382 },
+  courbevoie: { latitude: 48.8967, longitude: 2.2567 },
+  levallois: { latitude: 48.8932, longitude: 2.2879 },
+  'levallois-perret': { latitude: 48.8932, longitude: 2.2879 },
+};
+
+function normalizeCityKey(city) {
+  return String(city || '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function coordinatesFromCity(city) {
+  const key = normalizeCityKey(city);
+  return CITY_COORDINATES[key] || null;
+}
+
 function coordinatesFromUrl(value) {
   if (!value) return null;
   const text = String(value);
@@ -65,6 +86,11 @@ function isTeamUpRegion(coordinates, city) {
   return Boolean(city);
 }
 
+function safeCoordinates(city, preferredCoordinates) {
+  if (isTeamUpRegion(preferredCoordinates, city)) return preferredCoordinates;
+  return coordinatesFromCity(city);
+}
+
 function assertFutureMatchDate(matchDate, matchTime) {
   const timestamp = Date.parse(`${matchDate}T${matchTime}`);
   if (!Number.isFinite(timestamp) || timestamp <= Date.now()) {
@@ -74,14 +100,16 @@ function assertFutureMatchDate(matchDate, matchTime) {
 
 async function hydrateCoordinates(rows) {
   return Promise.all(rows.map(async (row) => {
-    if (row.latitude && row.longitude) return row;
+    const existing = { latitude: row.latitude, longitude: row.longitude };
+    if (isTeamUpRegion(existing, row.city)) return row;
     const resolved = await resolveLocationCoordinates(row.location);
-    if (!isTeamUpRegion(resolved, row.city)) return row;
+    const safe = safeCoordinates(row.city, resolved);
+    if (!safe) return { ...row, latitude: null, longitude: null };
     await query(
       'UPDATE matches SET latitude = :latitude, longitude = :longitude WHERE id = :id',
-      { id: row.id, latitude: resolved.latitude, longitude: resolved.longitude },
+      { id: row.id, latitude: safe.latitude, longitude: safe.longitude },
     );
-    return { ...row, ...resolved };
+    return { ...row, ...safe };
   }));
 }
 
@@ -155,6 +183,10 @@ export async function createMatch(data, userId) {
   const [sport] = await query('SELECT id FROM sports WHERE id = :sportId', { sportId: data.sportId });
   if (!sport) throw new HttpError(400, 'Sport invalide');
   const resolvedCoordinates = await resolveLocationCoordinates(data.location);
+  const safe = safeCoordinates(data.city, {
+    latitude: data.latitude ?? resolvedCoordinates?.latitude,
+    longitude: data.longitude ?? resolvedCoordinates?.longitude,
+  });
 
   const result = await query(
     `INSERT INTO matches
@@ -174,8 +206,8 @@ export async function createMatch(data, userId) {
       maxPlayers: data.maxPlayers,
       description: data.description || null,
       imageUrl: data.imageUrl || null,
-      latitude: data.latitude ?? resolvedCoordinates?.latitude ?? null,
-      longitude: data.longitude ?? resolvedCoordinates?.longitude ?? null,
+      latitude: safe?.latitude ?? null,
+      longitude: safe?.longitude ?? null,
     },
   );
   const createdMatch = await getMatchById(result.insertId);
@@ -197,6 +229,10 @@ export async function updateMatch(id, data, user) {
   if (match.organizer_id !== user.id) throw new HttpError(403, 'Seul l’organisateur peut modifier ce match');
   assertFutureMatchDate(data.matchDate, data.matchTime);
   const resolvedCoordinates = await resolveLocationCoordinates(data.location);
+  const safe = safeCoordinates(data.city, {
+    latitude: data.latitude ?? resolvedCoordinates?.latitude,
+    longitude: data.longitude ?? resolvedCoordinates?.longitude,
+  });
 
   await query(
     `UPDATE matches SET
@@ -218,8 +254,8 @@ export async function updateMatch(id, data, user) {
       maxPlayers: data.maxPlayers,
       description: data.description || null,
       imageUrl: data.imageUrl || null,
-      latitude: data.latitude ?? resolvedCoordinates?.latitude ?? null,
-      longitude: data.longitude ?? resolvedCoordinates?.longitude ?? null,
+      latitude: safe?.latitude ?? null,
+      longitude: safe?.longitude ?? null,
     },
   );
 
