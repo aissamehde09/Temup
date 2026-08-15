@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useRef, useState } from 
 import { demoNotifications } from '../data/teamupDemo';
 import { useAuth } from './AuthContext';
 import { api } from '../services/api';
+import { getErrorMessage } from '../services/api';
 
 const NotificationContext = createContext(null);
 
@@ -24,6 +25,7 @@ export function NotificationProvider({ children }) {
   const key = storageKey(user);
   const loadedKey = useRef(key);
   const [notifications, setNotifications] = useState(() => readNotifications(key, user));
+  const [error, setError] = useState('');
 
   useEffect(() => {
     loadedKey.current = key;
@@ -45,8 +47,12 @@ export function NotificationProvider({ children }) {
             const localOnly = current.filter((local) => !serverNotifications.some((remote) => remote._id === local._id));
             return [...serverNotifications, ...localOnly];
           });
+          setError('');
         })
-        .catch(() => {});
+        .catch((requestError) => {
+          if (!active) return;
+          setError(getErrorMessage(requestError));
+        });
     }
     return () => { active = false; };
   }, [key, user]);
@@ -59,14 +65,16 @@ export function NotificationProvider({ children }) {
   function markRead(id) {
     setNotifications((current) => current.filter((item) => item._id !== id));
     if (!String(id).startsWith('local-') && localStorage.getItem('teamup_token')) {
-      api.delete(`/notifications/${id}`).catch(() => {});
+      api.delete(`/notifications/${id}`).catch((requestError) => setError(getErrorMessage(requestError)));
     }
   }
 
   function markAllRead() {
     setNotifications([]);
     localStorage.setItem(key, JSON.stringify([]));
-    if (localStorage.getItem('teamup_token')) api.delete('/notifications').catch(() => {});
+    if (localStorage.getItem('teamup_token')) {
+      api.delete('/notifications').catch((requestError) => setError(getErrorMessage(requestError)));
+    }
   }
 
   function addNotification(notification) {
@@ -82,7 +90,7 @@ export function NotificationProvider({ children }) {
   }
 
   const unreadCount = notifications.filter((item) => !item.read).length;
-  const value = useMemo(() => ({ notifications, unreadCount, markRead, markAllRead, addNotification }), [notifications, unreadCount]);
+  const value = useMemo(() => ({ notifications, unreadCount, notificationError: error, markRead, markAllRead, addNotification }), [notifications, unreadCount, error]);
   return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
 }
 

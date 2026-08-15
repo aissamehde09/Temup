@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
+import { useSocial } from '../context/SocialContext';
 import InviteFriendsCard from './InviteFriendsCard';
 import InviteFriendsModal from './InviteFriendsModal';
 import {
@@ -13,12 +14,13 @@ import {
 const navItems = [
   ['Tableau de bord', '/dashboard', Home], ['Trouver un match', '/matches', Search],
   ['Mes matchs', '/my-matches', CalendarDays], ['Créer un match', '/matches/create', CalendarPlus],
-  ['Notifications', '/notifications', Bell, 3], ['Messages', '/messages', MessageCircle, 2],
+  ['Notifications', '/notifications', Bell], ['Messages', '/messages', MessageCircle],
   ['Profil', '/profile', User], ['Paramètres', '/settings', Gear],
 ];
 
 function SidebarContent({ onNavigate, onLogout }) {
   const { unreadCount } = useNotifications();
+  const { unreadMessagesCount } = useSocial();
   return (
     <div className="px-4 py-6 text-white">
       <NavLink to="/dashboard" onClick={onNavigate} className="mb-10 flex items-center gap-3">
@@ -30,7 +32,8 @@ function SidebarContent({ onNavigate, onLogout }) {
           <NavLink key={label} to={path} onClick={onNavigate} className={({ isActive }) => `teamup-sidebar-link flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-bold transition ${isActive ? 'bg-lime-700 text-white shadow-lg shadow-lime-900/20' : 'text-white/90 hover:bg-white/10'}`}>
             <Icon size={19} color="currentColor" className="w-5 shrink-0" />
             <span className="min-w-0 flex-1 break-words leading-5">{label}</span>
-            {label === 'Notifications' && unreadCount > 0 ? <span className="grid h-7 w-7 place-items-center rounded-full bg-lime-600 text-sm font-black">{unreadCount}</span> : badge && label !== 'Notifications' ? <span className="grid h-7 w-7 place-items-center rounded-full bg-lime-600 text-sm font-black">{badge}</span> : null}
+            {label === 'Notifications' && unreadCount > 0 ? <span className="grid h-7 w-7 place-items-center rounded-full bg-lime-600 text-sm font-black">{unreadCount}</span> : null}
+            {label === 'Messages' && unreadMessagesCount > 0 ? <span className="grid h-7 w-7 place-items-center rounded-full bg-lime-600 text-sm font-black">{unreadMessagesCount}</span> : null}
           </NavLink>
         ))}
         <div className="my-5 h-px bg-white/10" />

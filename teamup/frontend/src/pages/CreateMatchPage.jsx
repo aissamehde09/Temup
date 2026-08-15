@@ -6,13 +6,19 @@ import { useAuth } from '../context/AuthContext';
 import { useMatchData } from '../context/MatchDataContext';
 import { getErrorMessage } from '../services/api';
 
+function getDefaultMatchDate() {
+  const date = new Date();
+  date.setDate(date.getDate() + 1);
+  return date.toISOString().slice(0, 10);
+}
+
 export default function CreateMatchPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { createMatch } = useMatchData();
   const [sport, setSport] = useState('Football');
   const [players, setPlayers] = useState(10);
-  const [form, setForm] = useState({ title: '', city: 'Nanterre', location: '', date: '2026-08-14', time: '16:00', level: 'Intermédiaire', description: '' });
+  const [form, setForm] = useState(() => ({ title: '', city: 'Nanterre', location: '', date: getDefaultMatchDate(), time: '16:00', level: 'Intermédiaire', description: '' }));
   const [imageUrl, setImageUrl] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -52,6 +58,11 @@ export default function CreateMatchPage() {
     setError('');
     if (form.title.trim().length < 3) {
       setError('Le titre du match doit contenir au moins 3 caractères.');
+      return;
+    }
+    const matchTimestamp = Date.parse(`${form.date}T${form.time}`);
+    if (!Number.isFinite(matchTimestamp) || matchTimestamp <= Date.now()) {
+      setError('La date et l’heure du match doivent être dans le futur.');
       return;
     }
     setSubmitting(true);

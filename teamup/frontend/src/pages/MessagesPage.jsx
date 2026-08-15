@@ -21,6 +21,8 @@ export default function MessagesPage() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('tous');
   const [draft, setDraft] = useState('');
+  const [sendError, setSendError] = useState('');
+  const [notice, setNotice] = useState('');
 
   const filteredConversations = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -36,13 +38,27 @@ export default function MessagesPage() {
   function openConversation(id) {
     setActiveId(id);
     markConversationRead(id);
+    setSendError('');
   }
 
-  function handleSend(event) {
+  function showNotice(message) {
+    setNotice(message);
+    window.setTimeout(() => setNotice(''), 2400);
+  }
+
+  async function handleSend(event) {
     event.preventDefault();
     if (!active || (active.type === 'match' && active.canWrite === false)) return;
-    sendMessage(active.id, draft);
-    setDraft('');
+    const cleanDraft = draft.trim();
+    if (!cleanDraft) return;
+
+    try {
+      await sendMessage(active.id, cleanDraft);
+      setDraft('');
+      setSendError('');
+    } catch {
+      setSendError("Le message n’a pas pu être envoyé. Vérifie la connexion au serveur.");
+    }
   }
 
   return (
@@ -154,17 +170,23 @@ export default function MessagesPage() {
             </div>
 
             <div className="flex gap-2 text-slate-400">
-              <button type="button" className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-slate-200 transition hover:border-lime-600 hover:text-lime-700" aria-label="Appeler">
+              <button type="button" onClick={() => showNotice('Les appels seront ajoutés dans une prochaine version.')} className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-slate-200 transition hover:border-lime-600 hover:text-lime-700" aria-label="Appeler">
                 <Phone size={16} color="currentColor" />
               </button>
-              <button type="button" className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-slate-200 transition hover:border-lime-600 hover:text-lime-700" aria-label="Démarrer une vidéo">
+              <button type="button" onClick={() => showNotice('La vidéo sera ajoutée dans une prochaine version.')} className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-slate-200 transition hover:border-lime-600 hover:text-lime-700" aria-label="Démarrer une vidéo">
                 <Video size={16} color="currentColor" />
               </button>
-              <button type="button" className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-slate-200 transition hover:border-lime-600 hover:text-lime-700" aria-label="Informations">
+              <button type="button" onClick={() => showNotice('Les informations de conversation seront ajoutées plus tard.')} className="grid h-11 w-11 cursor-pointer place-items-center rounded-full border border-slate-200 transition hover:border-lime-600 hover:text-lime-700" aria-label="Informations">
                 <CircleInfo size={16} color="currentColor" />
               </button>
             </div>
           </header>
+
+          {notice ? (
+            <p role="status" className="mx-6 mt-4 rounded-xl bg-lime-50 px-4 py-3 text-sm font-bold text-lime-800">
+              {notice}
+            </p>
+          ) : null}
 
           <div className="min-h-0 flex-1 space-y-5 overflow-y-auto bg-gradient-to-b from-white to-slate-50/70 p-6">
             <div className="mx-auto w-fit rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500">
@@ -184,7 +206,13 @@ export default function MessagesPage() {
             ))}
           </div>
 
-          <form onSubmit={handleSend} className="flex items-center gap-3 border-t border-slate-100 bg-white p-5">
+          <form onSubmit={handleSend} className="border-t border-slate-100 bg-white p-5">
+            {sendError ? (
+              <p role="alert" className="mb-3 rounded-xl bg-red-50 px-4 py-3 text-sm font-bold text-red-700">
+                {sendError}
+              </p>
+            ) : null}
+            <div className="flex items-center gap-3">
             <label className="flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 focus-within:border-lime-500">
               <input
                 value={draft}
@@ -193,7 +221,7 @@ export default function MessagesPage() {
                 className="min-w-0 flex-1 text-sm font-medium text-slate-800 outline-none placeholder:text-slate-400 disabled:bg-white disabled:text-slate-400"
                 placeholder={active.type === 'match' && active.canWrite === false ? 'Rejoins ce match pour écrire.' : 'Écrire un message...'}
               />
-              <button type="button" className="text-slate-400 transition hover:text-lime-700" aria-label="Ajouter une pièce jointe">
+              <button type="button" onClick={() => showNotice('Les pièces jointes seront ajoutées dans une prochaine version.')} className="text-slate-400 transition hover:text-lime-700" aria-label="Ajouter une pièce jointe">
                 <Paperclip size={17} color="currentColor" />
               </button>
             </label>
@@ -205,6 +233,7 @@ export default function MessagesPage() {
             >
               <ArrowRight size={17} color="currentColor" />
             </button>
+            </div>
           </form>
         </section>
       ) : null}

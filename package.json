@@ -1,0 +1,9 @@
+{
+  "name": "teamup-railway-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm --prefix teamup/backend install",
+    "start": "npm --prefix teamup/backend start"
+  }
+}

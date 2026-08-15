@@ -6,9 +6,9 @@ import JoinMatchModal from '../components/JoinMatchModal';
 import LeaveMatchModal from '../components/LeaveMatchModal';
 import ParticipantsList from '../components/ParticipantsList';
 import SuccessToast from '../components/SuccessToast';
+import EmptyState from '../components/EmptyState';
 import { useAuth } from '../context/AuthContext';
-import { api } from '../services/api';
-import { getErrorMessage } from '../services/api';
+import { api, getErrorMessage } from '../services/api';
 import { useMatchInteractions } from '../context/MatchInteractionContext';
 import { useMatchData } from '../context/MatchDataContext';
 import { MetaItem, PagePanel, RemainingPlaces, SportBadge } from '../components/InternalUI';
@@ -35,22 +35,26 @@ export default function MatchDetailPage() {
   const { user } = useAuth();
   const { matches } = useMatchData();
   const { joinMatch, leaveMatch, toggleFavorite, isJoined, isFavorite } = useMatchInteractions();
-  const fallbackMatch = matches.find((item) => String(item.id) === String(id)) || matches[0];
+  const cachedMatch = matches.find((item) => String(item.id) === String(id));
   const [matchDetails, setMatchDetails] = useState(null);
-  const match = matchDetails || fallbackMatch;
-  const joined = isJoined(match.id);
-  const isOrganizer = Boolean(user?.id && match.organizer_id && String(user.id) === String(match.organizer_id));
-  const favorite = isFavorite(match.id);
+  const [loadingDetails, setLoadingDetails] = useState(Boolean(id && localStorage.getItem('teamup_token')));
+  const [detailsError, setDetailsError] = useState('');
+  const match = matchDetails || cachedMatch;
+  const joined = match ? isJoined(match.id) : false;
+  const isOrganizer = Boolean(user?.id && match?.organizer_id && String(user.id) === String(match.organizer_id));
+  const favorite = match ? isFavorite(match.id) : false;
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [toast, setToast] = useState('');
   const [joinError, setJoinError] = useState('');
   const [joining, setJoining] = useState(false);
-  const participantsCount = matchDetails
-    ? Number(match.players_count)
-    : Number(match.players_count) + (joined ? 1 : 0);
-  const matchWithCount = { ...match, players_count: participantsCount };
-  const placesLeft = Number(match.max_players) - participantsCount;
+  const [leaveError, setLeaveError] = useState('');
+  const [leaving, setLeaving] = useState(false);
+  const participantsCount = match
+    ? (matchDetails ? Number(match.players_count) : Number(match.players_count) + (joined ? 1 : 0))
+    : 0;
+  const matchWithCount = match ? { ...match, players_count: participantsCount } : null;
+  const placesLeft = match ? Number(match.max_players) - participantsCount : 0;
   const isFull = placesLeft <= 0;
   const currentUser = {
     id: user?.id || 10,
@@ -66,9 +70,54 @@ export default function MatchDetailPage() {
   }, [toast]);
 
   useEffect(() => {
-    if (!id || !localStorage.getItem('teamup_token')) return;
-    api.get(`/matches/${id}`).then(({ data }) => setMatchDetails(data.match)).catch(() => {});
+    if (!id || !localStorage.getItem('teamup_token')) {
+      setLoadingDetails(false);
+      return;
+    }
+
+    let active = true;
+    setLoadingDetails(true);
+    setDetailsError('');
+
+    api.get(`/matches/${id}`)
+      .then(({ data }) => {
+        if (!active) return;
+        setMatchDetails(data.match);
+      })
+      .catch((error) => {
+        if (!active) return;
+        setDetailsError(getErrorMessage(error));
+      })
+      .finally(() => {
+        if (active) setLoadingDetails(false);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [id]);
+
+  if (loadingDetails && !match) {
+    return (
+      <div className="match-detail-shell mx-auto w-full max-w-[1040px]">
+        <EmptyState title="Chargement du match" description="Récupération des informations du match..." />
+      </div>
+    );
+  }
+
+  if (!match) {
+    return (
+      <div className="match-detail-shell mx-auto w-full max-w-[1040px]">
+        <Link to="/matches" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-lime-800">
+          ← Retour
+        </Link>
+        <EmptyState
+          title="Match indisponible"
+          description={detailsError || 'Ce match est introuvable ou ne peut pas être chargé pour le moment.'}
+        />
+      </div>
+    );
+  }
 
   function requestJoin() {
     if (!user) {
@@ -94,10 +143,19 @@ export default function MatchDetailPage() {
     }
   }
 
-  function confirmLeave() {
-    leaveMatch(match.id);
-    setShowLeaveModal(false);
-    setToast(`Tu as quitté ${match.title}.`);
+  async function confirmLeave() {
+    setLeaving(true);
+    setLeaveError('');
+    try {
+      const updatedMatch = await leaveMatch(match.id);
+      if (updatedMatch) setMatchDetails(updatedMatch);
+      setShowLeaveModal(false);
+      setToast(`Tu as quitté ${match.title}.`);
+    } catch (error) {
+      setLeaveError(getErrorMessage(error));
+    } finally {
+      setLeaving(false);
+    }
   }
 
   return (
@@ -182,8 +240,13 @@ export default function MatchDetailPage() {
       />
       <LeaveMatchModal
         open={showLeaveModal}
-        onCancel={() => setShowLeaveModal(false)}
+        onCancel={() => {
+          setLeaveError('');
+          setShowLeaveModal(false);
+        }}
         onConfirm={confirmLeave}
+        error={leaveError}
+        loading={leaving}
       />
     </div>
   );

@@ -64,10 +64,10 @@ export function MatchInteractionProvider({ children }) {
   async function leaveMatch(matchId) {
     const id = String(matchId);
     if (localStorage.getItem('teamup_token')) {
-      await api.delete(`/matches/${id}/leave`);
+      const { data } = await api.delete(`/matches/${id}/leave`);
       setJoinedIds((current) => current.filter((item) => item !== id));
       setLeftIds((current) => (current.includes(id) ? current : [...current, id]));
-      return;
+      return data.match;
     }
     setJoinedIds((current) => current.filter((item) => item !== id));
     setLeftIds((current) => (current.includes(id) ? current : [...current, id]));

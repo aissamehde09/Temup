@@ -85,6 +85,16 @@ function setMeta(name, content, attribute = 'name') {
   element.setAttribute('content', content);
 }
 
+function setCanonical(href) {
+  let element = document.head.querySelector('link[rel="canonical"]');
+  if (!element) {
+    element = document.createElement('link');
+    element.setAttribute('rel', 'canonical');
+    document.head.appendChild(element);
+  }
+  element.setAttribute('href', href);
+}
+
 export default function SEO() {
   const { pathname } = useLocation();
 
@@ -93,13 +103,22 @@ export default function SEO() {
       title: 'Détail du match - TeamUp',
       description: 'Consulte les détails d’un match TeamUp, ses participants et les places disponibles.',
     } : pages['/']);
+    const url = `${window.location.origin}${pathname}`;
+    const imageUrl = `${window.location.origin}/img/logo-teamup.png`;
 
     document.title = page.title;
+    setCanonical(url);
     setMeta('description', page.description);
+    setMeta('robots', 'index, follow');
     setMeta('og:title', page.title, 'property');
     setMeta('og:description', page.description, 'property');
+    setMeta('og:type', 'website', 'property');
+    setMeta('og:url', url, 'property');
+    setMeta('og:image', imageUrl, 'property');
+    setMeta('twitter:card', 'summary_large_image');
     setMeta('twitter:title', page.title);
     setMeta('twitter:description', page.description);
+    setMeta('twitter:image', imageUrl);
   }, [pathname]);
 
   return null;

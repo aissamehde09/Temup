@@ -63,6 +63,10 @@ const seedConversations = [
   },
 ];
 
+function demoFallback(user) {
+  return user?.email === 'mehdi@teamup.local';
+}
+
 function storageKey(user, name) {
   return `teamup_${name}_${user?.email || 'guest'}`;
 }
@@ -80,6 +84,24 @@ function nowTime() {
   return new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit' }).format(new Date());
 }
 
+function normalizeConversation(conversation) {
+  const merged = { ...conversation };
+  const participantId = merged.participantId || merged.participant_id;
+
+  return {
+    ...merged,
+    participantId,
+    avatar: getAvatarSource({
+      id: participantId,
+      name: merged.name,
+      email: merged.email,
+      avatar: merged.avatar,
+      avatar_url: merged.avatar_url,
+    }),
+    messages: Array.isArray(merged.messages) ? merged.messages : [],
+  };
+}
+
 export function SocialProvider({ children }) {
   const { user } = useAuth();
   const { addNotification } = useNotifications();
@@ -87,12 +109,21 @@ export function SocialProvider({ children }) {
   const requestsKey = storageKey(user, 'friend_requests');
   const conversationsKey = storageKey(user, 'conversations');
 
-  const [friends, setFriendsState] = useState(() => readStoredArray(friendsKey, seedFriends));
+  const [friends, setFriendsState] = useState(() => readStoredArray(friendsKey, demoFallback(user) ? seedFriends : []));
   const [friendRequests, setFriendRequestsState] = useState(() =>
-    readStoredArray(requestsKey, [{ id: 'req-3', sender: users[2], status: 'pending', createdAt: 'À l’instant' }]),
+    readStoredArray(requestsKey, demoFallback(user) ? [{ id: 'req-3', sender: users[2], status: 'pending', createdAt: 'À l’instant' }] : []),
   );
-  const [conversations, setConversationsState] = useState(() => readStoredArray(conversationsKey, seedConversations));
+  const [conversations, setConversationsState] = useState(() => readStoredArray(conversationsKey, demoFallback(user) ? seedConversations : []));
   const [backendAvailable, setBackendAvailable] = useState(true);
+
+  useEffect(() => {
+    const fallbackFriends = demoFallback(user) ? seedFriends : [];
+    const fallbackRequests = demoFallback(user) ? [{ id: 'req-3', sender: users[2], status: 'pending', createdAt: 'À l’instant' }] : [];
+    setFriendsState(readStoredArray(friendsKey, fallbackFriends));
+    setFriendRequestsState(readStoredArray(requestsKey, fallbackRequests));
+    setConversationsState(readStoredArray(conversationsKey, demoFallback(user) ? seedConversations : []));
+    setBackendAvailable(true);
+  }, [user?.email]);
 
   useEffect(() => {
     async function loadConversations() {
@@ -100,22 +131,7 @@ export function SocialProvider({ children }) {
       try {
         const { data } = await api.get('/conversations');
         const apiConversations = data.conversations || [];
-        const normalizedConversations = apiConversations.map((conversation) => {
-          const seed = seedConversations.find((item) =>
-            item.id === conversation.id ||
-            String(item.participantId) === String(conversation.participantId || conversation.participant_id),
-          );
-          const merged = { ...seed, ...conversation };
-          return {
-            ...merged,
-            avatar: getAvatarSource({
-              id: merged.participantId || merged.participant_id || seed?.participantId,
-              name: merged.name || seed?.name,
-              avatar: merged.avatar || seed?.avatar,
-              avatar_url: merged.avatar_url,
-            }),
-          };
-        });
+        const normalizedConversations = apiConversations.map(normalizeConversation);
         setConversationsState(normalizedConversations);
         setBackendAvailable(true);
       } catch {
@@ -223,20 +239,22 @@ export function SocialProvider({ children }) {
     if (!cleanText) return;
     const conversation = conversations.find((item) => item.id === conversationId);
 
-    if (localStorage.getItem('teamup_token') && backendAvailable && conversation) {
+    if (localStorage.getItem('teamup_token') && conversation) {
       try {
         const endpoint = conversation.serverId
           ? `/conversations/${conversation.serverId}/messages`
           : `/players/${conversation.participantId}/messages`;
         const { data } = await api.post(endpoint, { content: cleanText });
+        const updatedConversation = normalizeConversation(data.conversation);
         setConversations(
-          conversations.some((item) => item.id === data.conversation.id)
-            ? conversations.map((item) => (item.id === data.conversation.id ? data.conversation : item))
-            : [data.conversation, ...conversations.filter((item) => item.id !== conversationId)],
+          conversations.some((item) => item.id === updatedConversation.id)
+            ? conversations.map((item) => (item.id === updatedConversation.id ? updatedConversation : item))
+            : [updatedConversation, ...conversations.filter((item) => item.id !== conversationId)],
         );
         return;
-      } catch {
+      } catch (requestError) {
         setBackendAvailable(false);
+        throw requestError;
       }
     }
 
@@ -265,6 +283,7 @@ export function SocialProvider({ children }) {
       openPrivateConversation,
       markConversationRead,
       sendMessage,
+      unreadMessagesCount: conversations.reduce((total, item) => total + Number(item.unread || 0), 0),
     }),
     [friends, friendRequests, conversations],
   );

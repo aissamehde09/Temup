@@ -5,8 +5,14 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
+    if (!localStorage.getItem('teamup_token')) return null;
     const storedUser = localStorage.getItem('teamup_user');
-    return storedUser ? JSON.parse(storedUser) : null;
+    try {
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch {
+      localStorage.removeItem('teamup_user');
+      return null;
+    }
   });
   const [loading, setLoading] = useState(Boolean(localStorage.getItem('teamup_token')));
 

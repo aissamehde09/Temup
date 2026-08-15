@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
+import { useSocial } from '../context/SocialContext';
 import { demoMatches } from '../data/teamupDemo';
 import { appAvatars, AvatarStack, IconStat, PagePanel, SportBadge, sportMeta } from '../components/InternalUI';
 import UserAvatar from '../components/UserAvatar';
@@ -10,6 +11,7 @@ import { ArrowRight, Basketball, Bell, CalendarDays, CalendarPlus, Football, Han
 export default function DashboardPage() {
   const { user } = useAuth();
   const { notifications, unreadCount } = useNotifications();
+  const { unreadMessagesCount } = useSocial();
   const isDemoAccount = user?.email === 'mehdi@teamup.local';
   const firstName = user?.first_name || user?.firstName || 'Sportif';
   const upcomingMatches = isDemoAccount ? demoMatches.slice(1, 4) : [];
@@ -101,7 +103,7 @@ export default function DashboardPage() {
             <Quick href="/matches/create" Icon={CalendarPlus} label="Créer" color="#F97316" />
             <Quick href="/my-matches" Icon={CalendarDays} label="Matchs" color="#0EA5E9" />
             <Quick href="/notifications" Icon={Bell} label="Notifs" color="#9333EA" badge={unreadCount || undefined} />
-            <Quick href="/messages" Icon={MessageCircle} label="Messages" color="#0284C7" badge="2" />
+            <Quick href="/messages" Icon={MessageCircle} label="Messages" color="#0284C7" badge={unreadMessagesCount || undefined} />
             <Quick href="/profile" Icon={User} label="Profil" color="#65A30D" />
           </div>
         </PagePanel>

@@ -14,6 +14,7 @@ export default function MatchesPage() {
   const [city, setCity] = useState('');
   const [date, setDate] = useState('');
   const [level, setLevel] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
 
   const filteredMatches = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -26,6 +27,11 @@ export default function MatchesPage() {
         && (!level || match.level === level);
     });
   }, [matches, query, sport, city, date, level]);
+
+  function handleSearchClick() {
+    const count = filteredMatches.length;
+    setFilterStatus(`${count} ${count > 1 ? 'matchs trouvés' : 'match trouvé'}.`);
+  }
 
   return (
     <div className="mx-auto max-w-[1180px]">
@@ -61,10 +67,15 @@ export default function MatchesPage() {
             </div>
             <TextInput type="date" aria-label="Date" value={date} onChange={(event) => setDate(event.target.value)} />
             <SelectInput value={level} onChange={(event) => setLevel(event.target.value)}><option value="">Niveau</option><option>Débutant</option><option>Intermédiaire</option><option>Confirmé</option></SelectInput>
-            <button type="button" className="h-11 rounded-lg bg-lime-700 px-8 text-sm font-black text-white hover:bg-lime-800">
+            <button type="button" onClick={handleSearchClick} className="h-11 rounded-lg bg-lime-700 px-8 text-sm font-black text-white hover:bg-lime-800">
               Rechercher
             </button>
           </div>
+          {filterStatus ? (
+            <p role="status" className="mt-3 text-sm font-bold text-lime-800">
+              {filterStatus}
+            </p>
+          ) : null}
         </div>
 
         <div className="mt-6">

@@ -65,6 +65,13 @@ function isTeamUpRegion(coordinates, city) {
   return Boolean(city);
 }
 
+function assertFutureMatchDate(matchDate, matchTime) {
+  const timestamp = Date.parse(`${matchDate}T${matchTime}`);
+  if (!Number.isFinite(timestamp) || timestamp <= Date.now()) {
+    throw new HttpError(400, 'La date et l’heure du match doivent être dans le futur');
+  }
+}
+
 async function hydrateCoordinates(rows) {
   return Promise.all(rows.map(async (row) => {
     if (row.latitude && row.longitude) return row;
@@ -144,6 +151,7 @@ export async function getMatchById(id) {
 }
 
 export async function createMatch(data, userId) {
+  assertFutureMatchDate(data.matchDate, data.matchTime);
   const [sport] = await query('SELECT id FROM sports WHERE id = :sportId', { sportId: data.sportId });
   if (!sport) throw new HttpError(400, 'Sport invalide');
   const resolvedCoordinates = await resolveLocationCoordinates(data.location);
@@ -187,12 +195,15 @@ export async function createMatch(data, userId) {
 export async function updateMatch(id, data, user) {
   const match = await getMatchById(id);
   if (match.organizer_id !== user.id) throw new HttpError(403, 'Seul l’organisateur peut modifier ce match');
+  assertFutureMatchDate(data.matchDate, data.matchTime);
+  const resolvedCoordinates = await resolveLocationCoordinates(data.location);
 
   await query(
     `UPDATE matches SET
       sport_id = :sportId, title = :title, city = :city, location = :location, address = :address,
       match_date = :matchDate, match_time = :matchTime, level = :level, max_players = :maxPlayers,
-      description = :description, image_url = :imageUrl
+      description = :description, image_url = :imageUrl,
+      latitude = :latitude, longitude = :longitude
      WHERE id = :id`,
     {
       id,
@@ -207,6 +218,8 @@ export async function updateMatch(id, data, user) {
       maxPlayers: data.maxPlayers,
       description: data.description || null,
       imageUrl: data.imageUrl || null,
+      latitude: data.latitude ?? resolvedCoordinates?.latitude ?? null,
+      longitude: data.longitude ?? resolvedCoordinates?.longitude ?? null,
     },
   );
 
@@ -301,7 +314,7 @@ export async function leaveMatch(id, user) {
     message: `${user.first_name} a quitté ton match "${match.title}"`,
   });
 
-  return { left: true };
+  return { match: await getMatchById(id) };
 }
 
 export async function toggleFavorite(id, userId) {

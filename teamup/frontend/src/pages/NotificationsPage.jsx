@@ -16,7 +16,7 @@ const iconByType = {
 };
 
 export default function NotificationsPage() {
-  const { notifications, unreadCount, markRead, markAllRead } = useNotifications();
+  const { notifications, unreadCount, notificationError, markRead, markAllRead } = useNotifications();
   const { friendRequests, acceptFriendRequest, rejectFriendRequest } = useSocial();
   const pendingFriendRequests = friendRequests.filter((request) => request.status === 'pending' && request.sender);
 
@@ -31,6 +31,12 @@ export default function NotificationsPage() {
             </button>
           )}
         />
+
+        {notificationError && (
+          <p className="mb-5 rounded-xl bg-red-50 p-4 text-sm font-semibold text-red-700">
+            {notificationError}
+          </p>
+        )}
 
         {pendingFriendRequests.length > 0 && (
           <div className="mb-6 rounded-xl border border-lime-200 bg-lime-50 p-4">

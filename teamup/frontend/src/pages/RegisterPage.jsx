@@ -9,6 +9,7 @@ export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -28,11 +29,26 @@ export default function RegisterPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     setError('');
+    if (form.password.length < 8) {
+      setError('Le mot de passe doit contenir au moins 8 caractères.');
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      setError('Les mots de passe ne correspondent pas.');
+      return;
+    }
+    if (form.sports.length === 0) {
+      setError('Sélectionne au moins un sport.');
+      return;
+    }
+    setLoading(true);
     try {
       await register(form);
       navigate('/dashboard');
     } catch (err) {
       setError(getErrorMessage(err));
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -47,8 +63,8 @@ export default function RegisterPage() {
           <Input label="Nom" value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} required />
           <Input label="Email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
           <Input label="Ville" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} required />
-          <Input label="Mot de passe" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
-          <Input label="Confirmation mot de passe" type="password" value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} required />
+          <Input label="Mot de passe" type="password" minLength={8} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
+          <Input label="Confirmation mot de passe" type="password" minLength={8} value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} required />
           <label className="grid gap-2 text-sm font-medium text-slate-700">
             Niveau
             <select className="rounded-2xl border border-slate-200 px-4 py-3" value={form.level} onChange={(e) => setForm({ ...form, level: e.target.value })}>
@@ -68,7 +84,7 @@ export default function RegisterPage() {
             </div>
           </div>
         </div>
-        <Button className="mt-8">Créer mon compte</Button>
+        <Button className="mt-8" disabled={loading}>{loading ? 'Création...' : 'Créer mon compte'}</Button>
       </form>
     </main>
   );
