@@ -4,7 +4,7 @@ import { Field, PagePanel, PageTitle, SelectInput, TextInput } from '../componen
 import { Basketball, Football } from '../components/landing/icons';
 import { useAuth } from '../context/AuthContext';
 import { useMatchData } from '../context/MatchDataContext';
-import { getErrorMessage } from '../services/api';
+import { getErrorMessage, uploadImage, apiBaseUrl } from '../services/api';
 
 function getDefaultMatchDate() {
   const date = new Date();
@@ -22,7 +22,8 @@ export default function CreateMatchPage() {
   const [sport, setSport] = useState('Football');
   const [players, setPlayers] = useState(10);
   const [form, setForm] = useState(() => ({ title: '', city: 'Nanterre', location: '', date: getDefaultMatchDate(), time: '16:00', level: 'Intermédiaire', description: '' }));
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const fileRef = useRef(null);
@@ -39,21 +40,12 @@ export default function CreateMatchPage() {
   function handleImage(event) {
     const file = event.target.files?.[0];
     if (!file) return;
-    if (!file.type.startsWith('image/') || file.size > 5 * 1024 * 1024) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const image = new Image();
-      image.onload = () => {
-        const scale = Math.min(1, 1400 / image.width);
-        const canvas = document.createElement('canvas');
-        canvas.width = Math.round(image.width * scale);
-        canvas.height = Math.round(image.height * scale);
-        canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
-        setImageUrl(canvas.toDataURL('image/jpeg', 0.78));
-      };
-      image.src = String(reader.result);
-    };
-    reader.readAsDataURL(file);
+    if (!file.type.startsWith('image/') || file.size > 5 * 1024 * 1024) {
+      setError('La photo doit être une image de moins de 5 Mo.');
+      return;
+    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
   }
 
   async function handleSubmit(event) {
@@ -70,6 +62,11 @@ export default function CreateMatchPage() {
     }
     setSubmitting(true);
     try {
+      let finalImageUrl = '';
+      if (imageFile) {
+        finalImageUrl = await uploadImage(imageFile);
+      }
+      
       const coordinates = coordinatesFromLink(form.location);
       const created = await createMatch({
         sport_name: sport,
@@ -85,7 +82,7 @@ export default function CreateMatchPage() {
         organizer_first_name: user?.first_name || user?.firstName || 'Moi',
         organizer_last_name: user?.last_name || user?.lastName || '',
         organizer_email: user?.email || '',
-        image_url: imageUrl,
+        image_url: finalImageUrl,
         ...coordinates,
       });
       navigate(`/matches/${created.id}`);
@@ -106,7 +103,7 @@ export default function CreateMatchPage() {
             <SportChoice active={sport === 'Football'} sport="Football" Icon={Football} onClick={() => setSport('Football')} />
             <SportChoice active={sport === 'Basketball'} sport="Basketball" Icon={Basketball} onClick={() => setSport('Basketball')} />
           </div>
-          <Field label="Titre du match"><TextInput value={form.title} minLength={3} onChange={(event) => update('title', event.target.value)} placeholder="Ex : Foot 5 détente" required /></Field>
+          <Field label="Titre du match"><TextInput value={form.title} minLength={3} maxLength={160} onChange={(event) => update('title', event.target.value)} placeholder="Ex : Foot 5 détente" required /></Field>
           <div className="grid gap-5 md:grid-cols-2">
             <Field label="Ville"><TextInput value={form.city} onChange={(event) => update('city', event.target.value)} list="create-cities" placeholder="Nanterre" /><datalist id="create-cities"><option value="Nanterre" /><option value="Puteaux" /><option value="Courbevoie" /><option value="Levallois" /></datalist></Field>
             <Field label="Lieu"><TextInput value={form.location} onChange={(event) => update('location', event.target.value)} placeholder="Ex : Stade municipal" /></Field>
@@ -116,12 +113,12 @@ export default function CreateMatchPage() {
             <Field label="Heure"><TextInput type="time" value={form.time} onChange={(event) => update('time', event.target.value)} required /></Field>
           </div>
           <Field label="Niveau"><SelectInput value={form.level} onChange={(event) => update('level', event.target.value)}><option>Débutant</option><option>Intermédiaire</option><option>Confirmé</option></SelectInput></Field>
-          <Field label="Nombre max. de joueurs"><div className="inline-flex w-fit items-center rounded-lg border border-slate-200"><button type="button" className="h-10 w-12 text-lg font-bold text-slate-600" onClick={() => setPlayers(Math.max(2, players - 1))}>−</button><span className="grid h-10 w-16 place-items-center border-x border-slate-200 text-sm font-black text-slate-950">{players}</span><button type="button" className="h-10 w-12 text-lg font-bold text-slate-600" onClick={() => setPlayers(Math.min(30, players + 1))}>+</button></div></Field>
+          <Field label="Nombre max. de joueurs"><div className="inline-flex w-fit items-center rounded-lg border border-slate-200"><button type="button" aria-label="Réduire le nombre de joueurs" className="h-10 w-12 text-lg font-bold text-slate-600" onClick={() => setPlayers(Math.max(2, players - 1))}>−</button><span className="grid h-10 w-16 place-items-center border-x border-slate-200 text-sm font-black text-slate-950">{players}</span><button type="button" aria-label="Augmenter le nombre de joueurs" className="h-10 w-12 text-lg font-bold text-slate-600" onClick={() => setPlayers(Math.min(30, players + 1))}>+</button></div></Field>
           <Field label="Description"><textarea value={form.description} onChange={(event) => update('description', event.target.value)} className="min-h-36 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium outline-none transition focus:border-lime-600" placeholder="Ambiance, niveau, règles..." /></Field>
           <Field label="Photo du match (facultatif)">
             <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={handleImage} className="sr-only" />
             <button type="button" onClick={() => fileRef.current?.click()} className="rounded-lg border border-dashed border-slate-300 px-5 py-3 text-sm font-bold text-slate-600 hover:border-lime-700 hover:text-lime-700">Ajouter une image</button>
-            {imageUrl && <img src={imageUrl} alt="Aperçu du match" className="mt-3 h-32 w-56 rounded-lg object-cover" />}
+            {imagePreview && <img src={imagePreview} alt="Aperçu du match" className="mt-3 h-32 w-56 rounded-lg object-cover" />}
           </Field>
           <button type="submit" disabled={submitting} className={`h-12 rounded-lg text-sm font-black text-white hover:opacity-90 disabled:cursor-wait disabled:opacity-60 ${sport === 'Basketball' ? 'bg-orange-500' : 'bg-lime-700'}`}>{submitting ? 'Publication en cours...' : 'Publier le match'}</button>
         </form>

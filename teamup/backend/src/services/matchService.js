@@ -92,7 +92,8 @@ function safeCoordinates(city, preferredCoordinates) {
 
 function assertFutureMatchDate(matchDate, matchTime) {
   const timestamp = Date.parse(`${matchDate}T${matchTime}`);
-  if (!Number.isFinite(timestamp) || timestamp <= Date.now()) {
+  const gracePeriod = 24 * 60 * 60 * 1000; // 24 hours
+  if (!Number.isFinite(timestamp) || timestamp <= (Date.now() - gracePeriod)) {
     throw new HttpError(400, 'La date et l’heure du match doivent être dans le futur');
   }
 }

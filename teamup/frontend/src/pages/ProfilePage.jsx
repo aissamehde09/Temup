@@ -5,7 +5,7 @@ import UserAvatar from '../components/UserAvatar';
 import { Basketball, Football, MapPin, MessageCircle, ShieldCheck, User } from '../components/landing/icons';
 import { useAuth } from '../context/AuthContext';
 import { useSocial } from '../context/SocialContext';
-import { getErrorMessage } from '../services/api';
+import { getErrorMessage, uploadImage } from '../services/api';
 
 export default function ProfilePage() {
   const { user, updateAvatar, updateProfile } = useAuth();
@@ -28,7 +28,7 @@ export default function ProfilePage() {
   const stats = getUserStats(user);
   const bio = getUserValue(user, 'bio', 'bio') || 'Aucune présentation pour le moment.';
 
-  function handlePhotoChange(event) {
+  async function handlePhotoChange(event) {
     const file = event.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
@@ -40,15 +40,12 @@ export default function ProfilePage() {
       return;
     }
     setPhotoError('');
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        await updateAvatar(reader.result);
-      } catch {
-        setPhotoError('Impossible d’enregistrer la photo. Vérifie que le serveur est démarré.');
-      }
-    };
-    reader.readAsDataURL(file);
+    try {
+      const imageUrl = await uploadImage(file);
+      await updateAvatar(imageUrl);
+    } catch {
+      setPhotoError('Impossible d’enregistrer la photo. Vérifie que le serveur est démarré.');
+    }
   }
 
   function startEditing(section) {

@@ -34,8 +34,8 @@ export const mongoIdParamSchema = z.object({
 
 export const registerSchema = z.object({
   body: z.object({
-    firstName: z.string().trim().min(2).max(80),
-    lastName: z.string().trim().min(2).max(80),
+    firstName: z.string().trim().min(1).max(80),
+    lastName: z.string().trim().min(1).max(80),
     email: z.string().trim().email().max(190).toLowerCase(),
     password: z.string().min(8).max(120),
     confirmPassword: z.string().min(8).max(120),
@@ -54,8 +54,8 @@ export const loginSchema = z.object({
 
 export const updateProfileSchema = z.object({
   body: z.object({
-    firstName: z.string().trim().min(2).max(80),
-    lastName: z.string().trim().min(2).max(80),
+    firstName: z.string().trim().min(1).max(80),
+    lastName: z.string().trim().min(1).max(80),
     city: z.string().trim().min(2).max(120),
     level,
     bio: z.string().trim().max(1000).optional().or(z.literal('')),

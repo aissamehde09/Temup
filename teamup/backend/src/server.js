@@ -7,6 +7,7 @@ import { matchRoutes } from './routes/matchRoutes.js';
 import { notificationRoutes } from './routes/notificationRoutes.js';
 import { socialRoutes } from './routes/socialRoutes.js';
 import { userRoutes } from './routes/userRoutes.js';
+import { uploadRoutes } from './routes/uploadRoutes.js';
 import { errorMiddleware } from './middleware/errorMiddleware.js';
 
 dotenv.config();
@@ -34,12 +35,7 @@ const allowedOrigins = [
 function isAllowedOrigin(origin) {
   const cleanOrigin = String(origin || '').replace(/\/+$/, '');
   if (!cleanOrigin || allowedOrigins.includes(cleanOrigin)) return true;
-  try {
-    const url = new URL(cleanOrigin);
-    return url.protocol === 'https:' && url.hostname.endsWith('.vercel.app');
-  } catch {
-    return false;
-  }
+  return false;
 }
 
 app.use(
@@ -54,7 +50,7 @@ app.use(
     credentials: true,
   }),
 );
-app.use(express.json({ limit: '8mb' }));
+app.use(express.json({ limit: '2mb' }));
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({
@@ -63,11 +59,14 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+app.use('/uploads', express.static('uploads'));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api', matchRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', socialRoutes);
+app.use('/api', uploadRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
