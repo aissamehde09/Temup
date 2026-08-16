@@ -4,8 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
 import { useSocial } from '../context/SocialContext';
 import { useMatchData } from '../context/MatchDataContext';
-import { demoMatches } from '../data/teamupDemo';
-import { appAvatars, AvatarStack, IconStat, PagePanel, SportBadge, sportMeta } from '../components/InternalUI';
+import { AvatarStack, IconStat, PagePanel, SportBadge, sportMeta } from '../components/InternalUI';
 import UserAvatar from '../components/UserAvatar';
 import { ArrowRight, Basketball, Bell, CalendarDays, CalendarPlus, Football, Hand, MessageCircle, Search, Star, Trophy, User } from '../components/landing/icons';
 import { formatMatchTime, formatShortMatchDate, isPastMatch } from '../utils/matchDate';
@@ -15,7 +14,6 @@ export default function DashboardPage() {
   const { matches } = useMatchData();
   const { notifications, unreadCount } = useNotifications();
   const { unreadMessagesCount } = useSocial();
-  const isDemoAccount = user?.email === 'mehdi@teamup.local';
   const firstName = user?.first_name || user?.firstName || 'Sportif';
   const userId = String(user?.id || '');
   const userEmail = String(user?.email || '').toLowerCase();
@@ -34,10 +32,12 @@ export default function DashboardPage() {
     .filter((match, index, array) => array.findIndex((item) => String(item.id) === String(match.id)) === index)
     .filter((match) => !isPastMatch(match))
     .slice(0, 3);
-  const upcomingMatches = isDemoAccount && realUpcomingMatches.length === 0 ? demoMatches.slice(1, 4) : realUpcomingMatches;
-  const upcomingCount = isDemoAccount && realUpcomingMatches.length === 0 ? 3 : realUpcomingMatches.length;
-  const organizedCount = isDemoAccount && organizedMatches.length === 0 ? 7 : organizedMatches.length;
-  const rating = isDemoAccount ? '4.8/5' : '0/5';
+  const upcomingMatches = realUpcomingMatches;
+  const upcomingCount = realUpcomingMatches.length;
+  const organizedCount = organizedMatches.length;
+  const ratingValue = Number(user?.average_rating ?? user?.rating ?? user?.note_moyenne ?? 0);
+  const hasRating = Number.isFinite(ratingValue) && ratingValue > 0;
+  const rating = hasRating ? `${ratingValue.toFixed(1)}/5` : '0/5';
 
   return (
     <div className="teamup-dashboard mx-auto grid w-full max-w-[1180px] items-start gap-5 xl:grid-cols-[minmax(0,1fr)_292px]">
@@ -47,7 +47,7 @@ export default function DashboardPage() {
         <div className="mt-4 grid gap-4 lg:grid-cols-3">
           <IconStat Icon={CalendarDays} value={String(upcomingCount)} label="À venir" helper="Prochains" color="#65A30D" />
           <IconStat Icon={Trophy} value={String(organizedCount)} label="Organisés" helper="Total" color="#F97316" />
-          <IconStat Icon={Star} value={rating} label="Note" helper={isDemoAccount ? '24 avis' : '0 avis'} color="#F97316" />
+          <IconStat Icon={Star} value={rating} label="Note" helper={hasRating ? 'Avis reçus' : '0 avis'} color="#F97316" />
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-2">
@@ -97,11 +97,11 @@ export default function DashboardPage() {
           <h2 className="text-xl font-black text-slate-950">Notifications</h2>
           <div className="mt-4 grid gap-4">
             {notifications.length > 0 ? (
-              notifications.slice(0, 3).map((notification, index) => (
+              notifications.slice(0, 3).map((notification) => (
                 <div key={notification._id} className="grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-slate-100 pb-5 last:border-0 last:pb-0">
                   <UserAvatar user={{
-                    name: ['Thomas', 'Sarah', 'Alex'][index] || 'Membre TeamUp',
-                    avatar: appAvatars[index],
+                    name: notification.sender_name || notification.userName || notification.name || 'Membre TeamUp',
+                    avatar: notification.sender_avatar_url || notification.avatar_url || notification.avatar,
                   }} size="lg" />
                   <div className="min-w-0">
                     <p className="line-clamp-2 text-sm font-black leading-5 text-slate-950">{notification.message}</p>
@@ -111,7 +111,7 @@ export default function DashboardPage() {
                 </div>
               ))
             ) : (
-              <EmptyState title="Aucune notif" description="Tu n’as aucune notification." />
+              <EmptyState title="Aucune notification" description="Tu n’as aucune notification." />
             )}
           </div>
           <Link to="/notifications" className="mt-6 flex items-center justify-center gap-2 text-sm font-black text-lime-800">

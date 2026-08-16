@@ -1,12 +1,21 @@
 import Modal from './Modal';
+import { Basketball, Football } from './landing/icons';
 import { formatMatchDate, formatMatchTime } from '../utils/matchDate';
 
+function sportIcon(sportName) {
+  return String(sportName || '').toLowerCase().includes('basket') ? Basketball : Football;
+}
+
 export default function JoinMatchModal({ open, match, onCancel, onConfirm, error, loading }) {
+  const SportIcon = sportIcon(match?.sport_name || match?.sportName);
   return (
     <Modal open={open} title="Rejoindre ce match ?" onClose={onCancel}>
       <div className="space-y-5">
         <div className="rounded-2xl bg-orange-50 p-4">
-          <p className="text-sm font-black text-orange-600">🏀 {match.title}</p>
+          <p className="text-sm font-black text-orange-600">
+            <span className="mr-1"><SportIcon size={15} color="currentColor" /></span>
+            {match.title}
+          </p>
           <p className="mt-2 text-sm font-medium text-slate-700">
             {formatMatchDate(match)} • {formatMatchTime(match)}
           </p>

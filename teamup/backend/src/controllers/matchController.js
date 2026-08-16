@@ -2,6 +2,7 @@ import {
   createMatch,
   deleteMatch,
   getMatchById,
+  getFavorites,
   getMatches,
   getMyMatches,
   getSports,
@@ -10,6 +11,14 @@ import {
   toggleFavorite,
   updateMatch,
 } from '../services/matchService.js';
+
+export async function listFavorites(req, res, next) {
+  try {
+    res.status(200).json({ matches: await getFavorites(req.user.id) });
+  } catch (error) {
+    next(error);
+  }
+}
 
 export async function listSports(req, res, next) {
   try {

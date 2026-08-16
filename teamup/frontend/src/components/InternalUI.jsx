@@ -53,17 +53,20 @@ export function SportBadge({ match, className = '' }) {
   );
 }
 
-function avatarInitials(user, fallbackIndex = 0) {
+function avatarInitials(user) {
   const first = String(user?.first_name || user?.firstName || user?.name || '').trim();
   const last = String(user?.last_name || user?.lastName || '').trim();
   const initials = `${first.charAt(0)}${last.charAt(0)}`.trim().toUpperCase();
-  return initials || ['TU', 'SA', 'TH', 'AL'][fallbackIndex] || 'TU';
+  return initials || 'TU';
 }
 
 export function AvatarStack({ participants = [], count = 4, extra, size = 'h-8 w-8' }) {
-  const visibleParticipants = Array.isArray(participants) && participants.length
-    ? participants.slice(0, count)
-    : appAvatars.slice(0, count).map((avatar, index) => ({ avatar, name: ['Mehdi', 'Sarah', 'Thomas', 'Alex'][index] }));
+  const visibleParticipants = Array.isArray(participants) ? participants.slice(0, count) : [];
+  const extraCount = Number(extra || 0);
+
+  if (!visibleParticipants.length && extraCount <= 0) {
+    return null;
+  }
 
   return (
     <div className="flex items-center">
@@ -76,14 +79,14 @@ export function AvatarStack({ participants = [], count = 4, extra, size = 'h-8 w
             <img key={`${label}-${index}`} src={avatar} alt={label} className={`${size} rounded-full object-cover ring-2 ring-white`} />
           ) : (
             <span key={`${label}-${index}`} className={`${size} grid place-items-center rounded-full bg-emerald-100 text-[10px] font-black text-emerald-700 ring-2 ring-white`} aria-label={label}>
-              {avatarInitials(participant, index)}
+              {avatarInitials(participant)}
             </span>
           );
         })}
       </div>
-      {extra && (
+      {extraCount > 0 && (
         <span className="ml-2 grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
-          +{extra}
+          +{extraCount}
         </span>
       )}
     </div>

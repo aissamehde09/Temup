@@ -1,5 +1,5 @@
 import { query } from '../utils/db.js';
-import { getPublicUserProfile, getUserSports, updateUserAvatar, updateUserProfile } from '../services/userService.js';
+import { getPublicUserProfile, getUserSports, updateUserAvatar, updateUserProfile, deleteUserAccount } from '../services/userService.js';
 import { HttpError } from '../utils/httpError.js';
 
 export async function me(req, res, next) {
@@ -31,6 +31,15 @@ export async function updateAvatar(req, res, next) {
   try {
     const user = await updateUserAvatar(req.user.id, req.validated.body.avatarUrl);
     res.status(200).json({ user });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function destroyMe(req, res, next) {
+  try {
+    await deleteUserAccount(req.user.id);
+    res.status(200).json({ deleted: true });
   } catch (error) {
     next(error);
   }

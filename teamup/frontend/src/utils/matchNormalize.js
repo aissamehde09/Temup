@@ -1,4 +1,3 @@
-import { getGeneratedAvatar } from './avatar';
 import { normalizeDateInput, normalizeTimeInput } from './matchDate';
 
 export const CITY_COORDINATES = {
@@ -7,13 +6,6 @@ export const CITY_COORDINATES = {
   courbevoie: { latitude: 48.8967, longitude: 2.2567 },
   levallois: { latitude: 48.8932, longitude: 2.2879 },
   'levallois-perret': { latitude: 48.8932, longitude: 2.2879 },
-};
-
-const DEMO_DATES_BY_TITLE = {
-  'basket à nanterre': '2026-08-16',
-  'foot 5 à puteaux': '2026-08-17',
-  'basket à courbevoie': '2026-08-18',
-  'football à levallois': '2026-08-19',
 };
 
 function normalizeText(value) {
@@ -45,7 +37,6 @@ export function normalizeUser(raw = {}) {
   const firstName = normalizeText(raw.first_name || raw.firstName || parts[0]);
   const lastName = normalizeText(raw.last_name || raw.lastName || parts.slice(1).join(' '));
   const explicitAvatar = raw.avatar_url || raw.avatarUrl || raw.avatar || '';
-  const demoAvatar = getGeneratedAvatar({ ...raw, first_name: firstName, last_name: lastName });
 
   return {
     ...raw,
@@ -59,8 +50,8 @@ export function normalizeUser(raw = {}) {
     city: raw.city || '',
     level: raw.level || '',
     role: raw.role || 'USER',
-    avatar_url: explicitAvatar || demoAvatar || '',
-    avatarUrl: explicitAvatar || demoAvatar || '',
+    avatar_url: explicitAvatar || '',
+    avatarUrl: explicitAvatar || '',
   };
 }
 
@@ -76,8 +67,7 @@ function resolveSportName(raw = {}) {
 
 function resolveDate(raw = {}) {
   const normalized = normalizeDateInput(raw.match_date || raw.matchDate || raw.date);
-  if (normalized) return normalized;
-  return DEMO_DATES_BY_TITLE[normalizeText(raw.title).toLowerCase()] || '';
+  return normalized || '';
 }
 
 export function normalizeMatch(raw = {}) {

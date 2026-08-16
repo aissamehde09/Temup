@@ -1,211 +1,118 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { users } from '../data/mockData';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useAuth } from './AuthContext';
-import { useNotifications } from './NotificationContext';
 import { api } from '../services/api';
 import { getAvatarSource } from '../utils/avatar';
 
 const SocialContext = createContext(null);
 
-const seedFriends = [users[1], users[2]];
-
-const seedConversations = [
-  {
-    id: 'private-3',
-    type: 'private',
-    participantId: 3,
-    name: 'Thomas Dubois',
-    context: 'Basket à Nanterre',
-    avatar: '/img/avatar-thomas-generated.png',
-    time: '10:30',
-    unread: 0,
-    filter: 'amis',
-    online: true,
-    messages: [
-      { author: 'Thomas', text: 'Toujours OK samedi ?', mine: false, time: '10:28' },
-      { author: 'Moi', text: 'Oui, nickel.', mine: true, time: '10:29' },
-      { author: 'Thomas', text: 'Super, on sera 7.', mine: false, time: '10:29' },
-      { author: 'Moi', text: 'Parfait, à samedi.', mine: true, time: '10:30' },
-    ],
-  },
-  {
-    id: 'private-2',
-    type: 'private',
-    participantId: 2,
-    name: 'Sarah Benali',
-    context: 'Foot 5 à Puteaux',
-    avatar: '/img/avatar-sarah-generated.png',
-    time: 'Hier',
-    unread: 1,
-    filter: 'amis',
-    online: false,
-    messages: [
-      { author: 'Sarah', text: "Merci pour l'invitation.", mine: false, time: '18:12' },
-      { author: 'Moi', text: 'Avec plaisir, à dimanche.', mine: true, time: '18:18' },
-    ],
-  },
-  {
-    id: 'match-1',
-    type: 'match',
-    matchId: 1,
-    name: 'Basket à Nanterre',
-    context: '7 participants',
-    avatar: '/img/avatar-mehdi-generated.png',
-    time: '17:20',
-    unread: 2,
-    filter: 'matchs',
-    online: true,
-    canWrite: true,
-    messages: [
-      { author: 'Yassine', text: 'J’arriverai vers 19h.', mine: false, time: '17:20' },
-      { author: 'Moi', text: 'Ok parfait, à samedi !', mine: true, time: '17:22' },
-    ],
-  },
-];
-
-function demoFallback(user) {
-  return user?.email === 'mehdi@teamup.local';
-}
-
-function storageKey(user, name) {
-  return `teamup_${name}_${user?.email || 'guest'}`;
-}
-
-function readStoredArray(key, fallback) {
-  try {
-    const stored = JSON.parse(localStorage.getItem(key));
-    return Array.isArray(stored) ? stored : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
 function nowTime() {
   return new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit' }).format(new Date());
 }
 
+function formatRequestDate(value) {
+  if (!value) return 'À l’instant';
+  return new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(value));
+}
+
+function normalizeFriend(raw) {
+  return {
+    id: raw.id,
+    firstName: raw.first_name || raw.firstName || 'Utilisateur',
+    lastName: raw.last_name || raw.lastName || '',
+    city: raw.city || '',
+    avatar: getAvatarSource(raw),
+    level: raw.level || '',
+  };
+}
+
+function normalizeRequest(raw) {
+  return {
+    id: raw.id,
+    status: raw.status || 'pending',
+    createdAt: formatRequestDate(raw.created_at),
+    sender: normalizeFriend({
+      id: raw.sender_id,
+      first_name: raw.first_name,
+      last_name: raw.last_name,
+      avatar_url: raw.avatar_url,
+      city: raw.city,
+      level: raw.level,
+    }),
+  };
+}
+
 function normalizeConversation(conversation) {
-  const merged = { ...conversation };
-  const participantId = merged.participantId || merged.participant_id;
+  const participantId = conversation.participantId || conversation.participant_id;
 
   return {
-    ...merged,
+    ...conversation,
     participantId,
     avatar: getAvatarSource({
       id: participantId,
-      name: merged.name,
-      email: merged.email,
-      avatar: merged.avatar,
-      avatar_url: merged.avatar_url,
+      name: conversation.name,
+      avatar: conversation.avatar,
+      avatar_url: conversation.avatar_url,
     }),
-    messages: Array.isArray(merged.messages) ? merged.messages : [],
+    messages: Array.isArray(conversation.messages) ? conversation.messages : [],
   };
 }
 
 export function SocialProvider({ children }) {
   const { user } = useAuth();
-  const { addNotification } = useNotifications();
-  const friendsKey = storageKey(user, 'friends');
-  const requestsKey = storageKey(user, 'friend_requests');
-  const conversationsKey = storageKey(user, 'conversations');
+  const [friends, setFriends] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
+  const [pendingOutgoing, setPendingOutgoing] = useState([]);
+  const [conversations, setConversations] = useState([]);
 
-  const [friends, setFriendsState] = useState(() => readStoredArray(friendsKey, demoFallback(user) ? seedFriends : []));
-  const [friendRequests, setFriendRequestsState] = useState(() =>
-    readStoredArray(requestsKey, demoFallback(user) ? [{ id: 'req-3', sender: users[2], status: 'pending', createdAt: 'À l’instant' }] : []),
-  );
-  const [conversations, setConversationsState] = useState(() => readStoredArray(conversationsKey, demoFallback(user) ? seedConversations : []));
-  const [backendAvailable, setBackendAvailable] = useState(true);
+  const refreshSocial = useCallback(async () => {
+    if (!localStorage.getItem('teamup_token')) return;
 
-  useEffect(() => {
-    const fallbackFriends = demoFallback(user) ? seedFriends : [];
-    const fallbackRequests = demoFallback(user) ? [{ id: 'req-3', sender: users[2], status: 'pending', createdAt: 'À l’instant' }] : [];
-    setFriendsState(readStoredArray(friendsKey, fallbackFriends));
-    setFriendRequestsState(readStoredArray(requestsKey, fallbackRequests));
-    setConversationsState(readStoredArray(conversationsKey, demoFallback(user) ? seedConversations : []));
-    setBackendAvailable(true);
-  }, [user?.email]);
+    const [friendsRes, requestsRes, conversationsRes] = await Promise.all([
+      api.get('/friends'),
+      api.get('/friend-requests'),
+      api.get('/conversations'),
+    ]);
+
+    setFriends((friendsRes.data.friends || []).map(normalizeFriend));
+    setFriendRequests((requestsRes.data.requests || []).map(normalizeRequest));
+    setConversations((conversationsRes.data.conversations || []).map(normalizeConversation));
+  }, []);
 
   useEffect(() => {
-    async function loadConversations() {
-      if (!localStorage.getItem('teamup_token')) return;
-      try {
-        const { data } = await api.get('/conversations');
-        const apiConversations = data.conversations || [];
-        const normalizedConversations = apiConversations.map(normalizeConversation);
-        setConversationsState(normalizedConversations);
-        setBackendAvailable(true);
-      } catch {
-        setBackendAvailable(false);
-      }
-    }
-
-    loadConversations();
-  }, [user?.id]);
-
-  function setFriends(next) {
-    setFriendsState(next);
-    localStorage.setItem(friendsKey, JSON.stringify(next));
-  }
-
-  function setFriendRequests(next) {
-    setFriendRequestsState(next);
-    localStorage.setItem(requestsKey, JSON.stringify(next));
-  }
-
-  function setConversations(next) {
-    setConversationsState(next);
-    localStorage.setItem(conversationsKey, JSON.stringify(next));
-  }
+    refreshSocial().catch(() => {
+      setFriends([]);
+      setFriendRequests([]);
+      setConversations([]);
+    });
+  }, [user?.id, refreshSocial]);
 
   function getFriendStatus(playerId) {
     if (friends.some((friend) => String(friend.id) === String(playerId))) return 'friends';
-    const request = friendRequests.find((item) => String(item.sender?.id) === String(playerId) || String(item.receiverId) === String(playerId));
-    return request?.status || 'none';
+    if (pendingOutgoing.includes(String(playerId))) return 'pending';
+    const incoming = friendRequests.find((item) => String(item.sender?.id) === String(playerId));
+    if (incoming) return incoming.status;
+    return 'none';
   }
 
-  function sendFriendRequest(player) {
+  async function sendFriendRequest(player) {
     if (!player || getFriendStatus(player.id) !== 'none') return;
-    const nextRequest = {
-      id: `req-out-${player.id}-${Date.now()}`,
-      senderId: user?.id,
-      receiverId: player.id,
-      receiver: player,
-      status: 'pending',
-      createdAt: 'À l’instant',
-    };
-    setFriendRequests([nextRequest, ...friendRequests]);
-    addNotification({
-      type: 'FRIEND_REQUEST',
-      message: `Demande envoyée à ${player.firstName}`,
-      context: 'Tu seras notifié dès qu’elle sera acceptée.',
-    });
+    await api.post(`/players/${player.id}/friend-request`);
+    setPendingOutgoing((current) => [...current, String(player.id)]);
+    await refreshSocial();
   }
 
-  function acceptFriendRequest(requestId) {
-    const request = friendRequests.find((item) => item.id === requestId);
-    if (!request?.sender) return;
-    const nextFriends = friends.some((friend) => friend.id === request.sender.id) ? friends : [request.sender, ...friends];
-    setFriends(nextFriends);
-    setFriendRequests(friendRequests.filter((item) => item.id !== requestId));
-    addNotification({
-      type: 'FRIEND_ACCEPTED',
-      message: `${request.sender.firstName} fait maintenant partie de tes amis.`,
-      context: 'Tu peux lui envoyer un message.',
-    });
+  async function acceptFriendRequest(requestId) {
+    await api.put(`/friend-requests/${requestId}`, { status: 'accepted' });
+    await refreshSocial();
   }
 
-  function rejectFriendRequest(requestId) {
-    setFriendRequests(friendRequests.filter((item) => item.id !== requestId));
+  async function rejectFriendRequest(requestId) {
+    await api.put(`/friend-requests/${requestId}`, { status: 'rejected' });
+    await refreshSocial();
   }
 
   function normalizePlayer(player) {
-    return {
-      id: player.id,
-      firstName: player.firstName || player.first_name || 'Utilisateur',
-      lastName: player.lastName || player.last_name || '',
-      city: player.city || '',
-      avatar: player.avatar || player.avatar_url || '',
-    };
+    return normalizeFriend(player);
   }
 
   function openPrivateConversation(player) {
@@ -223,52 +130,33 @@ export function SocialProvider({ children }) {
       time: nowTime(),
       unread: 0,
       filter: 'amis',
-      online: true,
+      online: false,
       messages: [],
     };
-    setConversations([conversation, ...conversations]);
+    setConversations((current) => [conversation, ...current]);
     return conversation.id;
   }
 
   function markConversationRead(conversationId) {
-    setConversations(conversations.map((item) => (item.id === conversationId ? { ...item, unread: 0 } : item)));
+    setConversations((current) => current.map((item) => (item.id === conversationId ? { ...item, unread: 0 } : item)));
   }
 
   async function sendMessage(conversationId, text) {
     const cleanText = text.trim();
     if (!cleanText) return;
     const conversation = conversations.find((item) => item.id === conversationId);
+    if (!conversation) return;
 
-    if (localStorage.getItem('teamup_token') && conversation) {
-      try {
-        const endpoint = conversation.serverId
-          ? `/conversations/${conversation.serverId}/messages`
-          : `/players/${conversation.participantId}/messages`;
-        const { data } = await api.post(endpoint, { content: cleanText });
-        const updatedConversation = normalizeConversation(data.conversation);
-        setConversations(
-          conversations.some((item) => item.id === updatedConversation.id)
-            ? conversations.map((item) => (item.id === updatedConversation.id ? updatedConversation : item))
-            : [updatedConversation, ...conversations.filter((item) => item.id !== conversationId)],
-        );
-        return;
-      } catch (requestError) {
-        setBackendAvailable(false);
-        throw requestError;
-      }
-    }
-
-    setConversations(
-      conversations.map((conversation) =>
-        conversation.id === conversationId
-          ? {
-              ...conversation,
-              time: nowTime(),
-              messages: [...conversation.messages, { author: 'Moi', text: cleanText, mine: true, time: nowTime() }],
-            }
-          : conversation,
-      ),
-    );
+    const endpoint = conversation.serverId
+      ? `/conversations/${conversation.serverId}/messages`
+      : `/players/${conversation.participantId}/messages`;
+    const { data } = await api.post(endpoint, { content: cleanText });
+    const updatedConversation = normalizeConversation(data.conversation);
+    setConversations((current) => (
+      current.some((item) => item.id === updatedConversation.id)
+        ? current.map((item) => (item.id === updatedConversation.id ? updatedConversation : item))
+        : [updatedConversation, ...current.filter((item) => item.id !== conversationId)]
+    ));
   }
 
   const value = useMemo(
@@ -283,9 +171,10 @@ export function SocialProvider({ children }) {
       openPrivateConversation,
       markConversationRead,
       sendMessage,
+      refreshSocial,
       unreadMessagesCount: conversations.reduce((total, item) => total + Number(item.unread || 0), 0),
     }),
-    [friends, friendRequests, conversations],
+    [friends, friendRequests, conversations, refreshSocial],
   );
 
   return <SocialContext.Provider value={value}>{children}</SocialContext.Provider>;

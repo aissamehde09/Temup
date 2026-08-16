@@ -62,3 +62,8 @@ export async function updateUserAvatar(userId, avatarUrl) {
   await query('UPDATE users SET avatar_url = :avatarUrl WHERE id = :userId', { userId, avatarUrl: avatarUrl || null });
   return findUserById(userId);
 }
+
+export async function deleteUserAccount(userId) {
+  await query('DELETE FROM users WHERE id = :userId', { userId });
+  return { deleted: true };
+}

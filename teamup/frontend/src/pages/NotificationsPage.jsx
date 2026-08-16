@@ -27,7 +27,7 @@ export default function NotificationsPage() {
           title="Notifications"
           action={(
             <button type="button" onClick={markAllRead} disabled={!unreadCount} className="rounded-lg border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50">
-              Tout marquer comme lu
+              Tout marquer comme lues
             </button>
           )}
         />

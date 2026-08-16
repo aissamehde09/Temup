@@ -15,12 +15,25 @@ function readStoredIds(key) {
   }
 }
 
+function participantBelongsToUser(participant, user) {
+  if (!participant || !user) return false;
+
+  const participantId = participant.user_id ?? participant.userId ?? participant.id;
+  const userId = user.user_id ?? user.userId ?? user.id;
+  if (participantId != null && userId != null && String(participantId) === String(userId)) {
+    return true;
+  }
+
+  const participantEmail = String(participant.email || participant.user?.email || '').trim().toLowerCase();
+  const userEmail = String(user.email || '').trim().toLowerCase();
+  return Boolean(participantEmail && userEmail && participantEmail === userEmail);
+}
+
 export function MatchInteractionProvider({ children }) {
   const { user } = useAuth();
   const { matches, refreshMatches } = useMatchData();
   const userKey = user?.email || 'guest';
   const joinedKey = `teamup_joined_matches_${userKey}`;
-  const favoriteKey = `teamup_favorite_matches_${userKey}`;
   const leftKey = `teamup_left_matches_${userKey}`;
 
   const [joinedIds, setJoinedIds] = useState([]);
@@ -30,20 +43,24 @@ export function MatchInteractionProvider({ children }) {
 
   useEffect(() => {
     setJoinedIds(readStoredIds(joinedKey));
-    setFavoriteIds(readStoredIds(favoriteKey));
     setLeftIds(readStoredIds(leftKey));
     loadedUserKey.current = userKey;
-  }, [joinedKey, favoriteKey, leftKey]);
+  }, [joinedKey, leftKey, userKey]);
+
+  useEffect(() => {
+    if (!localStorage.getItem('teamup_token')) {
+      setFavoriteIds([]);
+      return;
+    }
+    api.get('/favorites')
+      .then(({ data }) => setFavoriteIds((data.matches || []).map((match) => String(match.id))))
+      .catch(() => setFavoriteIds([]));
+  }, [user?.id]);
 
   useEffect(() => {
     if (loadedUserKey.current !== userKey) return;
     localStorage.setItem(joinedKey, JSON.stringify(joinedIds));
   }, [joinedIds, joinedKey, userKey]);
-
-  useEffect(() => {
-    if (loadedUserKey.current !== userKey) return;
-    localStorage.setItem(favoriteKey, JSON.stringify(favoriteIds));
-  }, [favoriteIds, favoriteKey, userKey]);
 
   useEffect(() => {
     if (loadedUserKey.current !== userKey) return;
@@ -57,14 +74,9 @@ export function MatchInteractionProvider({ children }) {
 
     const match = matches.find((item) => String(item.id) === id);
     const currentUserId = String(user?.id || '');
-    const currentUserEmail = String(user?.email || '').toLowerCase();
-    const isOrganizer = Boolean(match && (
-      (match.organizer_id != null && String(match.organizer_id) === currentUserId)
-      || (match.organizer_email && String(match.organizer_email).toLowerCase() === currentUserEmail)
-    ));
+    const isOrganizer = Boolean(match && match.organizer_id != null && String(match.organizer_id) === currentUserId);
     const alreadyParticipant = Boolean(match?.participants?.some((participant) => (
       (participant.id != null && String(participant.id) === currentUserId)
-      || (participant.email && String(participant.email).toLowerCase() === currentUserEmail)
     )));
 
     if (isOrganizer) throw new Error('Tu ne peux pas rejoindre ton propre match.');
@@ -90,23 +102,36 @@ export function MatchInteractionProvider({ children }) {
     return data.match ? normalizeMatch(data.match) : null;
   }
 
-  function toggleFavorite(matchId) {
+  async function toggleFavorite(matchId) {
     const id = String(matchId);
+    const { data } = await api.post(`/matches/${id}/favorite`);
     setFavoriteIds((current) => (
-      current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
+      data.favorite
+        ? (current.includes(id) ? current : [...current, id])
+        : current.filter((item) => item !== id)
     ));
   }
 
+  const backendJoinedIds = useMemo(() => (
+    matches
+      .filter((match) => match.participants?.some((participant) => participantBelongsToUser(participant, user)))
+      .map((match) => String(match.id))
+  ), [matches, user]);
+
+  const effectiveJoinedIds = useMemo(() => (
+    [...new Set([...joinedIds, ...backendJoinedIds])].filter((id) => !leftIds.includes(id))
+  ), [joinedIds, backendJoinedIds, leftIds]);
+
   const value = useMemo(() => ({
-    joinedIds,
+    joinedIds: effectiveJoinedIds,
     leftIds,
     favoriteIds,
     joinMatch,
     leaveMatch,
     toggleFavorite,
-    isJoined: (matchId) => joinedIds.includes(String(matchId)),
+    isJoined: (matchId) => effectiveJoinedIds.includes(String(matchId)),
     isFavorite: (matchId) => favoriteIds.includes(String(matchId)),
-  }), [joinedIds, leftIds, favoriteIds, matches, user]);
+  }), [effectiveJoinedIds, leftIds, favoriteIds, matches, user]);
 
   return (
     <MatchInteractionContext.Provider value={value}>

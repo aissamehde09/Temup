@@ -3,7 +3,15 @@ import { getAvatarSource } from '../utils/avatar';
 
 export default function ParticipantsList({ count, currentUser, joined, organizer = false, participants = [] }) {
   const showCurrentUser = Boolean(joined || organizer);
-  const remoteParticipants = participants.filter((participant) => String(participant.id) !== String(currentUser?.id));
+  const currentUserId = currentUser?.user_id ?? currentUser?.userId ?? currentUser?.id;
+  const currentUserEmail = String(currentUser?.email || '').trim().toLowerCase();
+  const remoteParticipants = participants.filter((participant) => {
+    const participantId = participant.user_id ?? participant.userId ?? participant.id;
+    const participantEmail = String(participant.email || participant.user?.email || '').trim().toLowerCase();
+    const sameId = participantId != null && currentUserId != null && String(participantId) === String(currentUserId);
+    const sameEmail = participantEmail && currentUserEmail && participantEmail === currentUserEmail;
+    return !(sameId || sameEmail);
+  });
   const visibleParticipants = remoteParticipants.slice(0, Math.max(0, count - (showCurrentUser ? 1 : 0)));
   const extra = Math.max(0, count - visibleParticipants.length - (showCurrentUser ? 1 : 0));
 
@@ -27,8 +35,16 @@ export default function ParticipantsList({ count, currentUser, joined, organizer
           </span>
         );
 
+        if (!participant.id) {
+          return (
+            <div key={`participant-${index}`} title={alt}>
+              {avatar}
+            </div>
+          );
+        }
+
         return (
-          <Link key={participant.id || index} to={`/players/${participant.id}`} className="transition hover:-translate-y-0.5" title={alt}>
+          <Link key={participant.id} to={`/players/${participant.id}`} className="transition hover:-translate-y-0.5" title={alt}>
             {avatar}
           </Link>
         );
@@ -48,7 +64,7 @@ export default function ParticipantsList({ count, currentUser, joined, organizer
             </span>
           )}
           <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-lime-700 px-2 py-0.5 text-[10px] font-black text-white">
-            {organizer ? 'Moi' : 'Moi'}
+            {organizer ? 'Moi (org)' : 'Moi'}
           </span>
         </div>
       )}

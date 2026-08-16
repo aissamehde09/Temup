@@ -58,6 +58,10 @@ export function getErrorMessage(error) {
     return 'Action refusée : tu n’as pas les droits nécessaires.';
   }
 
+  if (error.response.status === 400) {
+    return error.response?.data?.message || 'Données invalides. Vérifie les champs du formulaire.';
+  }
+
   if (error.response.status === 404) {
     return 'Ressource introuvable.';
   }

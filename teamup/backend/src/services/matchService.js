@@ -9,7 +9,6 @@ const matchSelect = `
     s.slug AS sport_slug,
     u.first_name AS organizer_first_name,
     u.last_name AS organizer_last_name,
-    u.email AS organizer_email,
     u.avatar_url AS organizer_avatar_url,
     (
       SELECT COUNT(*)
@@ -210,18 +209,7 @@ export async function createMatch(data, userId) {
       longitude: safe?.longitude ?? null,
     },
   );
-  const createdMatch = await getMatchById(result.insertId);
-  const users = await query('SELECT id FROM users WHERE id <> :organizerId', { organizerId: userId });
-  await Promise.all(users.map((recipient) => createNotification({
-    userId: recipient.id,
-    type: 'MATCH_CREATED',
-    message: `${createdMatch.organizer_first_name} a créé un nouveau match`,
-    context: createdMatch.title,
-  }).catch((error) => {
-    console.error('Notification de création non envoyée:', error.message);
-    return null;
-  })));
-  return createdMatch;
+  return getMatchById(result.insertId);
 }
 
 export async function updateMatch(id, data, user) {
@@ -259,11 +247,15 @@ export async function updateMatch(id, data, user) {
     },
   );
 
-  await createNotification({
-    userId: match.organizer_id,
-    type: 'MATCH_UPDATED',
-    message: `Ton match "${match.title}" a été modifié`,
-  });
+  try {
+    await createNotification({
+      userId: match.organizer_id,
+      type: 'MATCH_UPDATED',
+      message: `Ton match "${match.title}" a été modifié`,
+    });
+  } catch (notificationError) {
+    console.error('Notification de modification non envoyée:', notificationError.message);
+  }
 
   return getMatchById(id);
 }
@@ -344,13 +336,28 @@ export async function leaveMatch(id, user) {
   );
   if (!result.affectedRows) throw new HttpError(404, 'Participation introuvable');
 
-  await createNotification({
-    userId: match.organizer_id,
-    type: 'MATCH_LEFT',
-    message: `${user.first_name} a quitté ton match "${match.title}"`,
-  });
+  try {
+    await createNotification({
+      userId: match.organizer_id,
+      type: 'MATCH_LEFT',
+      message: `${user.first_name} a quitté ton match "${match.title}"`,
+    });
+  } catch (notificationError) {
+    // Une panne MongoDB ne doit pas bloquer la sortie d’un match déjà supprimée côté MySQL.
+    console.error('Notification de départ non envoyée:', notificationError.message);
+  }
 
   return { match: await getMatchById(id) };
+}
+
+export async function getFavorites(userId) {
+  const rows = await query(
+    `${matchSelect}
+     INNER JOIN favorites fav ON fav.match_id = m.id AND fav.user_id = :userId
+     ORDER BY m.match_date ASC, m.match_time ASC`,
+    { userId },
+  );
+  return hydrateCoordinates(rows);
 }
 
 export async function toggleFavorite(id, userId) {

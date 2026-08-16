@@ -1,9 +1,5 @@
 import { Link } from 'react-router-dom';
-
-function formatDate(value) {
-  if (!value) return '';
-  return new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(value));
-}
+import { formatShortMatchDate, formatMatchTime } from '../utils/matchDate';
 
 export default function MatchCard({ match }) {
   const placesLeft = Number(match.max_players) - Number(match.players_count || 0);
@@ -22,7 +18,7 @@ export default function MatchCard({ match }) {
         </div>
         <h3 className="mt-4 text-xl font-bold text-slate-950">{match.title}</h3>
         <p className="mt-2 text-sm text-slate-500">{match.city} · {match.location}</p>
-        <p className="mt-3 text-sm font-semibold text-slate-700">{formatDate(match.match_date)} · {String(match.match_time).slice(0, 5)}</p>
+        <p className="mt-3 text-sm font-semibold text-slate-700">{formatShortMatchDate(match)} · {formatMatchTime(match)}</p>
         <div className="mt-5 flex items-center justify-between">
           <span className="text-sm text-slate-600">
             <strong className="text-slate-950">{match.players_count || 0} / {match.max_players}</strong> joueurs · {placesLeft} places

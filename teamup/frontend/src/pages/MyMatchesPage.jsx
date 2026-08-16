@@ -14,19 +14,23 @@ export default function MyMatchesPage() {
   const [activeTab, setActiveTab] = useState('À venir');
   const [deletingId, setDeletingId] = useState(null);
   const [deleteError, setDeleteError] = useState('');
-  const isDemoAccount = user?.email === 'mehdi@teamup.local';
   const userId = String(user?.id || '');
   const userEmail = String(user?.email || '').toLowerCase();
   const organizedMatches = allMatches.filter((match) => (
     (match.organizer_id != null && String(match.organizer_id) === userId)
     || (match.organizer_email && String(match.organizer_email).toLowerCase() === userEmail)
   ));
-  const baseMatches = [...(isDemoAccount ? allMatches.slice(1, 3) : []), ...organizedMatches]
-    .filter((match) => !leftIds.includes(String(match.id)));
-  const joinedMatches = allMatches.filter((match) => joinedIds.includes(String(match.id)));
-  const matches = [...baseMatches, ...joinedMatches]
-    .filter((match, index, array) => array.findIndex((item) => item.id === match.id) === index);
   const organizedIds = new Set(organizedMatches.map((match) => String(match.id)));
+  const joinedMatches = allMatches.filter((match) => (
+    joinedIds.includes(String(match.id))
+    && !organizedIds.has(String(match.id))
+    && !leftIds.includes(String(match.id))
+  ));
+  const matches = [
+    ...organizedMatches.filter((match) => !leftIds.includes(String(match.id))),
+    ...joinedMatches,
+  ]
+    .filter((match, index, array) => array.findIndex((item) => item.id === match.id) === index);
   const visibleMatches = useMemo(() => {
     if (activeTab === 'Organisés') return organizedMatches;
     if (activeTab === 'Passés') return matches.filter(isPastMatch);

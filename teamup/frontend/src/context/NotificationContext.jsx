@@ -1,80 +1,71 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { demoNotifications } from '../data/teamupDemo';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useAuth } from './AuthContext';
 import { api } from '../services/api';
 import { getErrorMessage } from '../services/api';
 
 const NotificationContext = createContext(null);
 
-function storageKey(user) {
-  return `teamup_notifications_${user?.email || 'guest'}`;
-}
-
-function readNotifications(key, user) {
-  try {
-    const stored = JSON.parse(localStorage.getItem(key));
-    if (Array.isArray(stored)) return stored;
-  } catch {
-    // Recreate the demo state if localStorage is unavailable or invalid.
-  }
-  return user?.email === 'mehdi@teamup.local' ? demoNotifications : [];
-}
-
 export function NotificationProvider({ children }) {
   const { user } = useAuth();
-  const key = storageKey(user);
-  const loadedKey = useRef(key);
-  const [notifications, setNotifications] = useState(() => readNotifications(key, user));
+  const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    loadedKey.current = key;
-    setNotifications(readNotifications(key, user));
     let active = true;
-    if (user && localStorage.getItem('teamup_token')) {
-      api.get('/notifications')
-        .then(({ data }) => {
-          if (!active) return;
-          const serverNotifications = (data.notifications || []).map((item) => ({
-            _id: item._id,
-            type: item.type,
-            message: item.message,
-            context: item.context || '',
-            read: Boolean(item.read),
-            createdAt: item.createdAt ? new Date(item.createdAt).toLocaleString('fr-FR') : 'À l’instant',
-          }));
-          setNotifications((current) => {
-            const localOnly = current.filter((local) => !serverNotifications.some((remote) => remote._id === local._id));
-            return [...serverNotifications, ...localOnly];
-          });
-          setError('');
-        })
-        .catch((requestError) => {
-          if (!active) return;
-          setError(getErrorMessage(requestError));
-        });
+    if (!user || !localStorage.getItem('teamup_token')) {
+      setNotifications([]);
+      return undefined;
     }
+
+    api.get('/notifications')
+      .then(({ data }) => {
+        if (!active) return;
+        const serverNotifications = (data.notifications || []).map((item) => ({
+          _id: item._id,
+          type: item.type,
+          message: item.message,
+          context: item.context || '',
+          read: Boolean(item.read),
+          createdAt: item.createdAt ? new Date(item.createdAt).toLocaleString('fr-FR') : 'À l’instant',
+        }));
+        setNotifications(serverNotifications);
+        setError('');
+      })
+      .catch((requestError) => {
+        if (!active) return;
+        setError(getErrorMessage(requestError));
+      });
+
     return () => { active = false; };
-  }, [key, user]);
+  }, [user?.id]);
 
-  useEffect(() => {
-    if (loadedKey.current !== key) return;
-    localStorage.setItem(key, JSON.stringify(notifications));
-  }, [key, notifications]);
-
-  function markRead(id) {
-    setNotifications((current) => current.filter((item) => item._id !== id));
+  async function markRead(id) {
+    setNotifications((current) => current.map((item) => (
+      item._id === id ? { ...item, read: true } : item
+    )));
     if (!String(id).startsWith('local-') && localStorage.getItem('teamup_token')) {
-      api.delete(`/notifications/${id}`).catch((requestError) => setError(getErrorMessage(requestError)));
+      try {
+        await api.put(`/notifications/${id}/read`);
+      } catch (requestError) {
+        setError(getErrorMessage(requestError));
+      }
     }
   }
 
-  function markAllRead() {
-    setNotifications([]);
-    localStorage.setItem(key, JSON.stringify([]));
-    if (localStorage.getItem('teamup_token')) {
-      api.delete('/notifications').catch((requestError) => setError(getErrorMessage(requestError)));
+  async function markAllRead() {
+    const token = localStorage.getItem('teamup_token');
+    const localNotifications = notifications.filter((item) => String(item._id).startsWith('local-'));
+    if (token) {
+      try {
+        const serverNotifications = notifications.filter((item) => !String(item._id).startsWith('local-'));
+        if (serverNotifications.some((item) => !item.read)) {
+          await api.put('/notifications/read-all');
+        }
+      } catch (requestError) {
+        setError(getErrorMessage(requestError));
+      }
     }
+    setNotifications((current) => current.map((item) => ({ ...item, read: true })));
   }
 
   function addNotification(notification) {
@@ -90,7 +81,10 @@ export function NotificationProvider({ children }) {
   }
 
   const unreadCount = notifications.filter((item) => !item.read).length;
-  const value = useMemo(() => ({ notifications, unreadCount, notificationError: error, markRead, markAllRead, addNotification }), [notifications, unreadCount, error]);
+  const value = useMemo(
+    () => ({ notifications, unreadCount, notificationError: error, markRead, markAllRead, addNotification }),
+    [notifications, unreadCount, error],
+  );
   return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
 }
 

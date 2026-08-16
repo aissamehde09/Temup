@@ -6,6 +6,7 @@ import Loader from './components/Loader';
 import SEO from './components/SEO';
 
 const LandingPage = lazy(() => import('./components/landing/LandingPage'));
+const EditMatchPage = lazy(() => import('./pages/EditMatchPage'));
 const CreateMatchPage = lazy(() => import('./pages/CreateMatchPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
@@ -51,6 +52,7 @@ export default function App() {
             <Route path="/matches" element={<MatchesPage />} />
             <Route path="/matches/:id" element={<MatchDetailPage />} />
             <Route path="/matches/create" element={<CreateMatchPage />} />
+            <Route path="/matches/:id/edit" element={<EditMatchPage />} />
             <Route path="/my-matches" element={<MyMatchesPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/profile" element={<ProfilePage />} />

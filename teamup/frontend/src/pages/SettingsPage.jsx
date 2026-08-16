@@ -8,7 +8,7 @@ import { useNotifications } from '../context/NotificationContext';
 const settingsNav = [['Compte', User], ['Profil', User], ['Sécurité', Lock], ['Notifications', Bell], ['Confidentialité', ShieldCheck]];
 
 export default function SettingsPage() {
-  const { user, logout } = useAuth();
+  const { user, logout, deleteAccount } = useAuth();
   const { unreadCount } = useNotifications();
   const navigate = useNavigate();
   const [active, setActive] = useState('Compte');
@@ -21,10 +21,14 @@ export default function SettingsPage() {
     if (label === 'Mot de passe') setMessage('La modification du mot de passe sera disponible prochainement.');
   }
 
-  function removeAccount() {
-    if (!window.confirm('Supprimer définitivement ton compte ?')) return;
-    logout();
-    navigate('/');
+  async function removeAccount() {
+    if (!window.confirm('Supprimer définitivement ton compte ? Cette action est irréversible.')) return;
+    try {
+      await deleteAccount();
+      navigate('/');
+    } catch {
+      setMessage('Impossible de supprimer le compte pour le moment.');
+    }
   }
 
   return (

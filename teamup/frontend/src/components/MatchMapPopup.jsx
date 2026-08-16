@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { formatShortMatchDate, formatMatchTime } from '../utils/matchDate';
 
 export default function MatchMapPopup({ match, color }) {
   return (
@@ -8,7 +9,7 @@ export default function MatchMapPopup({ match, color }) {
       </p>
       <h3 className="mt-1 text-sm font-black text-slate-950">{match.title}</h3>
       <p className="mt-1 text-xs text-slate-600">
-        {new Date(`${match.match_date}T${match.match_time}`).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })} · {String(match.match_time).slice(0, 5)}
+        {formatShortMatchDate(match)} · {formatMatchTime(match)}
       </p>
       <p className="mt-1 text-xs font-semibold text-slate-700">📍 {match.location || match.city}</p>
       {match.address && match.address !== match.location && <p className="mt-1 text-[11px] text-slate-500">{match.address}</p>}

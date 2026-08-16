@@ -12,7 +12,7 @@ import { api, getErrorMessage } from '../services/api';
 import { useMatchInteractions } from '../context/MatchInteractionContext';
 import { useMatchData } from '../context/MatchDataContext';
 import { MetaItem, PagePanel, RemainingPlaces, SportBadge } from '../components/InternalUI';
-import { CalendarDays, Clock, MapPin, ShieldCheck, Star } from '../components/landing/icons';
+import { CalendarDays, Clock, MapPin, ShieldCheck } from '../components/landing/icons';
 import UserAvatar from '../components/UserAvatar';
 import { getAvatarSource } from '../utils/avatar';
 import { formatMatchDate, formatMatchTime } from '../utils/matchDate';
@@ -43,12 +43,12 @@ export default function MatchDetailPage() {
   const matchWithCount = match ? { ...match, players_count: participantsCount } : null;
   const placesLeft = match ? Number(match.max_players) - participantsCount : 0;
   const isFull = placesLeft <= 0;
-  const currentUser = {
-    id: user?.id || 10,
+  const currentUser = user ? {
+    id: user.id,
     firstName: user?.first_name || user?.firstName || 'Moi',
     lastName: user?.last_name || user?.lastName || '',
     avatar: getAvatarSource(user || {}),
-  };
+  } : null;
 
   useEffect(() => {
     if (!toast) return undefined;
@@ -156,7 +156,14 @@ export default function MatchDetailPage() {
       <PagePanel className="match-detail-panel p-7">
         <div className="grid gap-7 lg:grid-cols-[1fr_310px]">
           <section>
-            <img src={match.image_url} alt={match.title} className="h-72 w-full rounded-lg object-cover" />
+            <img
+              src={match.image_url || match.image}
+              alt={match.title}
+              className="h-72 w-full rounded-lg object-cover"
+              onError={(event) => {
+                event.target.src = '/img/teamup-football-night-original.png';
+              }}
+            />
             <div className="mt-5">
               <SportBadge match={match} />
               <h1 className="mt-2 text-2xl font-black text-slate-950">{match.title}</h1>
@@ -167,11 +174,7 @@ export default function MatchDetailPage() {
   avatar_url: match.organizer_avatar_url,
   first_name: match.organizer_first_name || 'Organisateur',
 }} size="sm" />
-                  <span className="text-sm font-medium text-slate-600">Organisé par {match.organizer_first_name || 'Julien'}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm font-bold text-slate-700">
-                  <Star size={15} color="#F97316" />
-                  4.8 (34)
+                  <span className="text-sm font-medium text-slate-600">Organisé par {match.organizer_first_name || 'Organisateur'}</span>
                 </div>
               </div>
             </div>
@@ -212,7 +215,13 @@ export default function MatchDetailPage() {
         </div>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <JoinMatchButton joined={joined} full={isFull} organizer={isOrganizer} onJoin={requestJoin} onLeave={() => setShowLeaveModal(true)} />
+          {isOrganizer ? (
+            <Link to={`/matches/${match.id}/edit`} className="flex items-center justify-center rounded-lg border border-lime-700 bg-white px-6 py-4 text-sm font-black text-lime-700 hover:bg-lime-50">
+              Modifier le match
+            </Link>
+          ) : (
+            <JoinMatchButton joined={joined} full={isFull} organizer={isOrganizer} onJoin={requestJoin} onLeave={() => setShowLeaveModal(true)} />
+          )}
           <FavoriteButton active={favorite} onClick={() => toggleFavorite(match.id)} />
         </div>
       </PagePanel>

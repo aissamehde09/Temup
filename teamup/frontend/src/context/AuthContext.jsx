@@ -82,6 +82,19 @@ export function AuthProvider({ children }) {
     return nextUser;
   }
 
+  async function updateProfile(payload) {
+    const { data } = await api.put('/users/me', payload);
+    const nextUser = normalizeUser(data.user);
+    localStorage.setItem('teamup_user', JSON.stringify(nextUser));
+    setUser(nextUser);
+    return nextUser;
+  }
+
+  async function deleteAccount() {
+    await api.delete('/users/me');
+    logout();
+  }
+
   const value = useMemo(
     () => ({
       user,
@@ -91,6 +104,8 @@ export function AuthProvider({ children }) {
       register,
       updateUser,
       updateAvatar,
+      updateProfile,
+      deleteAccount,
       logout,
     }),
     [user, loading],

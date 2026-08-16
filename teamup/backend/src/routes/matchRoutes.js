@@ -4,6 +4,7 @@ import {
   favorite,
   join,
   leave,
+  listFavorites,
   listMatches,
   listSports,
   mine,
@@ -17,6 +18,7 @@ import { idParamSchema, matchBodySchema, matchQuerySchema } from '../utils/valid
 
 export const matchRoutes = Router();
 
+matchRoutes.get('/favorites', requireAuth, listFavorites);
 matchRoutes.get('/sports', listSports);
 matchRoutes.get('/my-matches', requireAuth, mine);
 matchRoutes.get('/matches', validate(matchQuerySchema), listMatches);

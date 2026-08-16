@@ -5,13 +5,18 @@ import UserAvatar from '../components/UserAvatar';
 import { Basketball, Football, MapPin, MessageCircle, ShieldCheck, User } from '../components/landing/icons';
 import { useAuth } from '../context/AuthContext';
 import { useSocial } from '../context/SocialContext';
+import { getErrorMessage } from '../services/api';
 
 export default function ProfilePage() {
-  const { user, updateAvatar } = useAuth();
+  const { user, updateAvatar, updateProfile } = useAuth();
   const { friends, openPrivateConversation } = useSocial();
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const [photoError, setPhotoError] = useState('');
+  const [editMode, setEditMode] = useState(null);
+  const [form, setForm] = useState({ firstName: '', lastName: '', bio: '' });
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const firstName = getUserValue(user, 'first_name', 'firstName');
   const lastName = getUserValue(user, 'last_name', 'lastName');
   const fullName = [firstName, lastName].filter(Boolean).join(' ') || 'Utilisateur TeamUp';
@@ -46,6 +51,44 @@ export default function ProfilePage() {
     reader.readAsDataURL(file);
   }
 
+  function startEditing(section) {
+    setEditMode(section);
+    setForm({
+      firstName: getUserValue(user, 'first_name', 'firstName'),
+      lastName: getUserValue(user, 'last_name', 'lastName'),
+      bio: getUserValue(user, 'bio', 'bio') || '',
+    });
+    setSaveError('');
+  }
+
+  function cancelEditing() {
+    setEditMode(null);
+    setSaveError('');
+  }
+
+  async function saveProfile() {
+    if (!form.firstName.trim() || !form.lastName.trim()) {
+      setSaveError('Le prénom et le nom sont obligatoires.');
+      return;
+    }
+    setSaving(true);
+    setSaveError('');
+    try {
+      await updateProfile({
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        city,
+        level,
+        bio: form.bio.trim() || '',
+      });
+      setEditMode(null);
+    } catch (error) {
+      setSaveError(getErrorMessage(error));
+    } finally {
+      setSaving(false);
+    }
+  }
+
   function openMessage(friend) {
     openPrivateConversation(friend);
     navigate('/messages');
@@ -74,16 +117,67 @@ export default function ProfilePage() {
             )}
           </div>
           <div>
-            <h1 className="text-3xl font-black text-slate-950">{fullName}</h1>
-            <p className="mt-2 text-base font-medium text-slate-500">{username}</p>
-            <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-600">
-              <MapPin size={14} color="currentColor" />
-              {city}
-            </p>
-            <p className="mt-2 flex items-center gap-2 text-sm font-medium text-slate-600">
-              <ShieldCheck size={14} color="currentColor" />
-              {level ? `Niveau ${level.toLowerCase()}` : 'Niveau non renseigné'}
-            </p>
+            {editMode === 'profile' ? (
+              <div className="max-w-md space-y-3">
+                <input
+                  type="text"
+                  value={form.firstName}
+                  onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium"
+                  placeholder="Prénom"
+                />
+                <input
+                  type="text"
+                  value={form.lastName}
+                  onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
+                  className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium"
+                  placeholder="Nom"
+                />
+                {saveError && <p className="text-sm text-red-600">{saveError}</p>}
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={saveProfile}
+                    disabled={saving}
+                    className="rounded-lg bg-lime-700 px-4 py-2 text-xs font-black text-white hover:bg-lime-800 disabled:cursor-wait disabled:opacity-60"
+                  >
+                    {saving ? 'Enregistrement...' : 'Enregistrer'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={cancelEditing}
+                    disabled={saving}
+                    className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-black text-slate-700 hover:bg-slate-50"
+                  >
+                    Annuler
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-3xl font-black text-slate-950">{fullName}</h1>
+                  <button
+                    type="button"
+                    onClick={() => startEditing('profile')}
+                    className="rounded-lg border border-slate-200 px-2 py-1 text-xs font-black text-slate-700 hover:bg-slate-50"
+                    aria-label="Modifier le nom et le prénom"
+                    title="Modifier le nom et les prénom"
+                  >
+                    ✎
+                  </button>
+                </div>
+                <p className="mt-2 text-base font-medium text-slate-500">{username}</p>
+                <p className="mt-3 flex items-center gap-2 text-sm font-medium text-slate-600">
+                  <MapPin size={14} color="currentColor" />
+                  {city}
+                </p>
+                <p className="mt-2 flex items-center gap-2 text-sm font-medium text-slate-600">
+                  <ShieldCheck size={14} color="currentColor" />
+                  {level ? `Niveau ${level.toLowerCase()}` : 'Niveau non renseigné'}
+                </p>
+              </>
+            )}
           </div>
         </div>
         {photoError && <p className="mt-3 text-sm font-semibold text-red-600">{photoError}</p>}
@@ -116,10 +210,53 @@ export default function ProfilePage() {
             </div>
           </section>
           <section>
-            <h2 className="text-lg font-black text-slate-950">À propos</h2>
-            <p className="mt-5 max-w-md text-sm leading-6 text-slate-600">
-              {bio}
-            </p>
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-black text-slate-950">À propos</h2>
+              {editMode === 'bio' ? (
+                <button
+                  type="button"
+                  onClick={cancelEditing}
+                  className="rounded-lg border border-slate-200 px-2 py-1 text-xs font-black text-slate-700 hover:bg-slate-50"
+                >
+                  Annuler
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => startEditing('bio')}
+                  className="rounded-lg border border-slate-200 px-2 py-1 text-xs font-black text-slate-700 hover:bg-slate-50"
+                  title="Modifier la bio"
+                >
+                  ✎
+                </button>
+              )}
+            </div>
+            {editMode === 'bio' ? (
+              <div className="mt-4 space-y-3">
+                <textarea
+                  value={form.bio}
+                  onChange={(e) => setForm((f) => ({ ...f, bio: e.target.value }))}
+                  className="min-h-32 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-950 outline-none focus:border-lime-600"
+                  placeholder="Dis-nous en plus sur toi..."
+                  maxLength={1000}
+                />
+                {saveError && <p className="text-sm text-red-600">{saveError}</p>}
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={saveProfile}
+                    disabled={saving}
+                    className="rounded-lg bg-lime-700 px-4 py-2 text-xs font-black text-white hover:bg-lime-800 disabled:cursor-wait disabled:opacity-60"
+                  >
+                    {saving ? 'Enregistrement...' : 'Enregistrer'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className="mt-5 max-w-md text-sm leading-6 text-slate-600">
+                {bio}
+              </p>
+            )}
           </section>
         </div>
 
