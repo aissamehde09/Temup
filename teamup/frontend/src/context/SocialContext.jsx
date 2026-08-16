@@ -86,6 +86,11 @@ export function SocialProvider({ children }) {
     });
   }, [user?.id, refreshSocial]);
 
+  useEffect(() => {
+    if (user) return;
+    setPendingOutgoing([]);
+  }, [user]);
+
   function getFriendStatus(playerId) {
     if (friends.some((friend) => String(friend.id) === String(playerId))) return 'friends';
     if (pendingOutgoing.includes(String(playerId))) return 'pending';

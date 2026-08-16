@@ -76,6 +76,8 @@ export const matchQuerySchema = z.object({
     date: z.string().trim().optional(),
     level: level.optional(),
     organizerId: z.coerce.number().int().positive().optional(),
+    page: z.coerce.number().int().min(1).optional(),
+    limit: z.coerce.number().int().min(1).max(50).optional(),
   }),
 });
 

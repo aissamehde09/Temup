@@ -48,6 +48,13 @@ export function MatchInteractionProvider({ children }) {
   }, [joinedKey, leftKey, userKey]);
 
   useEffect(() => {
+    if (user) return;
+    setJoinedIds([]);
+    setLeftIds([]);
+    setFavoriteIds([]);
+  }, [user]);
+
+  useEffect(() => {
     if (!localStorage.getItem('teamup_token')) {
       setFavoriteIds([]);
       return;

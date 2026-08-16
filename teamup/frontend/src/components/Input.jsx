@@ -1,8 +1,12 @@
-export default function Input({ label, error, className = '', ...props }) {
+let inputCounter = 0;
+
+export default function Input({ label, error, className = '', id, ...props }) {
+  const inputId = id || `input-${++inputCounter}`;
   return (
-    <label className="grid gap-2 text-sm font-semibold text-slate-700">
+    <label htmlFor={inputId} className="grid gap-2 text-sm font-semibold text-slate-700">
       {label && <span className="leading-none">{label}</span>}
       <input
+        id={inputId}
         className={`w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-950 outline-none transition focus:border-lime-600 focus:ring-4 focus:ring-lime-600/10 ${className}`}
         {...props}
       />

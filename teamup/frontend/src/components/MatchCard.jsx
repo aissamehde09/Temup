@@ -10,6 +10,12 @@ export default function MatchCard({ match }) {
         src={match.image_url || '/img/teamup-basketball-original.png'}
         alt={`Illustration du match ${match.title}`}
         className="h-48 w-full object-cover"
+        onError={(event) => {
+          event.target.onerror = null;
+          event.target.src = match.sport_name === 'Basketball'
+            ? '/img/teamup-basketball-original.png'
+            : '/img/teamup-football-original.png';
+        }}
       />
       <div className="p-5">
         <div className="flex items-center justify-between gap-3">
