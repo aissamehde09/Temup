@@ -39,7 +39,9 @@ CREATE TABLE users (
   avatar_url LONGTEXT NULL,
   bio TEXT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_users_email (email),
+  INDEX idx_users_city (city)
 );
 
 -- =====================================================
@@ -89,7 +91,12 @@ CREATE TABLE matches (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   CONSTRAINT fk_matches_sport FOREIGN KEY (sport_id) REFERENCES sports(id),
   CONSTRAINT fk_matches_organizer FOREIGN KEY (organizer_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT chk_max_players CHECK (max_players BETWEEN 2 AND 30)
+  CONSTRAINT chk_max_players CHECK (max_players BETWEEN 2 AND 30),
+  INDEX idx_matches_date_time (match_date, match_time),
+  INDEX idx_matches_sport (sport_id),
+  INDEX idx_matches_organizer (organizer_id),
+  INDEX idx_matches_city (city),
+  INDEX idx_matches_level (level)
 );
 
 -- =====================================================
@@ -104,7 +111,9 @@ CREATE TABLE participations (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY unique_active_participation (user_id, match_id),
   CONSTRAINT fk_participations_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT fk_participations_match FOREIGN KEY (match_id) REFERENCES matches(id) ON DELETE CASCADE
+  CONSTRAINT fk_participations_match FOREIGN KEY (match_id) REFERENCES matches(id) ON DELETE CASCADE,
+  INDEX idx_participations_match (match_id),
+  INDEX idx_participations_user (user_id)
 );
 
 -- =====================================================
@@ -118,7 +127,8 @@ CREATE TABLE favorites (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY unique_favorite (user_id, match_id),
   CONSTRAINT fk_favorites_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT fk_favorites_match FOREIGN KEY (match_id) REFERENCES matches(id) ON DELETE CASCADE
+  CONSTRAINT fk_favorites_match FOREIGN KEY (match_id) REFERENCES matches(id) ON DELETE CASCADE,
+  INDEX idx_favorites_user (user_id)
 );
 
 -- =====================================================
@@ -135,7 +145,9 @@ CREATE TABLE friend_requests (
   UNIQUE KEY unique_friend_request (sender_id, receiver_id),
   CONSTRAINT fk_friend_requests_sender FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_friend_requests_receiver FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT chk_friend_request_not_self CHECK (sender_id <> receiver_id)
+  CONSTRAINT chk_friend_request_not_self CHECK (sender_id <> receiver_id),
+  INDEX idx_friend_requests_receiver (receiver_id),
+  INDEX idx_friend_requests_sender (sender_id)
 );
 
 -- =====================================================
@@ -150,7 +162,8 @@ CREATE TABLE friendships (
   UNIQUE KEY unique_friendship (user1_id, user2_id),
   CONSTRAINT fk_friendships_user1 FOREIGN KEY (user1_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_friendships_user2 FOREIGN KEY (user2_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT chk_friendship_not_self CHECK (user1_id <> user2_id)
+  CONSTRAINT chk_friendship_not_self CHECK (user1_id <> user2_id),
+  INDEX idx_friendships_user2 (user2_id)
 );
 
 -- =====================================================
@@ -174,7 +187,8 @@ CREATE TABLE conversation_participants (
   user_id INT NOT NULL,
   PRIMARY KEY (conversation_id, user_id),
   CONSTRAINT fk_conversation_participants_conversation FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
-  CONSTRAINT fk_conversation_participants_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  CONSTRAINT fk_conversation_participants_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_conversation_participants_user (user_id)
 );
 
 -- =====================================================
@@ -189,7 +203,9 @@ CREATE TABLE messages (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   read_at TIMESTAMP NULL,
   CONSTRAINT fk_messages_conversation FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE,
-  CONSTRAINT fk_messages_sender FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
+  CONSTRAINT fk_messages_sender FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_messages_conversation (conversation_id),
+  INDEX idx_messages_sender (sender_id)
 );
 
 -- =====================================================
@@ -208,7 +224,8 @@ CREATE TABLE reviews (
   CONSTRAINT fk_reviews_reviewer FOREIGN KEY (reviewer_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_reviews_reviewed_user FOREIGN KEY (reviewed_user_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_reviews_match FOREIGN KEY (match_id) REFERENCES matches(id) ON DELETE CASCADE,
-  CONSTRAINT chk_rating CHECK (rating BETWEEN 1 AND 5)
+  CONSTRAINT chk_rating CHECK (rating BETWEEN 1 AND 5),
+  INDEX idx_reviews_reviewed_user (reviewed_user_id)
 );
 
 -- =====================================================

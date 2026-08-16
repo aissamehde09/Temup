@@ -81,6 +81,20 @@ export const matchQuerySchema = z.object({
   }),
 });
 
+export const friendRequestSchema = z.object({
+  params: z.object({ id: positiveId }),
+});
+
+export const answerFriendRequestSchema = z.object({
+  params: z.object({ id: positiveId }),
+  body: z.object({ status: z.enum(['accepted', 'rejected']) }),
+});
+
+export const sendMessageSchema = z.object({
+  params: z.object({ id: positiveId }),
+  body: z.object({ content: z.string().trim().min(1, 'Le message ne peut pas être vide').max(5000, 'Le message est trop long') }),
+});
+
 export const matchBodySchema = z.object({
   body: z.preprocess(normalizeMatchBody, z.object({
     sportId: positiveId,

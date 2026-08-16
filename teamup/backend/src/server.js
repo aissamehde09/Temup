@@ -4,6 +4,7 @@ import express from 'express';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
 import rateLimit from 'express-rate-limit';
+import { pool } from './utils/db.js';
 import { authRoutes } from './routes/authRoutes.js';
 import { matchRoutes } from './routes/matchRoutes.js';
 import { notificationRoutes } from './routes/notificationRoutes.js';
@@ -78,10 +79,27 @@ const uploadLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    status: 'ok',
+app.get('/api/health', async (req, res) => {
+  const checks = { api: 'ok' };
+
+  try {
+    await pool.execute('SELECT 1');
+    checks.database = 'ok';
+  } catch {
+    checks.database = 'error';
+  }
+
+  try {
+    checks.mongo = mongoose.connection.readyState === 1 ? 'ok' : 'disconnected';
+  } catch {
+    checks.mongo = 'error';
+  }
+
+  const status = checks.database === 'ok' ? 200 : 503;
+  res.status(status).json({
+    status: checks.database === 'ok' ? 'ok' : 'degraded',
     app: 'TeamUp API',
+    checks,
   });
 });
 
