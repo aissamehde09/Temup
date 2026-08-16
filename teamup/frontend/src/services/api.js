@@ -83,5 +83,8 @@ export async function uploadImage(file) {
     },
   });
 
-  return response.data.url;
+  const relativeUrl = response.data.url;
+  if (!relativeUrl) return '';
+  const base = apiBaseUrl.replace(/\/api$/, '');
+  return `${base}${relativeUrl}`;
 }

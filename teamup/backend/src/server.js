@@ -1,8 +1,10 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import fs from 'fs';
 import helmet from 'helmet';
 import mongoose from 'mongoose';
+import path from 'path';
 import rateLimit from 'express-rate-limit';
 import { pool } from './utils/db.js';
 import { authRoutes } from './routes/authRoutes.js';
@@ -22,6 +24,10 @@ process.on('unhandledRejection', (reason) => {
 const app = express();
 const port = process.env.PORT || 5000;
 const host = process.env.HOST || '0.0.0.0';
+const uploadsDir = path.resolve('uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 function parseOrigins(...values) {
   return values
     .flatMap((value) => String(value || '').split(','))
