@@ -1,6 +1,7 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import helmet from 'helmet';
 import mongoose from 'mongoose';
 import rateLimit from 'express-rate-limit';
 import { authRoutes } from './routes/authRoutes.js';
@@ -51,6 +52,21 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", 'data:', 'https://*.tile.openstreetmap.org', 'https://unpkg.com'],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com', 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      connectSrc: ["'self'", 'https://*.tile.openstreetmap.org'],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+}));
+
 app.use(express.json({ limit: '2mb' }));
 
 const authLimiter = rateLimit({
