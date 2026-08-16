@@ -79,7 +79,8 @@ function isTeamUpRegion(coordinates, city) {
   if (!coordinates) return false;
   const latitude = Number(coordinates.latitude);
   const longitude = Number(coordinates.longitude);
-  // TeamUp couvre l’ouest parisien. On refuse une redirection Google
+  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return false;
+  // TeamUp couvre l'ouest parisien. On refuse une redirection Google
   // manifestement située dans une autre région (ex. Nigeria).
   if (latitude < 48.5 || latitude > 49.2 || longitude < 1.5 || longitude > 3.5) return false;
   return Boolean(city);
@@ -88,6 +89,11 @@ function isTeamUpRegion(coordinates, city) {
 function safeCoordinates(city, preferredCoordinates) {
   if (isTeamUpRegion(preferredCoordinates, city)) return preferredCoordinates;
   return coordinatesFromCity(city);
+}
+
+function toDbNumber(value) {
+  const num = Number(value);
+  return Number.isFinite(num) ? num : null;
 }
 
 function assertFutureMatchDate(matchDate, matchTime) {
@@ -100,16 +106,20 @@ function assertFutureMatchDate(matchDate, matchTime) {
 
 async function hydrateCoordinates(rows) {
   return Promise.all(rows.map(async (row) => {
-    const existing = { latitude: row.latitude, longitude: row.longitude };
-    if (isTeamUpRegion(existing, row.city)) return row;
-    const resolved = await resolveLocationCoordinates(row.location);
-    const safe = safeCoordinates(row.city, resolved);
-    if (!safe) return { ...row, latitude: null, longitude: null };
-    await query(
-      'UPDATE matches SET latitude = :latitude, longitude = :longitude WHERE id = :id',
-      { id: row.id, latitude: safe.latitude, longitude: safe.longitude },
-    );
-    return { ...row, ...safe };
+    try {
+      const existing = { latitude: row.latitude, longitude: row.longitude };
+      if (isTeamUpRegion(existing, row.city)) return row;
+      const resolved = await resolveLocationCoordinates(row.location);
+      const safe = safeCoordinates(row.city, resolved);
+      if (!safe) return { ...row, latitude: null, longitude: null };
+      await query(
+        'UPDATE matches SET latitude = :latitude, longitude = :longitude WHERE id = :id',
+        { id: row.id, latitude: toDbNumber(safe?.latitude), longitude: toDbNumber(safe?.longitude) },
+      );
+      return { ...row, latitude: toDbNumber(safe?.latitude), longitude: toDbNumber(safe?.longitude) };
+    } catch {
+      return row;
+    }
   }));
 }
 
@@ -206,8 +216,8 @@ export async function createMatch(data, userId) {
       maxPlayers: data.maxPlayers,
       description: data.description || null,
       imageUrl: data.imageUrl || null,
-      latitude: safe?.latitude ?? null,
-      longitude: safe?.longitude ?? null,
+      latitude: toDbNumber(safe?.latitude),
+      longitude: toDbNumber(safe?.longitude),
     },
   );
   return getMatchById(result.insertId);
@@ -243,8 +253,8 @@ export async function updateMatch(id, data, user) {
       maxPlayers: data.maxPlayers,
       description: data.description || null,
       imageUrl: data.imageUrl || null,
-      latitude: safe?.latitude ?? null,
-      longitude: safe?.longitude ?? null,
+      latitude: toDbNumber(safe?.latitude),
+      longitude: toDbNumber(safe?.longitude),
     },
   );
 

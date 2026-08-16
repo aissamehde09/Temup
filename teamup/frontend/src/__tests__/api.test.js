@@ -22,11 +22,11 @@ describe('getErrorMessage', () => {
   });
 
   it('returns session expired for 401', () => {
-    expect(getErrorMessage(makeAxiosError(401))).toContain('Session expirée');
+    expect(getErrorMessage(makeAxiosError(401))).toContain('Session expiree');
   });
 
   it('returns access denied for 403', () => {
-    expect(getErrorMessage(makeAxiosError(403))).toContain('refusée');
+    expect(getErrorMessage(makeAxiosError(403))).toContain('refusee');
   });
 
   it('returns server message for 400', () => {
@@ -35,7 +35,7 @@ describe('getErrorMessage', () => {
   });
 
   it('returns fallback for 400 without message', () => {
-    expect(getErrorMessage(makeAxiosError(400))).toContain('Données invalides');
+    expect(getErrorMessage(makeAxiosError(400))).toContain('Donnees invalides');
   });
 
   it('returns not found for 404', () => {

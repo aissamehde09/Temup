@@ -67,7 +67,7 @@ export function getErrorMessage(error) {
   }
 
   if (error.response.status >= 500) {
-    return "Erreur serveur. Reessaie plus tard.";
+    return error.response?.data?.message || "Erreur serveur. Reessaie plus tard.";
   }
 
   return error.response?.data?.message || "Une erreur est survenue";
