@@ -43,45 +43,45 @@ api.interceptors.response.use(
 
 export function getErrorMessage(error) {
   if (error.code === 'TEAMUP_API_URL_MISSING') {
-    return 'Configuration API manquante. Ajoute VITE_API_URL sur Vercel avec l’URL publique Railway.';
+    return "Configuration API manquante. Verifie la variable VITE_API_URL.";
   }
 
   if (!error.response) {
-    return 'Serveur inaccessible. Vérifie que l’API Railway est démarrée et que VITE_API_URL est correctement configurée sur Vercel.';
+    return "Serveur inaccessible. Verifie que l'API est demarree et que VITE_API_URL est correctement configuree.";
   }
 
   if (error.response.status === 401) {
-    return 'Session expirée ou identifiants invalides. Reconnecte-toi.';
+    return "Session expiree ou identifiants invalides. Reconnecte-toi.";
   }
 
   if (error.response.status === 403) {
-    return 'Action refusée : tu n’as pas les droits nécessaires.';
+    return "Action refusee : tu n'as pas les droits necessaires.";
   }
 
   if (error.response.status === 400) {
-    return error.response?.data?.message || 'Données invalides. Vérifie les champs du formulaire.';
+    return error.response?.data?.message || "Donnees invalides. Verifie les champs du formulaire.";
   }
 
   if (error.response.status === 404) {
-    return 'Ressource introuvable.';
+    return "Ressource introuvable.";
   }
 
   if (error.response.status >= 500) {
-    return 'Erreur serveur. Vérifie les logs Railway du backend.';
+    return "Erreur serveur. Reessaie plus tard.";
   }
 
-  return error.response?.data?.message || 'Une erreur est survenue';
+  return error.response?.data?.message || "Une erreur est survenue";
 }
 
 export async function uploadImage(file) {
   const formData = new FormData();
   formData.append('image', file);
-  
+
   const response = await api.post('/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
-  
+
   return response.data.url;
 }

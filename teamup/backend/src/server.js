@@ -16,7 +16,6 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-// Railway doit pouvoir atteindre l'application depuis l'extérieur du conteneur.
 const host = process.env.HOST || '0.0.0.0';
 function parseOrigins(...values) {
   return values
@@ -26,8 +25,7 @@ function parseOrigins(...values) {
 }
 
 const allowedOrigins = [
-  ...parseOrigins(process.env.FRONTEND_URL, process.env.URL_FRONTEND, process.env.VITE_FRONTEND_URL),
-  ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL.replace(/\/+$/, '')}`] : []),
+  ...parseOrigins(process.env.FRONTEND_URL, process.env.URL_FRONTEND),
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'http://localhost:5175',
