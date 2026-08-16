@@ -177,7 +177,17 @@ function UpcomingMatch({ match, extra }) {
   const meta = sportMeta(match);
   return (
     <article className="teamup-upcoming-match grid items-center gap-4 border-b border-slate-100 py-3.5 last:border-b-0 md:grid-cols-[88px_minmax(0,1fr)_142px_84px]">
-      <img src={match.image_url} alt={match.title} className="h-[74px] w-[88px] rounded-lg object-cover" />
+      <img
+        src={match.image_url || match.image}
+        alt={match.title}
+        className="h-[74px] w-[88px] rounded-lg object-cover"
+        onError={(event) => {
+          event.target.onerror = null;
+          event.target.src = match.sport_name === 'Basketball' || match.sport === 'Basketball'
+            ? '/img/teamup-basketball-original.png'
+            : '/img/teamup-football-original.png';
+        }}
+      />
       <div className="teamup-upcoming-info min-w-0">
         <SportBadge match={match} />
         <h3 className="mt-1 truncate text-[15px] font-black leading-5 text-slate-950">{match.title}</h3>

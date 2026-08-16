@@ -114,7 +114,17 @@ export function MatchListRow({ match, actions, playersText, imageSize = 'h-24 w-
   const meta = sportMeta(match);
   return (
     <article className="teamup-my-match-row grid items-center gap-4 border-b border-slate-100 py-4 last:border-b-0 md:grid-cols-[auto_1fr_auto_auto]">
-      <img src={match.image_url} alt={match.title} className={`${imageSize} rounded-lg object-cover`} />
+      <img
+        src={match.image_url || match.image}
+        alt={match.title}
+        className={`${imageSize} rounded-lg object-cover`}
+        onError={(event) => {
+          event.target.onerror = null;
+          event.target.src = match.sport_name === 'Basketball' || match.sport === 'Basketball'
+            ? '/img/teamup-basketball-original.png'
+            : '/img/teamup-football-original.png';
+        }}
+      />
       <div className="teamup-my-match-info min-w-0">
         <SportBadge match={match} />
         <h2 className="mt-1 text-lg font-black text-slate-950">{match.title}</h2>
