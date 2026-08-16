@@ -14,6 +14,3 @@ export function errorMiddleware(error, req, res, next) {
 
   res.status(status).json({ message });
 }
-
-  res.status(status).json({ message });
-}
